@@ -26,6 +26,7 @@ public class ExampleTest {
 
         try(InputStream in = ExampleTest.class.getResourceAsStream("/thoughtworks.sample.input.txt")) {
             PrintStream out = new PrintStream(baos);
+            com.vocumsineratio.kata.mars.TestableCore.runTest(in, out);
         }
 
         BufferedReader actual = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(baos.toByteArray())));
