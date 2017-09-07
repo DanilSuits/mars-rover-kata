@@ -33,16 +33,22 @@ public class TestableCore {
     }
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
-        // Simplest thing that can possibly work
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
         // TODO: we eventually will need to do something with the state of the grid.
         reader.readLine();
 
         List<String> output = new ArrayList<>();
-        // TODO: let the input data drive the number of rovers.
-        output.add(simulateRover(reader.readLine(), reader.readLine()));
-        output.add(simulateRover(reader.readLine(), reader.readLine()));
+
+        String roverState;
+        while( (roverState = reader.readLine()) != null) {
+            String instructions = reader.readLine();
+            // TODO: this isn't quite right - the boundary between parsing
+            // the rover inputs and modeling the rover behavior should be
+            // more clear.  There needs to be an intermediary state.
+            output.add(simulateRover(roverState, instructions));
+        }
 
         for(String current : output) {
             out.println(current);
