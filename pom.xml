@@ -1,0 +1,134 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.vocumsineratio.kata</groupId>
+  <artifactId>mars-rover</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>${project.artifactId}</name>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Expect 1.8 source and produce 1.8 binaries. -->
+    <vast.compiler.level>1.8</vast.compiler.level>
+    <maven.compiler.source>${vast.compiler.level}</maven.compiler.source>
+    <maven.compiler.target>${vast.compiler.level}</maven.compiler.target>
+    <maven.compiler.testSource>${vast.compiler.level}</maven.compiler.testSource>
+    <maven.compiler.testTarget>${vast.compiler.level}</maven.compiler.testTarget>
+
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>6.9.9</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>strict</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-dependency-plugin</artifactId>
+              <version>2.10</version>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-enforcer-plugin</artifactId>
+              <version>1.4.1</version>
+
+              <dependencies>
+                <dependency>
+                  <groupId>com.github.ferstl</groupId>
+                  <artifactId>pedantic-pom-enforcers</artifactId>
+                  <version>1.2.0</version>
+                </dependency>
+              </dependencies>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>enforce-pedantic-rules</id>
+                <goals>
+                  <goal>enforce</goal>
+                </goals>
+                <configuration>
+                  <rules>
+                    <compound
+                            implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
+                      <!-- Enforcers -->
+                      <enforcers>
+                        POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION
+                      </enforcers>
+
+                      <!-- Further configuration of the declared enforcer rules -->
+                    </compound>
+                  </rules>
+                  <fail>true</fail>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>2.17</version>
+            <executions>
+              <execution>
+                <id>validate</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <configuration>
+                  <configLocation>google_checks.xml</configLocation>
+                  <consoleOutput>true</consoleOutput>
+                  <failsOnError>true</failsOnError>
+                </configuration>
+              </execution>
+            </executions>
+         </plugin>
+        </plugins>
+      </build>
+      <reporting>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-checkstyle-plugin</artifactId>
+            <version>2.17</version>
+            <configuration>
+              <configLocation>google_checks.xml</configLocation>
+              <consoleOutput>true</consoleOutput>
+              <failsOnError>true</failsOnError>
+            </configuration>
+          </plugin>
+        </plugins>
+      </reporting>
+    </profile>
+
+  </profiles>
+
+</project>
