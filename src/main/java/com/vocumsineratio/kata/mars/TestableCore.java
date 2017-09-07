@@ -5,8 +5,6 @@
  */
 package com.vocumsineratio.kata.mars;
 
-import sun.jvm.hotspot.utilities.AssertionFailure;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +27,7 @@ public class TestableCore {
             return "5 1 E";
         }
 
-        throw new AssertionFailure("Failed to provide a complete implementation");
+        throw new AssertionError("Failed to provide a complete implementation");
     }
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
