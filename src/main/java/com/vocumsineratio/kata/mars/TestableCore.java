@@ -7,8 +7,10 @@ package com.vocumsineratio.kata.mars;
 
 import sun.jvm.hotspot.utilities.AssertionFailure;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,13 +32,17 @@ public class TestableCore {
         throw new AssertionFailure("Failed to provide a complete implementation");
     }
 
-    static void runTest(InputStream in, PrintStream out) {
+    static void runTest(InputStream in, PrintStream out) throws IOException {
         // Simplest thing that can possibly work
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+        // TODO: we eventually will need to do something with the state of the grid.
+        reader.readLine();
 
         List<String> output = new ArrayList<>();
-        // TODO: read the actual data
-        output.add(simulateRover("1 2 N", "LMLMLMLMM"));
-        output.add(simulateRover("3 3 E", "MMRMMRMRRM"));
+        // TODO: let the input data drive the number of rovers.
+        output.add(simulateRover(reader.readLine(), reader.readLine()));
+        output.add(simulateRover(reader.readLine(), reader.readLine()));
 
         for(String current : output) {
             out.println(current);
