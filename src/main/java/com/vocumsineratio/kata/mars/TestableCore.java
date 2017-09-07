@@ -30,6 +30,32 @@ public class TestableCore {
         throw new AssertionError("Failed to provide a complete implementation");
     }
 
+    private static List<String> runSimulation(List<String> simulationInputs) {
+        // NOTE: the use of Lists as the mechanism for communicating state is an
+        // arbitrary choice at this point, I just want something that looks like
+        // a pure function  f: immutable state -> immutable state
+
+        // In this case, I'm using lists, because that makes it easy to use
+        // random access, which allows me to easily document the input format?
+        // A thin justification, perhaps.
+        List<String> output = new ArrayList<>();
+
+        final int FIRST_ROVER_OFFSET = 1;
+        final int ROVER_RECORD_LENGTH = 2;
+
+        final int ROVER_STATE_OFFSET = 0;
+        final int ROVER_INSTRUCTIONS_OFFSET = 1;
+
+        for(int recordOffset = FIRST_ROVER_OFFSET; recordOffset < simulationInputs.size(); recordOffset += ROVER_RECORD_LENGTH) {
+            String roverState = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
+            String instructions = simulationInputs.get(ROVER_INSTRUCTIONS_OFFSET + recordOffset);
+
+            String report = simulateRover(roverState, instructions);
+            output.add(report);
+        }
+        return output;
+    }
+
     static void runTest(InputStream in, PrintStream out) throws IOException {
 
         List<String> simulationInputs = new ArrayList<>();
@@ -42,15 +68,7 @@ public class TestableCore {
             }
         }
 
-        List<String> output = new ArrayList<>();
-
-        for(int currentOffset = 1; currentOffset < simulationInputs.size(); currentOffset += 2) {
-            String roverState = simulationInputs.get(currentOffset);
-            String instructions = simulationInputs.get(1 + currentOffset);
-
-            String report = simulateRover(roverState, instructions);
-            output.add(report);
-        }
+        List<String> output = runSimulation(simulationInputs);
 
         for(String report : output) {
             out.println(report);
