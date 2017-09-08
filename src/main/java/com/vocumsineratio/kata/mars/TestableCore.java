@@ -11,7 +11,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Danil Suits (danil@vast.com)
@@ -30,15 +32,23 @@ public class TestableCore {
         // TODO: add support for moves
         String currentState = state;
 
-        final String TURN_LEFT = "NWSEN";
+        final Map<Character,String> TRANSITIONS = new HashMap<>();
+        {
+            final String TURN_LEFT = "NWSEN";
+            TRANSITIONS.put('L', TURN_LEFT);
+
+            final String TURN_RIGHT = "NESWN";
+            TRANSITIONS.put('R', TURN_RIGHT);
+        }
 
         for(char command : instructions.toCharArray()) {
             String position = currentState.substring(0,3);
             String orientation = currentState.substring(4);
 
             // In the mean time, pretend everything is a LEFT rotation.
-            int pos = TURN_LEFT.indexOf(orientation);
-            String result = TURN_LEFT.substring(pos + 1, pos + 2);
+            String transitionsForRotation = TRANSITIONS.get(command);
+            int pos = transitionsForRotation.indexOf(orientation);
+            String result = transitionsForRotation.substring(pos + 1, pos + 2);
 
             currentState = position + " " + result;
         }
