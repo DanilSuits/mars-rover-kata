@@ -23,12 +23,22 @@ public class RoverSimulationTest {
     }
 
     @Test
-    public void testRotation () {
+    public void testLeftRotation () {
         String initialState = "1 2 N";
         String trivialInstructions = "L";
 
         String finalState = TestableCore.simulateRover(initialState, trivialInstructions);
         Assert.assertEquals(finalState, "1 2 W");
+
+    }
+
+    @Test
+    public void testRightRotation () {
+        String initialState = "1 2 N";
+        String trivialInstructions = "R";
+
+        String finalState = TestableCore.simulateRover(initialState, trivialInstructions);
+        Assert.assertEquals(finalState, "1 2 E");
 
     }
 
