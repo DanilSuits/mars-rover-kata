@@ -47,6 +47,8 @@ public class RoverSimulationTest {
         Object [][] programs = {
                 { "" }
                 , {"LLLL"}
+                , {"RL"}
+                , {"LLRRLR"}
         } ;
 
         return programs;
