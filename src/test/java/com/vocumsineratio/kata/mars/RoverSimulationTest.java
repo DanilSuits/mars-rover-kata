@@ -67,4 +67,15 @@ public class RoverSimulationTest {
         Assert.assertEquals(finalState, initialState);
 
     }
+
+    @Test
+    public void testMove() {
+        String initialState = "1 2 W";
+        String instructions = "M";
+        String expectedState = "0 2 N";
+
+        String finalState = TestableCore.simulateRover(initialState, instructions);
+        Assert.assertEquals(finalState, expectedState);
+
+    }
 }
