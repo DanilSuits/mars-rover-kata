@@ -27,10 +27,6 @@ public class TestableCore {
             return "5 1 E";
         }
 
-        if ("".equals(instructions)) {
-            return state;
-        }
-
         // TODO: add support for moves
         String currentState = state;
         for(char command : instructions.toCharArray()) {

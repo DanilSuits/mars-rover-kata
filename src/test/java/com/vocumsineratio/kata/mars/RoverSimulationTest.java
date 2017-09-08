@@ -6,6 +6,7 @@
 package com.vocumsineratio.kata.mars;
 
 import org.testng.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -28,6 +29,30 @@ public class RoverSimulationTest {
 
         String finalState = TestableCore.simulateRover(initialState, trivialInstructions);
         Assert.assertEquals(finalState, "1 2 W");
+
+    }
+
+    @DataProvider(name = "invariantRotations")
+    Object[][] invariantRotations() {
+        Object [][] programs = {
+                { "" }
+                , {"LLLL"}
+        } ;
+
+        return programs;
+    }
+
+    @DataProvider(name = "invariantPrograms")
+    Object [][] invariantPrograms() {
+        return invariantRotations();
+    }
+
+    @Test(dataProvider = "invariantPrograms")
+    public void testInvariantPrograms(String instructions) {
+        String initialState = "1 2 N";
+
+        String finalState = TestableCore.simulateRover(initialState, instructions);
+        Assert.assertEquals(finalState, initialState);
 
     }
 }
