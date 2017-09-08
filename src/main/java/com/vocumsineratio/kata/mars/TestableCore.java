@@ -29,9 +29,18 @@ public class TestableCore {
 
         // TODO: add support for moves
         String currentState = state;
+
+        final String TURN_LEFT = "NWSEN";
+
         for(char command : instructions.toCharArray()) {
-            // In the mean time, pretend everything is a rotation.
-            currentState = "1 2 W";
+            String position = currentState.substring(0,3);
+            String orientation = currentState.substring(4);
+
+            // In the mean time, pretend everything is a LEFT rotation.
+            int pos = TURN_LEFT.indexOf(orientation);
+            String result = TURN_LEFT.substring(pos + 1, pos + 2);
+
+            currentState = position + " " + result;
         }
         return currentState;
     }
