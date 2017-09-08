@@ -18,8 +18,7 @@ public class RoverSimulationTest {
         String initialState = "1 2 N";
         String trivialInstructions = "";
 
-        String finalState = TestableCore.simulateRover(initialState, trivialInstructions);
-        Assert.assertEquals(finalState, initialState);
+        checkSimulation(initialState, trivialInstructions, initialState);
     }
 
     @Test
@@ -27,8 +26,7 @@ public class RoverSimulationTest {
         String initialState = "1 2 N";
         String trivialInstructions = "L";
 
-        String finalState = TestableCore.simulateRover(initialState, trivialInstructions);
-        Assert.assertEquals(finalState, "1 2 W");
+        checkSimulation(initialState, trivialInstructions, "1 2 W");
 
     }
 
@@ -37,8 +35,7 @@ public class RoverSimulationTest {
         String initialState = "1 2 N";
         String trivialInstructions = "R";
 
-        String finalState = TestableCore.simulateRover(initialState, trivialInstructions);
-        Assert.assertEquals(finalState, "1 2 E");
+        checkSimulation(initialState, trivialInstructions, "1 2 E");
 
     }
 
@@ -63,8 +60,7 @@ public class RoverSimulationTest {
     public void testInvariantPrograms(String instructions) {
         String initialState = "1 2 N";
 
-        String finalState = TestableCore.simulateRover(initialState, instructions);
-        Assert.assertEquals(finalState, initialState);
+        checkSimulation(initialState, instructions, initialState);
 
     }
 
@@ -74,8 +70,12 @@ public class RoverSimulationTest {
         String instructions = "M";
         String expectedState = "0 2 N";
 
+        checkSimulation(initialState, instructions, expectedState);
+
+    }
+
+    private void checkSimulation(String initialState, String instructions, String expectedState) {
         String finalState = TestableCore.simulateRover(initialState, instructions);
         Assert.assertEquals(finalState, expectedState);
-
     }
 }
