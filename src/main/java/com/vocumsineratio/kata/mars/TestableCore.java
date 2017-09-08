@@ -27,6 +27,12 @@ public class TestableCore {
             return "5 1 E";
         }
 
+        if ("".equals(instructions)) {
+            return state;
+        }
+
+
+
         throw new AssertionError("Failed to provide a complete implementation");
     }
 
