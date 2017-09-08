@@ -33,7 +33,7 @@ public class TestableCore {
 
         // TODO: add support for moves
         String currentState = state;
-        for(String command : instructions.split("")) {
+        for(char command : instructions.toCharArray()) {
             // In the mean time, pretend everything is a rotation.
             currentState = "1 2 W";
         }
