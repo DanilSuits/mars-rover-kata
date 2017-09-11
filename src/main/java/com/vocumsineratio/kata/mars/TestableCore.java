@@ -82,11 +82,15 @@ public class TestableCore {
             }
         }
 
-        StringBuilder b = new StringBuilder();
-        b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
-        final String currentState = b.toString();
+        final String currentState = toResult(rover);
         return currentState;
 
+    }
+
+    private static String toResult(RoverState rover) {
+        StringBuilder b = new StringBuilder();
+        b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
+        return b.toString();
     }
 
     private static RoverState parse(String state) {
