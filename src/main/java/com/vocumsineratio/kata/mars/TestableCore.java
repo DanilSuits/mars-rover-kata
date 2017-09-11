@@ -99,24 +99,8 @@ public class TestableCore {
         }) ;
 
         for(char command : instructions.toCharArray()) {
-            if ('M' == command) {
-                Instruction move = instructionTable.get(command);
-
-                move.applyTo(rover);
-            } else {
-                if ('L' == command) {
-                    Instruction left = instructionTable.get(command);
-
-                    left.applyTo(rover);
-                    
-                }
-
-                if ('R' == command) {
-                    Instruction right = instructionTable.get(command);
-
-                    right.applyTo(rover);
-                }
-            }
+            Instruction currentInstruction = instructionTable.get(command);
+            currentInstruction.applyTo(rover);
         }
 
         return toResult(rover);
