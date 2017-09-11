@@ -39,14 +39,17 @@ public class TestableCore {
             return "5 1 E";
         }
 
+        Map<String, Move> moves = new HashMap<>();
+        moves.put("W", new Move(-1,0));
+
         if ("1 2 W".equals(state) && instructions.startsWith("M")) {
             // TODO: real parsing.
             int posX = 1;
             int posY = 2;
             String orientation = "W";
-            // TODO: real 
+            // TODO: real
             if ("W".equals(orientation)) {
-                Move WEST = new Move(-1, 0);
+                Move WEST = moves.get("W");
 
                 posX += WEST.offsetX;
                 posY +=  WEST.offsetY;
