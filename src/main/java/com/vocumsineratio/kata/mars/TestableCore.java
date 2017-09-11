@@ -94,7 +94,7 @@ public class TestableCore {
                 String result = TURN_LEFT.substring(pos + 1, pos + 2);
 
                 currentState.orientation = result;
-                return currentState;
+                return new RoverState(currentState.posX, currentState.posY, result);
 
             }
         });
