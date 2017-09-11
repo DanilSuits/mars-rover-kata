@@ -82,8 +82,7 @@ public class TestableCore {
             }
         }
 
-        final String currentState = toResult(rover);
-        return currentState;
+        return toResult(rover);
 
     }
 
