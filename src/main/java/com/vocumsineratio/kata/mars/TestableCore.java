@@ -29,6 +29,18 @@ public class TestableCore {
         }
     }
 
+    static class RoverState {
+        int posX;
+        int posY;
+        String orientation;
+
+        RoverState(int posX, int posY, String orientation) {
+            this.posX = posX;
+            this.posY = posY;
+            this.orientation = orientation;
+        }
+    }
+
     static String simulateRover(String state, String instructions) {
         // TODO: provide a real implementation
         if ("1 2 N".equals(state) && "LMLMLMLMM".equals(instructions)) {
@@ -44,19 +56,17 @@ public class TestableCore {
 
         if ("1 2 W".equals(state) && instructions.startsWith("M")) {
             // TODO: real parsing.
-            int posX = 1;
-            int posY = 2;
-            String orientation = "W";
+            RoverState rover = new RoverState(1, 2, "W");
             // TODO: real
-            if ("W".equals(orientation)) {
+            if ("W".equals(rover.orientation)) {
                 Move WEST = moves.get("W");
 
-                posX += WEST.offsetX;
-                posY +=  WEST.offsetY;
+                rover.posX += WEST.offsetX;
+                rover.posY +=  WEST.offsetY;
             }
 
             StringBuilder b = new StringBuilder();
-            b.append(posX).append(" ").append(posY).append(" ").append(orientation);
+            b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
 
             state = b.toString();
             instructions = instructions.substring(1);
