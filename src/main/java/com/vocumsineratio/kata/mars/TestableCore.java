@@ -51,14 +51,19 @@ public class TestableCore {
 
         final RoverState rover = parseRoverState(state);
 
+        RoverState currentRover = runProgram(rover, program);
+
+        return toResult(currentRover);
+
+    }
+
+    private static RoverState runProgram(RoverState rover, List<Instruction> program) {
         RoverState currentRover = rover;
 
         for(Instruction currentInstruction : program) {
             currentRover = currentInstruction.applyTo(currentRover);
         }
-
-        return toResult(currentRover);
-
+        return currentRover;
     }
 
     private static List<Instruction> parseInstructions(String instructions) {
@@ -84,7 +89,7 @@ public class TestableCore {
         });
 
         final String TURN_LEFT = "NWSEN";
-        final String TURN_RIGHT = "NESWN";
+        final String TURN_RIGHT = new StringBuilder(TURN_LEFT).reverse().toString();
 
         instructionSet.put('L', new Instruction() {
             @Override
@@ -151,10 +156,13 @@ public class TestableCore {
         final int ROVER_INSTRUCTIONS_OFFSET = 1;
 
         for(int recordOffset = FIRST_ROVER_OFFSET; recordOffset < simulationInputs.size(); recordOffset += ROVER_RECORD_LENGTH) {
-            String roverState = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
+            String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
             String instructions = simulationInputs.get(ROVER_INSTRUCTIONS_OFFSET + recordOffset);
 
-            String report = simulateRover(roverState, instructions);
+            RoverState roverState = parseRoverState(roverInput);
+            List<Instruction> program = parseInstructions(instructions);
+            RoverState finalState = runProgram(roverState, program);
+            String report = toResult(finalState);
             output.add(report);
         }
         return output;
