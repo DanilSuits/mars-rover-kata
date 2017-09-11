@@ -103,13 +103,22 @@ public class TestableCore {
                 }
 
                 if ('R' == command) {
-                    String orientation = rover.orientation;
+                    Instruction right = new Instruction() {
+                        @Override
+                        public RoverState applyTo(RoverState currentState) {
+                            String orientation = rover.orientation;
 
-                    String transitionsForRotation = TRANSITIONS.get(command);
-                    int pos = transitionsForRotation.indexOf(orientation);
-                    String result = transitionsForRotation.substring(pos + 1, pos + 2);
+                            String transitionsForRotation = TRANSITIONS.get(command);
+                            int pos = transitionsForRotation.indexOf(orientation);
+                            String result = transitionsForRotation.substring(pos + 1, pos + 2);
 
-                    rover.orientation = result;
+                            rover.orientation = result;
+                            return rover;
+
+                        }
+                    } ;
+
+                    right.applyTo(rover);
                 }
             }
         }
