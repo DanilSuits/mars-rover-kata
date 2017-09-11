@@ -84,6 +84,20 @@ public class TestableCore {
             }
         });
 
+        instructionTable.put('R', new Instruction() {
+            @Override
+            public RoverState applyTo(RoverState currentState) {
+                String orientation = rover.orientation;
+
+                final String TURN_RIGHT = "NESWN";
+                int pos = TURN_RIGHT.indexOf(orientation);
+                String result = TURN_RIGHT.substring(pos + 1, pos + 2);
+
+                rover.orientation = result;
+                return rover;
+            }
+        }) ;
+
         for(char command : instructions.toCharArray()) {
             if ('M' == command) {
                 Instruction move = instructionTable.get(command);
@@ -98,20 +112,7 @@ public class TestableCore {
                 }
 
                 if ('R' == command) {
-                    Instruction right = new Instruction() {
-                        @Override
-                        public RoverState applyTo(RoverState currentState) {
-                            String orientation = rover.orientation;
-
-                            final String TURN_RIGHT = "NESWN";
-                            int pos = TURN_RIGHT.indexOf(orientation);
-                            String result = TURN_RIGHT.substring(pos + 1, pos + 2);
-
-                            rover.orientation = result;
-                            return rover;
-
-                        }
-                    } ;
+                    Instruction right = instructionTable.get(command);
 
                     right.applyTo(rover);
                 }
