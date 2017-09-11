@@ -102,9 +102,8 @@ public class TestableCore {
                             String orientation = rover.orientation;
 
                             final String TURN_RIGHT = "NESWN";
-                            String transitionsForRotation = TURN_RIGHT;
-                            int pos = transitionsForRotation.indexOf(orientation);
-                            String result = transitionsForRotation.substring(pos + 1, pos + 2);
+                            int pos = TURN_RIGHT.indexOf(orientation);
+                            String result = TURN_RIGHT.substring(pos + 1, pos + 2);
 
                             rover.orientation = result;
                             return rover;
