@@ -47,18 +47,21 @@ public class TestableCore {
 
     static String simulateRover(String state, String instructions) {
 
-        Map<String, Move> moves = new HashMap<>();
-        moves.put("W", new Move(-1,0));
-        moves.put("E", new Move(1, 0));
-        moves.put("N", new Move(0, 1));
-        moves.put("S", new Move(0, -1));
-
         RoverState rover = parse(state);
 
         Map<Character, Instruction> instructionTable = new HashMap<>();
         instructionTable.put('M', new Instruction() {
             @Override
             public RoverState applyTo(RoverState currentState) {
+
+                Map<String, Move> moves = new HashMap<>();
+                {
+                    moves.put("W", new Move(-1, 0));
+                    moves.put("E", new Move(1, 0));
+                    moves.put("N", new Move(0, 1));
+                    moves.put("S", new Move(0, -1));
+                }
+                
                 Move move = moves.get(rover.orientation);
                 rover.posX += move.offsetX;
                 rover.posY += move.offsetY;
@@ -74,9 +77,8 @@ public class TestableCore {
 
                 final String TURN_LEFT = "NWSEN";
 
-                String transitionsForRotation = TURN_LEFT;
-                int pos = transitionsForRotation.indexOf(orientation);
-                String result = transitionsForRotation.substring(pos + 1, pos + 2);
+                int pos = TURN_LEFT.indexOf(orientation);
+                String result = TURN_LEFT.substring(pos + 1, pos + 2);
 
                 rover.orientation = result;
                 return rover;
