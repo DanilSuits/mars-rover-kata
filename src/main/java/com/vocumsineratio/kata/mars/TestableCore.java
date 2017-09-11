@@ -57,7 +57,9 @@ public class TestableCore {
 
             StringBuilder b = new StringBuilder();
             b.append(posX).append(" ").append(posY).append(" ").append(orientation);
-            return b.toString();
+
+            state = b.toString();
+            instructions = instructions.substring(1);
         }
 
         // TODO: add support for moves
