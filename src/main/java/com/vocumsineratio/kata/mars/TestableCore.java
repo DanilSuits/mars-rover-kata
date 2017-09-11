@@ -99,7 +99,10 @@ public class TestableCore {
     }
 
     private static RoverState parse(String state) {
-        return new RoverState(1, 2, "W");
+        final int posX = 1;
+        final int posY = 2;
+        final String w = "W";
+        return new RoverState(posX, posY, w);
     }
 
     private static List<String> runSimulation(List<String> simulationInputs) {
