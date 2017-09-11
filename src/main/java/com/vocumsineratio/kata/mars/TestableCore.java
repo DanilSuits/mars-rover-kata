@@ -93,7 +93,6 @@ public class TestableCore {
                 int pos = TURN_LEFT.indexOf(orientation);
                 String result = TURN_LEFT.substring(pos + 1, pos + 2);
 
-                currentState.orientation = result;
                 return new RoverState(currentState.posX, currentState.posY, result);
 
             }
@@ -108,7 +107,6 @@ public class TestableCore {
                 int pos = TURN_RIGHT.indexOf(orientation);
                 String result = TURN_RIGHT.substring(pos + 1, pos + 2);
 
-                currentState.orientation = result;
                 return new RoverState(currentState.posX, currentState.posY, result);
             }
         }) ;
