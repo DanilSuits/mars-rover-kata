@@ -83,12 +83,14 @@ public class TestableCore {
             }
         });
 
+        final String TURN_LEFT = "NWSEN";
+        final String TURN_RIGHT = "NESWN";
+
         instructionSet.put('L', new Instruction() {
             @Override
             public RoverState applyTo(RoverState currentState) {
                 String orientation = currentState.orientation;
 
-                final String TURN_LEFT = "NWSEN";
 
                 int pos = TURN_LEFT.indexOf(orientation);
                 String result = TURN_LEFT.substring(pos + 1, pos + 2);
@@ -103,7 +105,6 @@ public class TestableCore {
             public RoverState applyTo(RoverState currentState) {
                 String orientation = currentState.orientation;
 
-                final String TURN_RIGHT = "NESWN";
                 int pos = TURN_RIGHT.indexOf(orientation);
                 String result = TURN_RIGHT.substring(pos + 1, pos + 2);
 
