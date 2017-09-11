@@ -30,9 +30,9 @@ public class TestableCore {
     }
 
     static class RoverState {
-        int posX;
-        int posY;
-        String orientation;
+        final int posX;
+        final int posY;
+        final String orientation;
 
         RoverState(int posX, int posY, String orientation) {
             this.posX = posX;
