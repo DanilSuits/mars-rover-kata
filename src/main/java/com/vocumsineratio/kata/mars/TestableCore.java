@@ -98,8 +98,13 @@ public class TestableCore {
             }
         }) ;
 
+        List<Instruction> program = new ArrayList<>();
         for(char command : instructions.toCharArray()) {
             Instruction currentInstruction = instructionTable.get(command);
+            program.add(currentInstruction);
+        }
+
+        for(Instruction currentInstruction : program) {
             currentInstruction.applyTo(rover);
         }
 
