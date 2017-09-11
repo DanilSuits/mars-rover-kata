@@ -47,8 +47,8 @@ public class TestableCore {
 
     static String simulateRover(String state, String instructions) {
 
-        Map<Character, Instruction> instructionTable = new HashMap<>();
-        instructionTable.put('M', new Instruction() {
+        Map<Character, Instruction> instructionSet = new HashMap<>();
+        instructionSet.put('M', new Instruction() {
             @Override
             public RoverState applyTo(RoverState currentState) {
 
@@ -68,7 +68,7 @@ public class TestableCore {
             }
         });
 
-        instructionTable.put('L', new Instruction() {
+        instructionSet.put('L', new Instruction() {
             @Override
             public RoverState applyTo(RoverState currentState) {
                 String orientation = currentState.orientation;
@@ -84,7 +84,7 @@ public class TestableCore {
             }
         });
 
-        instructionTable.put('R', new Instruction() {
+        instructionSet.put('R', new Instruction() {
             @Override
             public RoverState applyTo(RoverState currentState) {
                 String orientation = currentState.orientation;
@@ -100,7 +100,7 @@ public class TestableCore {
 
         List<Instruction> program = new ArrayList<>();
         for(char command : instructions.toCharArray()) {
-            Instruction currentInstruction = instructionTable.get(command);
+            Instruction currentInstruction = instructionSet.get(command);
             program.add(currentInstruction);
         }
 
