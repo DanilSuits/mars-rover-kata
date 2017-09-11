@@ -49,13 +49,15 @@ public class TestableCore {
 
         List<Instruction> program = parseInstructions(instructions);
 
-        RoverState rover = parseRoverState(state);
+        final RoverState rover = parseRoverState(state);
+
+        RoverState currentRover = rover;
 
         for(Instruction currentInstruction : program) {
-            currentInstruction.applyTo(rover);
+            currentRover = currentInstruction.applyTo(currentRover);
         }
 
-        return toResult(rover);
+        return toResult(currentRover);
 
     }
 
