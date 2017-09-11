@@ -66,11 +66,9 @@ public class TestableCore {
         RoverState rover = parse(state);
 
         if ("1 2 W".equals(state) && instructions.startsWith("M")) {
-            if ("W".equals(rover.orientation)) {
-                Move WEST = moves.get(rover.orientation);
-                rover.posX += WEST.offsetX;
-                rover.posY += WEST.offsetY;
-            }
+            Move WEST = moves.get(rover.orientation);
+            rover.posX += WEST.offsetX;
+            rover.posY += WEST.offsetY;
 
             StringBuilder b = new StringBuilder();
             b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
