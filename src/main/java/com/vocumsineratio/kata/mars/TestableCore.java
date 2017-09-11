@@ -53,15 +53,6 @@ public class TestableCore {
         moves.put("N", new Move(0, 1));
         moves.put("S", new Move(0, -1));
 
-        final Map<Character,String> TRANSITIONS = new HashMap<>();
-        {
-            final String TURN_LEFT = "NWSEN";
-            TRANSITIONS.put('L', TURN_LEFT);
-
-            final String TURN_RIGHT = "NESWN";
-            TRANSITIONS.put('R', TURN_RIGHT);
-        }
-
         RoverState rover = parse(state);
 
         Map<Character, Instruction> instructionTable = new HashMap<>();
