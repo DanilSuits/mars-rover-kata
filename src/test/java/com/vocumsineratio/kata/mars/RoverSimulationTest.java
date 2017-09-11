@@ -46,6 +46,8 @@ public class RoverSimulationTest {
                 , {"LLLL"}
                 , {"RL"}
                 , {"LLRRLR"}
+                , {"LMLLML"}
+                , {"RMLLMR"}
         } ;
 
         return programs;
