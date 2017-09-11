@@ -70,20 +70,11 @@ public class TestableCore {
             rover.posX += WEST.offsetX;
             rover.posY += WEST.offsetY;
 
-            StringBuilder b = new StringBuilder();
-            b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
-
-            state = b.toString();
             instructions = instructions.substring(1);
         }
 
 
-        // TODO: add support for moves
-        String currentState = state;
-
-
         for(char command : instructions.toCharArray()) {
-            String position = currentState.substring(0,3);
             String orientation = rover.orientation;
 
             // In the mean time, pretend everything is a LEFT rotation.
@@ -93,9 +84,11 @@ public class TestableCore {
 
             rover.orientation = result;
         }
+
         StringBuilder b = new StringBuilder();
         b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
-        return b.toString();
+        final String currentState = b.toString();
+        return currentState;
 
     }
 
