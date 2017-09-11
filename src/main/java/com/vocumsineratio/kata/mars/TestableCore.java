@@ -75,14 +75,18 @@ public class TestableCore {
 
 
         for(char command : instructions.toCharArray()) {
-            String orientation = rover.orientation;
+            if ('M' == command) {
 
-            // In the mean time, pretend everything is a LEFT rotation.
-            String transitionsForRotation = TRANSITIONS.get(command);
-            int pos = transitionsForRotation.indexOf(orientation);
-            String result = transitionsForRotation.substring(pos + 1, pos + 2);
+            } else {
+                String orientation = rover.orientation;
 
-            rover.orientation = result;
+                // In the mean time, pretend everything is a LEFT rotation.
+                String transitionsForRotation = TRANSITIONS.get(command);
+                int pos = transitionsForRotation.indexOf(orientation);
+                String result = transitionsForRotation.substring(pos + 1, pos + 2);
+
+                rover.orientation = result;
+            }
         }
 
         StringBuilder b = new StringBuilder();
