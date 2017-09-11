@@ -76,10 +76,10 @@ public class TestableCore {
                 }
 
                 Move move = moves.get(currentState.orientation);
-                currentState.posX += move.offsetX;
-                currentState.posY += move.offsetY;
+                int posX = currentState.posX + move.offsetX;
+                int posY = currentState.posY + move.offsetY;
 
-                return currentState;
+                return new RoverState(posX, posY, currentState.orientation);
             }
         });
 
