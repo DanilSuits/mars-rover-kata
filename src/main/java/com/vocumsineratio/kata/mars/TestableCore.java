@@ -19,6 +19,16 @@ import java.util.Map;
  * @author Danil Suits (danil@vast.com)
  */
 public class TestableCore {
+    static class Move {
+        final int offsetX;
+        final int offsetY;
+
+        Move(int offsetX, int offsetY) {
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
+        }
+    }
+
     static String simulateRover(String state, String instructions) {
         // TODO: provide a real implementation
         if ("1 2 N".equals(state) && "LMLMLMLMM".equals(instructions)) {
@@ -36,8 +46,10 @@ public class TestableCore {
             String orientation = "W";
             // TODO: real 
             if ("W".equals(orientation)) {
-                posX += -1;
-                posY +=  0;
+                Move WEST = new Move(-1, 0);
+
+                posX += WEST.offsetX;
+                posY +=  WEST.offsetY;
             }
 
             StringBuilder b = new StringBuilder();
