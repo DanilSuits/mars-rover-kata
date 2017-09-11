@@ -41,6 +41,10 @@ public class TestableCore {
         }
     }
 
+    interface Command {
+        RoverState applyTo(RoverState currentState);
+    }
+
     static String simulateRover(String state, String instructions) {
 
         Map<String, Move> moves = new HashMap<>();
@@ -62,13 +66,21 @@ public class TestableCore {
 
         for(char command : instructions.toCharArray()) {
             if ('M' == command) {
-                Move move = moves.get(rover.orientation);
-                rover.posX += move.offsetX;
-                rover.posY += move.offsetY;
+                Command move = new Command() {
+                    @Override
+                    public RoverState applyTo(RoverState currentState) {
+                        Move move = moves.get(rover.orientation);
+                        rover.posX += move.offsetX;
+                        rover.posY += move.offsetY;
+
+                        return rover;
+                    }
+                } ;
+
+                move.applyTo(rover);
             } else {
                 String orientation = rover.orientation;
 
-                // In the mean time, pretend everything is a LEFT rotation.
                 String transitionsForRotation = TRANSITIONS.get(command);
                 int pos = transitionsForRotation.indexOf(orientation);
                 String result = transitionsForRotation.substring(pos + 1, pos + 2);
