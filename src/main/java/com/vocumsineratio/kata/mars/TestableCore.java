@@ -76,7 +76,9 @@ public class TestableCore {
 
         for(char command : instructions.toCharArray()) {
             if ('M' == command) {
-
+                Move WEST = moves.get(rover.orientation);
+                rover.posX += WEST.offsetX;
+                rover.posY += WEST.offsetY;
             } else {
                 String orientation = rover.orientation;
 
