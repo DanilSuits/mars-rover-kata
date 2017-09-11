@@ -68,7 +68,7 @@ public class RoverSimulationTest {
     public void testMove() {
         String initialState = "1 2 W";
         String instructions = "M";
-        String expectedState = "0 2 N";
+        String expectedState = "0 2 W";
 
         checkSimulation(initialState, instructions, expectedState);
 
