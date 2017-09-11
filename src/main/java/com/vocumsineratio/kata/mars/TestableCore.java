@@ -47,9 +47,9 @@ public class TestableCore {
 //            return "1 3 N";
 //        }
 
-        if ("3 3 E".equals(state) && "MMRMMRMRRM".equals(instructions)) {
-            return "5 1 E";
-        }
+//        if ("3 3 E".equals(state) && "MMRMMRMRRM".equals(instructions)) {
+//            return "5 1 E";
+//        }
 
         Map<String, Move> moves = new HashMap<>();
         moves.put("W", new Move(-1,0));
