@@ -56,7 +56,7 @@ public class TestableCore {
 
         if ("1 2 W".equals(state) && instructions.startsWith("M")) {
             // TODO: real parsing.
-            RoverState rover = new RoverState(1, 2, "W");
+            RoverState rover = parse(state);
             // TODO: real
             if ("W".equals(rover.orientation)) {
                 Move WEST = moves.get("W");
@@ -96,6 +96,10 @@ public class TestableCore {
             currentState = position + " " + result;
         }
         return currentState;
+    }
+
+    private static RoverState parse(String state) {
+        return new RoverState(1, 2, "W");
     }
 
     private static List<String> runSimulation(List<String> simulationInputs) {
