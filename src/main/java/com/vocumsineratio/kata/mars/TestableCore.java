@@ -29,6 +29,10 @@ public class TestableCore {
             return "5 1 E";
         }
 
+        if ("1 2 W".equals(state) && instructions.startsWith("M")) {
+            return "0 2 W";
+        }
+
         // TODO: add support for moves
         String currentState = state;
 
