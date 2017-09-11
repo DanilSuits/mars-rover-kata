@@ -63,14 +63,11 @@ public class TestableCore {
             TRANSITIONS.put('R', TURN_RIGHT);
         }
 
+        RoverState rover = parse(state);
 
         if ("1 2 W".equals(state) && instructions.startsWith("M")) {
-            // TODO: real parsing.
-            RoverState rover = parse(state);
-            // TODO: real
             if ("W".equals(rover.orientation)) {
-                Move WEST = moves.get("W");
-
+                Move WEST = moves.get(rover.orientation);
                 rover.posX += WEST.offsetX;
                 rover.posY += WEST.offsetY;
             }
