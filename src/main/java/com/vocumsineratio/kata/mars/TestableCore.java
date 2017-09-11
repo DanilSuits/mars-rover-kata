@@ -53,6 +53,7 @@ public class TestableCore {
 
         Map<String, Move> moves = new HashMap<>();
         moves.put("W", new Move(-1,0));
+        moves.put("E", new Move(1, 0));
 
         final Map<Character,String> TRANSITIONS = new HashMap<>();
         {
