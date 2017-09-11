@@ -54,6 +54,16 @@ public class TestableCore {
         Map<String, Move> moves = new HashMap<>();
         moves.put("W", new Move(-1,0));
 
+        final Map<Character,String> TRANSITIONS = new HashMap<>();
+        {
+            final String TURN_LEFT = "NWSEN";
+            TRANSITIONS.put('L', TURN_LEFT);
+
+            final String TURN_RIGHT = "NESWN";
+            TRANSITIONS.put('R', TURN_RIGHT);
+        }
+
+
         if ("1 2 W".equals(state) && instructions.startsWith("M")) {
             // TODO: real parsing.
             RoverState rover = parse(state);
@@ -62,7 +72,7 @@ public class TestableCore {
                 Move WEST = moves.get("W");
 
                 rover.posX += WEST.offsetX;
-                rover.posY +=  WEST.offsetY;
+                rover.posY += WEST.offsetY;
             }
 
             StringBuilder b = new StringBuilder();
@@ -72,17 +82,10 @@ public class TestableCore {
             instructions = instructions.substring(1);
         }
 
+
         // TODO: add support for moves
         String currentState = state;
 
-        final Map<Character,String> TRANSITIONS = new HashMap<>();
-        {
-            final String TURN_LEFT = "NWSEN";
-            TRANSITIONS.put('L', TURN_LEFT);
-
-            final String TURN_RIGHT = "NESWN";
-            TRANSITIONS.put('R', TURN_RIGHT);
-        }
 
         for(char command : instructions.toCharArray()) {
             String position = currentState.substring(0,3);
