@@ -43,9 +43,9 @@ public class TestableCore {
 
     static String simulateRover(String state, String instructions) {
         // TODO: provide a real implementation
-        if ("1 2 N".equals(state) && "LMLMLMLMM".equals(instructions)) {
-            return "1 3 N";
-        }
+//        if ("1 2 N".equals(state) && "LMLMLMLMM".equals(instructions)) {
+//            return "1 3 N";
+//        }
 
         if ("3 3 E".equals(state) && "MMRMMRMRRM".equals(instructions)) {
             return "5 1 E";
