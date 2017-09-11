@@ -41,7 +41,7 @@ public class TestableCore {
         }
     }
 
-    interface Command {
+    interface Instruction {
         RoverState applyTo(RoverState currentState);
     }
 
@@ -66,7 +66,7 @@ public class TestableCore {
 
         for(char command : instructions.toCharArray()) {
             if ('M' == command) {
-                Command move = new Command() {
+                Instruction move = new Instruction() {
                     @Override
                     public RoverState applyTo(RoverState currentState) {
                         Move move = moves.get(rover.orientation);
