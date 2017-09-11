@@ -47,6 +47,19 @@ public class TestableCore {
 
     static String simulateRover(String state, String instructions) {
 
+        List<Instruction> program = parseInstructions(instructions);
+
+        RoverState rover = parseRoverState(state);
+
+        for(Instruction currentInstruction : program) {
+            currentInstruction.applyTo(rover);
+        }
+
+        return toResult(rover);
+
+    }
+
+    private static List<Instruction> parseInstructions(String instructions) {
         Map<Character, Instruction> instructionSet = new HashMap<>();
         instructionSet.put('M', new Instruction() {
             @Override
@@ -59,7 +72,7 @@ public class TestableCore {
                     moves.put("N", new Move(0, 1));
                     moves.put("S", new Move(0, -1));
                 }
-                
+
                 Move move = moves.get(currentState.orientation);
                 currentState.posX += move.offsetX;
                 currentState.posY += move.offsetY;
@@ -103,15 +116,7 @@ public class TestableCore {
             Instruction currentInstruction = instructionSet.get(command);
             program.add(currentInstruction);
         }
-
-        RoverState rover = parseRoverState(state);
-
-        for(Instruction currentInstruction : program) {
-            currentInstruction.applyTo(rover);
-        }
-
-        return toResult(rover);
-
+        return program;
     }
 
     private static String toResult(RoverState rover) {
