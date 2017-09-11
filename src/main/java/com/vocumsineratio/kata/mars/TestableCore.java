@@ -64,18 +64,21 @@ public class TestableCore {
 
         RoverState rover = parse(state);
 
+        Map<Character, Instruction> instructionTable = new HashMap<>();
+        instructionTable.put('M', new Instruction() {
+            @Override
+            public RoverState applyTo(RoverState currentState) {
+                Move move = moves.get(rover.orientation);
+                rover.posX += move.offsetX;
+                rover.posY += move.offsetY;
+
+                return rover;
+            }
+        });
+
         for(char command : instructions.toCharArray()) {
             if ('M' == command) {
-                Instruction move = new Instruction() {
-                    @Override
-                    public RoverState applyTo(RoverState currentState) {
-                        Move move = moves.get(rover.orientation);
-                        rover.posX += move.offsetX;
-                        rover.posY += move.offsetY;
-
-                        return rover;
-                    }
-                } ;
+                Instruction move = instructionTable.get(command);
 
                 move.applyTo(rover);
             } else {
