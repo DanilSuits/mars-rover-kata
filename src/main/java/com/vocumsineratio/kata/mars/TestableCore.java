@@ -99,9 +99,10 @@ public class TestableCore {
     }
 
     private static RoverState parse(String state) {
-        final int posX = 1;
-        final int posY = 2;
-        final String w = "W";
+        String [] args = state.split(" ");
+        final int posX = Integer.parseInt(args[0]);
+        final int posY = Integer.parseInt(args[1]);
+        final String w = args[2];
         return new RoverState(posX, posY, w);
     }
 
