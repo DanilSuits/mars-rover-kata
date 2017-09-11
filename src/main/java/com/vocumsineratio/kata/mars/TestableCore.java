@@ -36,7 +36,8 @@ public class TestableCore {
             String orientation = "W";
             // TODO: real 
             if ("W".equals(orientation)) {
-                posX -= 1;
+                posX += -1;
+                posY +=  0;
             }
 
             StringBuilder b = new StringBuilder();
