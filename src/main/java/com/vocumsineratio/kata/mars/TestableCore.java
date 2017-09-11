@@ -84,16 +84,19 @@ public class TestableCore {
 
         for(char command : instructions.toCharArray()) {
             String position = currentState.substring(0,3);
-            String orientation = currentState.substring(4);
+            String orientation = rover.orientation;
 
             // In the mean time, pretend everything is a LEFT rotation.
             String transitionsForRotation = TRANSITIONS.get(command);
             int pos = transitionsForRotation.indexOf(orientation);
             String result = transitionsForRotation.substring(pos + 1, pos + 2);
 
-            currentState = position + " " + result;
+            rover.orientation = result;
         }
-        return currentState;
+        StringBuilder b = new StringBuilder();
+        b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
+        return b.toString();
+
     }
 
     private static RoverState parse(String state) {
