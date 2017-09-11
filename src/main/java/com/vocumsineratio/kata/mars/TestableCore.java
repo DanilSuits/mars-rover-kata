@@ -47,7 +47,7 @@ public class TestableCore {
 
     static String simulateRover(String state, String instructions) {
 
-        RoverState rover = parse(state);
+        RoverState rover = parseRoverState(state);
 
         Map<Character, Instruction> instructionTable = new HashMap<>();
         instructionTable.put('M', new Instruction() {
@@ -120,7 +120,7 @@ public class TestableCore {
         return b.toString();
     }
 
-    private static RoverState parse(String state) {
+    private static RoverState parseRoverState(String state) {
         String [] args = state.split(" ");
         final int posX = Integer.parseInt(args[0]);
         final int posY = Integer.parseInt(args[1]);
