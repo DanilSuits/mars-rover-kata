@@ -54,6 +54,8 @@ public class TestableCore {
         Map<String, Move> moves = new HashMap<>();
         moves.put("W", new Move(-1,0));
         moves.put("E", new Move(1, 0));
+        moves.put("N", new Move(0, 1));
+        moves.put("S", new Move(0, -1));
 
         final Map<Character,String> TRANSITIONS = new HashMap<>();
         {
