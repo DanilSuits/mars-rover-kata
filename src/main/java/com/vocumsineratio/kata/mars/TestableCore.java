@@ -47,8 +47,6 @@ public class TestableCore {
 
     static String simulateRover(String state, String instructions) {
 
-        RoverState rover = parseRoverState(state);
-
         Map<Character, Instruction> instructionTable = new HashMap<>();
         instructionTable.put('M', new Instruction() {
             @Override
@@ -62,26 +60,26 @@ public class TestableCore {
                     moves.put("S", new Move(0, -1));
                 }
                 
-                Move move = moves.get(rover.orientation);
-                rover.posX += move.offsetX;
-                rover.posY += move.offsetY;
+                Move move = moves.get(currentState.orientation);
+                currentState.posX += move.offsetX;
+                currentState.posY += move.offsetY;
 
-                return rover;
+                return currentState;
             }
         });
 
         instructionTable.put('L', new Instruction() {
             @Override
             public RoverState applyTo(RoverState currentState) {
-                String orientation = rover.orientation;
+                String orientation = currentState.orientation;
 
                 final String TURN_LEFT = "NWSEN";
 
                 int pos = TURN_LEFT.indexOf(orientation);
                 String result = TURN_LEFT.substring(pos + 1, pos + 2);
 
-                rover.orientation = result;
-                return rover;
+                currentState.orientation = result;
+                return currentState;
 
             }
         });
@@ -89,14 +87,14 @@ public class TestableCore {
         instructionTable.put('R', new Instruction() {
             @Override
             public RoverState applyTo(RoverState currentState) {
-                String orientation = rover.orientation;
+                String orientation = currentState.orientation;
 
                 final String TURN_RIGHT = "NESWN";
                 int pos = TURN_RIGHT.indexOf(orientation);
                 String result = TURN_RIGHT.substring(pos + 1, pos + 2);
 
-                rover.orientation = result;
-                return rover;
+                currentState.orientation = result;
+                return currentState;
             }
         }) ;
 
@@ -105,6 +103,8 @@ public class TestableCore {
             Instruction currentInstruction = instructionTable.get(command);
             program.add(currentInstruction);
         }
+
+        RoverState rover = parseRoverState(state);
 
         for(Instruction currentInstruction : program) {
             currentInstruction.applyTo(rover);
