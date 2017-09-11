@@ -110,7 +110,8 @@ public class TestableCore {
                         public RoverState applyTo(RoverState currentState) {
                             String orientation = rover.orientation;
 
-                            String transitionsForRotation = TRANSITIONS.get('R');
+                            final String TURN_RIGHT = "NESWN";
+                            String transitionsForRotation = TURN_RIGHT;
                             int pos = transitionsForRotation.indexOf(orientation);
                             String result = transitionsForRotation.substring(pos + 1, pos + 2);
 
