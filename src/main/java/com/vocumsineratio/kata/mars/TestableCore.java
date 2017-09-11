@@ -30,7 +30,18 @@ public class TestableCore {
         }
 
         if ("1 2 W".equals(state) && instructions.startsWith("M")) {
-            return "0 2 W";
+            // TODO: real parsing.
+            int posX = 1;
+            int posY = 2;
+            String orientation = "W";
+            // TODO: real 
+            if ("W".equals(orientation)) {
+                posX -= 1;
+            }
+
+            StringBuilder b = new StringBuilder();
+            b.append(posX).append(" ").append(posY).append(" ").append(orientation);
+            return b.toString();
         }
 
         // TODO: add support for moves
