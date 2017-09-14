@@ -42,7 +42,7 @@ public class TestableCore {
         List<RoverState> simulationResults = new ArrayList<>();
         for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
-
+            
             for(Instruction currentInstruction : roverDefinition.instructions) {
                 RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
@@ -53,6 +53,7 @@ public class TestableCore {
                 currentRover = roverAfterInstruction;
             }
             RoverState finalState = currentRover;
+            grid.roverArrived(finalState.posX, finalState.posY);
             simulationResults.add(finalState);
         }
 
