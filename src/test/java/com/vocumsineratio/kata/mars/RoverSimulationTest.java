@@ -105,8 +105,7 @@ public class RoverSimulationTest {
         String [] simulation = toArray("5 5", "1 0 E", "MM", "2 0 N", "M");
         String [] expectedReport = toArray("1 0 E", "2 1 N");
 
-        String [] actualReport = TestableCore.simulateCollision(simulation);
-        Assert.assertEquals(actualReport, expectedReport);
+        checkCollision(simulation, expectedReport);
     }
 
     @Test
@@ -114,6 +113,10 @@ public class RoverSimulationTest {
         String [] simulation = toArray("5 5", "1 0 E", "M", "2 1 S", "M");
         String [] expectedReport = toArray("2 0 E", "2 1 S");
 
+        checkCollision(simulation, expectedReport);
+    }
+
+    private void checkCollision(String[] simulation, String[] expectedReport) {
         String [] actualReport = TestableCore.simulateCollision(simulation);
         Assert.assertEquals(actualReport, expectedReport);
     }
