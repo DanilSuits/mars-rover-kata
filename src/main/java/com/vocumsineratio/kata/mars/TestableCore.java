@@ -20,7 +20,7 @@ import java.util.Map;
  * @author Danil Suits (danil@vast.com)
  */
 public class TestableCore {
-    public static String[] simulateCollision(String[] simulation) {
+    static String[] simulateCollision(String[] simulation) {
         List<String> simulationInputs = Arrays.asList(simulation);
         // NOTE: the use of Lists as the mechanism for communicating state is an
         // arbitrary choice at this point, I just want something that looks like
