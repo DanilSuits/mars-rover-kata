@@ -21,7 +21,10 @@ import java.util.Map;
  */
 public class TestableCore {
     public static String[] simulateCollision(String[] simulation) {
-        return new String [] {"1 0 E", "2 1 N"};
+        List<String> simulationInputs = Arrays.asList(simulation);
+        List<String> report = runSimulation(simulationInputs);
+
+        return new String [] {"1 0 E", report.get(1)};
     }
 
     static class Move {
