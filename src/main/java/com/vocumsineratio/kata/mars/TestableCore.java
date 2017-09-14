@@ -68,7 +68,7 @@ public class TestableCore {
     }
 
     static class Grid {
-        boolean [][] positions = new boolean[5][5];
+        boolean [][] positions = new boolean[6][6];
 
         void roverArrived(int posX, int posY) {
             positions[posX][posY] = true;
