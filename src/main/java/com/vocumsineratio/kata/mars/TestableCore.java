@@ -50,7 +50,7 @@ public class TestableCore {
     }
 
     private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
-        GridDefinition gridDefinition = new GridDefinition();
+        GridDefinition gridDefinition = simulationDefinition.grid;
         Grid grid = Grid.from(gridDefinition.maxRight, gridDefinition.maxUp);
 
         for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
@@ -146,6 +146,7 @@ public class TestableCore {
     }
 
     static class SimulationDefinition {
+        public final GridDefinition grid = new GridDefinition();
         public final List<RoverDefinition> rovers;
 
         SimulationDefinition(List<RoverDefinition> rovers) {
