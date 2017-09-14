@@ -45,6 +45,16 @@ public class TestableCore {
         RoverState applyTo(RoverState currentState);
     }
 
+    static class RoverDefinition {
+        public final RoverState state;
+        public final List<Instruction> instructions;
+
+        RoverDefinition(RoverState state, List<Instruction> instructions) {
+            this.state = state;
+            this.instructions = instructions;
+        }
+    }
+
     static String simulateRover(String state, String instructions) {
 
         List<Instruction> program = parseInstructions(instructions);
@@ -55,6 +65,10 @@ public class TestableCore {
 
         return toResult(currentRover);
 
+    }
+
+    private static RoverState runProgram(RoverDefinition roverDefinition) {
+        return runProgram(roverDefinition.state, roverDefinition.instructions);
     }
 
     private static RoverState runProgram(RoverState rover, List<Instruction> program) {
@@ -161,7 +175,9 @@ public class TestableCore {
 
             RoverState roverState = parseRoverState(roverInput);
             List<Instruction> program = parseInstructions(instructions);
-            RoverState finalState = runProgram(roverState, program);
+
+            RoverDefinition roverDefinition = new RoverDefinition(roverState, program);
+            RoverState finalState = runProgram(roverDefinition);
             String report = toResult(finalState);
             output.add(report);
         }
