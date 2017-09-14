@@ -172,14 +172,24 @@ public class TestableCore {
 
         SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
 
+        List<RoverState> simulationResults = runSimulation(simulationDefinition);
+
         List<String> output = new ArrayList<>();
-        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState finalState = runProgram(roverDefinition);
+        for(RoverState finalState : simulationResults) {
             String report = toResult(finalState);
             output.add(report);
         }
 
         return output;
+    }
+
+    private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
+        List<RoverState> simulationResults = new ArrayList<>();
+        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
+            RoverState finalState = runProgram(roverDefinition);
+            simulationResults.add(finalState);
+        }
+        return simulationResults;
     }
 
     private static SimulationDefinition parseSimulation(List<String> simulationInputs) {
