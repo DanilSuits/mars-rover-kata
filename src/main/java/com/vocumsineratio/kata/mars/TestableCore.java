@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +163,10 @@ public class TestableCore {
     }
 
     static String[] runSimulation(String[] simulation) {
-        return null;
+        List<String> simulationInputs = Arrays.asList(simulation);
+        List<String> report = runSimulation(simulationInputs);
+        final String [] template = new String[0];
+        return report.toArray(template);
     }
     
     private static List<String> runSimulation(List<String> simulationInputs) {
