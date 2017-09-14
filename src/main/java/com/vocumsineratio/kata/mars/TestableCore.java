@@ -269,6 +269,8 @@ public class TestableCore {
     }
 
     private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
+        if (true) { return runCollisionSimulation(simulationDefinition);}
+        
         List<RoverState> simulationResults = new ArrayList<>();
         for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState finalState = runProgram(roverDefinition);
