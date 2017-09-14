@@ -32,6 +32,8 @@ public class TestableCore {
 
         SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
 
+        Grid grid = new Grid();
+
         List<RoverState> simulationResults = new ArrayList<>();
         for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
@@ -40,10 +42,8 @@ public class TestableCore {
                 RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
                 // Fake collision detection
-                if (2 == roverAfterInstruction.posX) {
-                    if (0 == roverAfterInstruction.posY) {
-                        break;
-                    }
+                if (grid.isOccupied(roverAfterInstruction.posX, roverAfterInstruction.posY)) {
+                    break;
                 }
                 currentRover = roverAfterInstruction;
             }
@@ -51,12 +51,15 @@ public class TestableCore {
             simulationResults.add(finalState);
         }
 
-        RoverState haltBeforeCollision = new RoverState(1, 0, "E");
-        simulationResults.set(0, haltBeforeCollision);
-
         List<String> output = toResult(simulationResults);
 
         return output.toArray(new String[0]);
+    }
+
+    static class Grid {
+        boolean isOccupied(int posX, int posY) {
+            return (2 == posX) && (0 == posY);
+        }
     }
 
     static class Move {
