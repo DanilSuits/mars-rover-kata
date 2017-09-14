@@ -149,9 +149,13 @@ public class TestableCore {
         public final GridDefinition grid;
         public final List<RoverDefinition> rovers;
 
-        SimulationDefinition(List<RoverDefinition> rovers) {
-            this.grid = new GridDefinition();
+        public SimulationDefinition(GridDefinition grid, List<RoverDefinition> rovers) {
+            this.grid = grid;
             this.rovers = rovers;
+        }
+
+        SimulationDefinition(List<RoverDefinition> rovers) {
+            this(new GridDefinition(), rovers);
         }
     }
 
