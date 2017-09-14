@@ -282,7 +282,7 @@ public class TestableCore {
             rovers.add(roverDefinition);
         }
 
-        return new SimulationDefinition(rovers);
+        return new SimulationDefinition(new GridDefinition(), rovers);
     }
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
