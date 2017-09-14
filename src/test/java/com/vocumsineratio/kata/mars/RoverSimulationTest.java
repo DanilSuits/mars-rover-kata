@@ -116,6 +116,15 @@ public class RoverSimulationTest {
         checkCollision(simulation, expectedReport);
     }
 
+    @Test
+    public void testCollisionAvoided () {
+        String [] simulation = toArray("5 5", "2 0 E", "M", "2 1 S", "M");
+        String [] expectedReport = toArray("3 0 E", "2 0 S");
+
+        checkCollision(simulation, expectedReport);
+
+    }
+
     private void checkCollision(String[] simulation, String[] expectedReport) {
         String [] actualReport = TestableCore.simulateCollision(simulation);
         Assert.assertEquals(actualReport, expectedReport);
