@@ -32,7 +32,16 @@ public class TestableCore {
 
         SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
 
-        List<RoverState> simulationResults = runSimulation(simulationDefinition);
+        List<RoverState> simulationResults = new ArrayList<>();
+        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
+            RoverState currentRover = roverDefinition.state;
+
+            for(Instruction currentInstruction : roverDefinition.instructions) {
+                currentRover = currentInstruction.applyTo(currentRover);
+            }
+            RoverState finalState = currentRover;
+            simulationResults.add(finalState);
+        }
 
         RoverState haltBeforeCollision = new RoverState(1, 0, "E");
         simulationResults.set(0, haltBeforeCollision);
