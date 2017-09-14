@@ -174,12 +174,17 @@ public class TestableCore {
 
         List<RoverState> simulationResults = runSimulation(simulationDefinition);
 
+        List<String> output = toResult(simulationResults);
+
+        return output;
+    }
+
+    private static List<String> toResult(List<RoverState> simulationResults) {
         List<String> output = new ArrayList<>();
         for(RoverState finalState : simulationResults) {
             String report = toResult(finalState);
             output.add(report);
         }
-
         return output;
     }
 
