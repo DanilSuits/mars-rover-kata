@@ -32,39 +32,11 @@ public class TestableCore {
 
         SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
 
-        List<RoverState> simulationResults = runCollisionSimulation(simulationDefinition);
+        List<RoverState> simulationResults = runSimulation(simulationDefinition);
 
         List<String> output = toResult(simulationResults);
 
         return output.toArray(new String[0]);
-    }
-
-    private static List<RoverState> runCollisionSimulation(SimulationDefinition simulationDefinition) {
-        Grid grid = Grid.from(5, 5);
-
-        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState state = roverDefinition.state;
-            grid.roverArrived(state.posX,state.posY);
-        }
-
-        List<RoverState> simulationResults = new ArrayList<>();
-        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState currentRover = roverDefinition.state;
-            grid.roverLeft(currentRover.posX, currentRover.posY);
-            for(Instruction currentInstruction : roverDefinition.instructions) {
-                RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
-
-                // Fake collision detection
-                if (grid.isOccupied(roverAfterInstruction.posX, roverAfterInstruction.posY)) {
-                    break;
-                }
-                currentRover = roverAfterInstruction;
-            }
-            RoverState finalState = currentRover;
-            grid.roverArrived(finalState.posX, finalState.posY);
-            simulationResults.add(finalState);
-        }
-        return simulationResults;
     }
 
     static class Grid {
