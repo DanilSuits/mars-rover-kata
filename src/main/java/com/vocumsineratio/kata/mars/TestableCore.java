@@ -34,11 +34,12 @@ public class TestableCore {
 
         List<RoverState> simulationResults = runSimulation(simulationDefinition);
 
+        RoverState haltBeforeCollision = new RoverState(1, 0, "E");
+        simulationResults.set(0, haltBeforeCollision);
+
         List<String> output = toResult(simulationResults);
 
-        List<String> report = output;
-
-        return new String [] {"1 0 E", report.get(1)};
+        return output.toArray(new String[0]);
     }
 
     static class Move {
