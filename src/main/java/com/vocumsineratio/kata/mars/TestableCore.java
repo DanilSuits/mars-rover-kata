@@ -30,11 +30,7 @@ public class TestableCore {
         // random access, which allows me to easily document the input format?
         // A thin justification, perhaps.
 
-        SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
-
-        List<RoverState> simulationResults = runSimulation(simulationDefinition);
-
-        List<String> output = toResult(simulationResults);
+        List<String> output = runSimulation(simulationInputs);
 
         return output.toArray(new String[0]);
     }
