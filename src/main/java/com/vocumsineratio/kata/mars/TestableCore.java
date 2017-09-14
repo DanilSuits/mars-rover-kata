@@ -22,7 +22,21 @@ import java.util.Map;
 public class TestableCore {
     public static String[] simulateCollision(String[] simulation) {
         List<String> simulationInputs = Arrays.asList(simulation);
-        List<String> report = runSimulation(simulationInputs);
+        // NOTE: the use of Lists as the mechanism for communicating state is an
+        // arbitrary choice at this point, I just want something that looks like
+        // a pure function  f: immutable state -> immutable state
+
+        // In this case, I'm using lists, because that makes it easy to use
+        // random access, which allows me to easily document the input format?
+        // A thin justification, perhaps.
+
+        SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
+
+        List<RoverState> simulationResults = runSimulation(simulationDefinition);
+
+        List<String> output = toResult(simulationResults);
+
+        List<String> report = output;
 
         return new String [] {"1 0 E", report.get(1)};
     }
