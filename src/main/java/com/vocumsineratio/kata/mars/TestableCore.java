@@ -38,6 +38,13 @@ public class TestableCore {
 
             for(Instruction currentInstruction : roverDefinition.instructions) {
                 RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
+
+                // Fake collision detection
+                if (2 == roverAfterInstruction.posX) {
+                    if (0 == roverAfterInstruction.posY) {
+                        break;
+                    }
+                }
                 currentRover = roverAfterInstruction;
             }
             RoverState finalState = currentRover;
