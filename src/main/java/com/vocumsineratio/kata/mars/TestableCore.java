@@ -153,10 +153,6 @@ public class TestableCore {
             this.grid = grid;
             this.rovers = rovers;
         }
-
-        SimulationDefinition(List<RoverDefinition> rovers) {
-            this(new GridDefinition(), rovers);
-        }
     }
 
     static String simulateRover(String state, String instructions) {
