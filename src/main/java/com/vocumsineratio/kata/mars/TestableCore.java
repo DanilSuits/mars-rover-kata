@@ -57,8 +57,13 @@ public class TestableCore {
     }
 
     static class Grid {
+        boolean [][] positions = new boolean[5][5];
+        {
+            positions[2][0] = true;
+        }
+
         boolean isOccupied(int posX, int posY) {
-            return (2 == posX) && (0 == posY);
+            return positions[posX][posY];
         }
     }
 
