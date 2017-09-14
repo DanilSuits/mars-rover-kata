@@ -90,4 +90,17 @@ public class RoverSimulationTest {
         String finalState = TestableCore.simulateRover(initialState, instructions);
         Assert.assertEquals(finalState, expectedState);
     }
+
+    @Test
+    public void testTwoRovers () {
+        String [] simulation = toArray("5 5", "2 0 N", "M", "1 0 E", "MM");
+        String [] expectedReport = toArray("2 1 N", "3 0 E");
+
+        String [] actualReport = TestableCore.runSimulation(simulation);
+        Assert.assertEquals(actualReport, expectedReport);
+    }
+
+    private String [] toArray(String ... items) {
+        return items;
+    }
 }
