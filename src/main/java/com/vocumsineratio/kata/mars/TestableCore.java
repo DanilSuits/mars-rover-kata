@@ -55,6 +55,14 @@ public class TestableCore {
         }
     }
 
+    static class SimulationDefinition {
+        public final List<RoverDefinition> rovers;
+
+        SimulationDefinition(List<RoverDefinition> rovers) {
+            this.rovers = rovers;
+        }
+    }
+
     static String simulateRover(String state, String instructions) {
 
         List<Instruction> program = parseInstructions(instructions);
@@ -161,13 +169,14 @@ public class TestableCore {
         // In this case, I'm using lists, because that makes it easy to use
         // random access, which allows me to easily document the input format?
         // A thin justification, perhaps.
-        List<String> output = new ArrayList<>();
 
         final int FIRST_ROVER_OFFSET = 1;
         final int ROVER_RECORD_LENGTH = 2;
 
         final int ROVER_STATE_OFFSET = 0;
         final int ROVER_INSTRUCTIONS_OFFSET = 1;
+
+        List<RoverDefinition> rovers = new ArrayList<>();
 
         for(int recordOffset = FIRST_ROVER_OFFSET; recordOffset < simulationInputs.size(); recordOffset += ROVER_RECORD_LENGTH) {
             String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
@@ -177,10 +186,18 @@ public class TestableCore {
             List<Instruction> program = parseInstructions(instructions);
 
             RoverDefinition roverDefinition = new RoverDefinition(roverState, program);
+            rovers.add(roverDefinition);
+        }
+
+        SimulationDefinition simulationDefinition = new SimulationDefinition(rovers);
+
+        List<String> output = new ArrayList<>();
+        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState finalState = runProgram(roverDefinition);
             String report = toResult(finalState);
             output.add(report);
         }
+
         return output;
     }
 
