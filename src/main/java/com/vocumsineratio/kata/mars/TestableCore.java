@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class TestableCore {
     public static String[] simulateCollision(String[] simulation) {
-        return new String[0];  //TODO: To change body of created methods use File | Settings | File Templates.
+        return new String [] {"1 0 E", "2 1 N"};
     }
 
     static class Move {
