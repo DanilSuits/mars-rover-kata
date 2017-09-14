@@ -170,6 +170,19 @@ public class TestableCore {
         // random access, which allows me to easily document the input format?
         // A thin justification, perhaps.
 
+        SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
+
+        List<String> output = new ArrayList<>();
+        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
+            RoverState finalState = runProgram(roverDefinition);
+            String report = toResult(finalState);
+            output.add(report);
+        }
+
+        return output;
+    }
+
+    private static SimulationDefinition parseSimulation(List<String> simulationInputs) {
         final int FIRST_ROVER_OFFSET = 1;
         final int ROVER_RECORD_LENGTH = 2;
 
@@ -189,16 +202,7 @@ public class TestableCore {
             rovers.add(roverDefinition);
         }
 
-        SimulationDefinition simulationDefinition = new SimulationDefinition(rovers);
-
-        List<String> output = new ArrayList<>();
-        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState finalState = runProgram(roverDefinition);
-            String report = toResult(finalState);
-            output.add(report);
-        }
-
-        return output;
+        return new SimulationDefinition(rovers);
     }
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
