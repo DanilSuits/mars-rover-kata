@@ -100,6 +100,15 @@ public class RoverSimulationTest {
         Assert.assertEquals(actualReport, expectedReport);
     }
 
+    @Test
+    public void testCollision () {
+        String [] simulation = toArray("5 5", "1 0 E", "MM", "2 0 N", "M");
+        String [] expectedReport = toArray("1 0 E", "2 1 N");
+
+        String [] actualReport = TestableCore.simulateCollision(simulation);
+        Assert.assertEquals(actualReport, expectedReport);
+    }
+
     private String [] toArray(String ... items) {
         return items;
     }

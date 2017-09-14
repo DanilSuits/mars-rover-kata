@@ -20,6 +20,10 @@ import java.util.Map;
  * @author Danil Suits (danil@vast.com)
  */
 public class TestableCore {
+    public static String[] simulateCollision(String[] simulation) {
+        return new String[0];  //TODO: To change body of created methods use File | Settings | File Templates.
+    }
+
     static class Move {
         final int offsetX;
         final int offsetY;
