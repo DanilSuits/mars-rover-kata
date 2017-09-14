@@ -161,6 +161,10 @@ public class TestableCore {
         return new RoverState(posX, posY, w);
     }
 
+    static String[] runSimulation(String[] simulation) {
+        return null;
+    }
+    
     private static List<String> runSimulation(List<String> simulationInputs) {
         // NOTE: the use of Lists as the mechanism for communicating state is an
         // arbitrary choice at this point, I just want something that looks like
