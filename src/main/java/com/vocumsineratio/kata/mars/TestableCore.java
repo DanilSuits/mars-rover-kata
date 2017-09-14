@@ -269,7 +269,31 @@ public class TestableCore {
     }
 
     private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
-        return runCollisionSimulation(simulationDefinition);
+        Grid grid = Grid.from(5, 5);
+
+        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
+            RoverState state = roverDefinition.state;
+            grid.roverArrived(state.posX,state.posY);
+        }
+
+        List<RoverState> simulationResults = new ArrayList<>();
+        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
+            RoverState currentRover = roverDefinition.state;
+            grid.roverLeft(currentRover.posX, currentRover.posY);
+            for(Instruction currentInstruction : roverDefinition.instructions) {
+                RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
+
+                // Fake collision detection
+                if (grid.isOccupied(roverAfterInstruction.posX, roverAfterInstruction.posY)) {
+                    break;
+                }
+                currentRover = roverAfterInstruction;
+            }
+            RoverState finalState = currentRover;
+            grid.roverArrived(finalState.posX, finalState.posY);
+            simulationResults.add(finalState);
+        }
+        return simulationResults;
     }
 
     private static SimulationDefinition parseSimulation(List<String> simulationInputs) {
