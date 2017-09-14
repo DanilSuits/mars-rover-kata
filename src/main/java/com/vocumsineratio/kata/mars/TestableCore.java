@@ -37,7 +37,8 @@ public class TestableCore {
             RoverState currentRover = roverDefinition.state;
 
             for(Instruction currentInstruction : roverDefinition.instructions) {
-                currentRover = currentInstruction.applyTo(currentRover);
+                RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
+                currentRover = roverAfterInstruction;
             }
             RoverState finalState = currentRover;
             simulationResults.add(finalState);
