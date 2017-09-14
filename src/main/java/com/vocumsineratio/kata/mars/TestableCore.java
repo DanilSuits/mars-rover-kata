@@ -40,7 +40,7 @@ public class TestableCore {
     }
 
     private static List<RoverState> runCollisionSimulation(SimulationDefinition simulationDefinition) {
-        Grid grid = new Grid();
+        Grid grid = Grid.from(5, 5);
 
         for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
@@ -68,7 +68,11 @@ public class TestableCore {
     }
 
     static class Grid {
-        boolean [][] positions = new boolean[6][6];
+        private final boolean [][] positions;
+
+        Grid(boolean[][] positions) {
+            this.positions = positions;
+        }
 
         void roverArrived(int posX, int posY) {
             positions[posX][posY] = true;
@@ -80,6 +84,11 @@ public class TestableCore {
 
         boolean isOccupied(int posX, int posY) {
             return positions[posX][posY];
+        }
+
+        static Grid from(int maxRight, int maxUp) {
+            boolean [][] positions = new boolean[1 + maxRight][1 + maxUp];
+            return new Grid(positions);
         }
     }
 
