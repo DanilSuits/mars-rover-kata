@@ -21,7 +21,17 @@ import java.util.Map;
  */
 public class TestableCore {
     static String[] simulateCollision(String[] simulation) {
+        return runSimulation(simulation);
+    }
+
+    static String[] runSimulation(String[] simulation) {
         List<String> simulationInputs = Arrays.asList(simulation);
+        List<String> report = runSimulation(simulationInputs);
+        final String [] template = new String[0];
+        return report.toArray(template);
+    }
+
+    private static List<String> runSimulation(List<String> simulationInputs) {
         // NOTE: the use of Lists as the mechanism for communicating state is an
         // arbitrary choice at this point, I just want something that looks like
         // a pure function  f: immutable state -> immutable state
@@ -30,10 +40,43 @@ public class TestableCore {
         // random access, which allows me to easily document the input format?
         // A thin justification, perhaps.
 
-        List<String> output = runSimulation(simulationInputs);
+        SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
 
-        return output.toArray(new String[0]);
+        List<RoverState> simulationResults = runSimulation(simulationDefinition);
+
+        List<String> output = toResult(simulationResults);
+
+        return output;
     }
+
+    private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
+        Grid grid = Grid.from(5, 5);
+
+        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
+            RoverState state = roverDefinition.state;
+            grid.roverArrived(state.posX,state.posY);
+        }
+
+        List<RoverState> simulationResults = new ArrayList<>();
+        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
+            RoverState currentRover = roverDefinition.state;
+            grid.roverLeft(currentRover.posX, currentRover.posY);
+            for(Instruction currentInstruction : roverDefinition.instructions) {
+                RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
+
+                // Fake collision detection
+                if (grid.isOccupied(roverAfterInstruction.posX, roverAfterInstruction.posY)) {
+                    break;
+                }
+                currentRover = roverAfterInstruction;
+            }
+            RoverState finalState = currentRover;
+            grid.roverArrived(finalState.posX, finalState.posY);
+            simulationResults.add(finalState);
+        }
+        return simulationResults;
+    }
+
 
     static class Grid {
         private final boolean [][] positions;
@@ -114,10 +157,6 @@ public class TestableCore {
 
         return toResult(currentRover);
 
-    }
-
-    private static RoverState runProgram(RoverDefinition roverDefinition) {
-        return runProgram(roverDefinition.state, roverDefinition.instructions);
     }
 
     private static RoverState runProgram(RoverState rover, List<Instruction> program) {
@@ -202,31 +241,6 @@ public class TestableCore {
         return new RoverState(posX, posY, w);
     }
 
-    static String[] runSimulation(String[] simulation) {
-        List<String> simulationInputs = Arrays.asList(simulation);
-        List<String> report = runSimulation(simulationInputs);
-        final String [] template = new String[0];
-        return report.toArray(template);
-    }
-    
-    private static List<String> runSimulation(List<String> simulationInputs) {
-        // NOTE: the use of Lists as the mechanism for communicating state is an
-        // arbitrary choice at this point, I just want something that looks like
-        // a pure function  f: immutable state -> immutable state
-
-        // In this case, I'm using lists, because that makes it easy to use
-        // random access, which allows me to easily document the input format?
-        // A thin justification, perhaps.
-
-        SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
-
-        List<RoverState> simulationResults = runSimulation(simulationDefinition);
-
-        List<String> output = toResult(simulationResults);
-
-        return output;
-    }
-
     private static List<String> toResult(List<RoverState> simulationResults) {
         List<String> output = new ArrayList<>();
         for(RoverState finalState : simulationResults) {
@@ -234,34 +248,6 @@ public class TestableCore {
             output.add(report);
         }
         return output;
-    }
-
-    private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
-        Grid grid = Grid.from(5, 5);
-
-        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState state = roverDefinition.state;
-            grid.roverArrived(state.posX,state.posY);
-        }
-
-        List<RoverState> simulationResults = new ArrayList<>();
-        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState currentRover = roverDefinition.state;
-            grid.roverLeft(currentRover.posX, currentRover.posY);
-            for(Instruction currentInstruction : roverDefinition.instructions) {
-                RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
-
-                // Fake collision detection
-                if (grid.isOccupied(roverAfterInstruction.posX, roverAfterInstruction.posY)) {
-                    break;
-                }
-                currentRover = roverAfterInstruction;
-            }
-            RoverState finalState = currentRover;
-            grid.roverArrived(finalState.posX, finalState.posY);
-            simulationResults.add(finalState);
-        }
-        return simulationResults;
     }
 
     private static SimulationDefinition parseSimulation(List<String> simulationInputs) {
