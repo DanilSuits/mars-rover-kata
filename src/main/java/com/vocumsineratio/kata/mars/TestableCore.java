@@ -32,6 +32,14 @@ public class TestableCore {
 
         SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
 
+        List<RoverState> simulationResults = runCollisionSimulation(simulationDefinition);
+
+        List<String> output = toResult(simulationResults);
+
+        return output.toArray(new String[0]);
+    }
+
+    private static List<RoverState> runCollisionSimulation(SimulationDefinition simulationDefinition) {
         Grid grid = new Grid();
 
         for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
@@ -56,10 +64,7 @@ public class TestableCore {
             grid.roverArrived(finalState.posX, finalState.posY);
             simulationResults.add(finalState);
         }
-
-        List<String> output = toResult(simulationResults);
-
-        return output.toArray(new String[0]);
+        return simulationResults;
     }
 
     static class Grid {
