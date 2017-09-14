@@ -125,6 +125,17 @@ public class RoverSimulationTest {
 
     }
 
+    @Test
+    public void testGridBoundaries () {
+        // The first line of input is the upper-right coordinates of the plateau,
+        // the lower-left coordinates are assumed to be 0,0.
+
+        String [] simulation = toArray("5 5", "5 5 E", "");
+        String [] expectedReport = toArray("5 5 E");
+
+        checkCollision(simulation, expectedReport);
+    }
+
     private void checkCollision(String[] simulation, String[] expectedReport) {
         String [] actualReport = TestableCore.simulateCollision(simulation);
         Assert.assertEquals(actualReport, expectedReport);
