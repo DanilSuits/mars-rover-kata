@@ -34,8 +34,11 @@ public class TestableCore {
 
         Grid grid = new Grid();
 
-        grid.roverArrived(2,0);
-        
+        for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
+            RoverState state = roverDefinition.state;
+            grid.roverArrived(state.posX,state.posY);
+        }
+
         List<RoverState> simulationResults = new ArrayList<>();
         for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
@@ -63,6 +66,10 @@ public class TestableCore {
 
         void roverArrived(int posX, int posY) {
             positions[posX][posY] = true;
+        }
+
+        void roverLeft(int posX, int posY) {
+            positions[posX][posY] = false;
         }
 
         boolean isOccupied(int posX, int posY) {
