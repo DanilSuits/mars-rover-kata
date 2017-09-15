@@ -49,6 +49,27 @@ public class TestableCore {
         return output;
     }
 
+    static void runTest(InputStream in, PrintStream out) throws IOException {
+
+        List<String> simulationInputs = new ArrayList<>();
+        {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            String currentLine;
+            while((currentLine = reader.readLine()) != null) {
+                simulationInputs.add(currentLine);
+            }
+        }
+
+        List<String> output = runSimulation(simulationInputs);
+
+        for(String report : output) {
+            out.println(report);
+        }
+    }
+
+
+
     private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
         GridDefinition gridDefinition = simulationDefinition.grid;
         Grid grid = Grid.from(gridDefinition.maxRight, gridDefinition.maxUp);
@@ -294,25 +315,6 @@ public class TestableCore {
         }
 
         return new SimulationDefinition(grid, rovers);
-    }
-
-    static void runTest(InputStream in, PrintStream out) throws IOException {
-
-        List<String> simulationInputs = new ArrayList<>();
-        {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-            String currentLine;
-            while((currentLine = reader.readLine()) != null) {
-                simulationInputs.add(currentLine);
-            }
-        }
-
-        List<String> output = runSimulation(simulationInputs);
-
-        for(String report : output) {
-            out.println(report);
-        }
     }
 
     public static void main(String[] args) throws IOException {
