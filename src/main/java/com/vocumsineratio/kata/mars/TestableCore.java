@@ -141,8 +141,13 @@ public class TestableCore {
     }
 
     static class GridDefinition {
-        public final int maxRight = 6;
-        public final int maxUp = 6;
+        public final int maxRight;
+        public final int maxUp;
+
+        public GridDefinition() {
+            this.maxRight = 6;
+            this.maxUp = 6;
+        }
     }
 
     static class SimulationDefinition {
