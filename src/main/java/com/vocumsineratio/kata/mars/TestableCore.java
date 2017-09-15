@@ -145,8 +145,12 @@ public class TestableCore {
         public final int maxUp;
 
         public GridDefinition() {
-            this.maxRight = 6;
-            this.maxUp = 6;
+            this(6,6);
+        }
+
+        public GridDefinition(int maxRight, int maxUp) {
+            this.maxRight = maxRight;
+            this.maxUp = maxUp;
         }
     }
 
