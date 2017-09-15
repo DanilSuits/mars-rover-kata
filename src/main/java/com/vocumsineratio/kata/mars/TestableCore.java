@@ -55,25 +55,20 @@ public class TestableCore {
         return output;
     }
 
-    static void runTest(InputStream in, PrintStream out) throws IOException {
-
-        List<String> simulationInputs = new ArrayList<>();
-        {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-            String currentLine;
-            while((currentLine = reader.readLine()) != null) {
-                simulationInputs.add(currentLine);
-            }
+    private static List<String> toResult(List<RoverState> simulationResults) {
+        List<String> output = new ArrayList<>();
+        for(RoverState finalState : simulationResults) {
+            String report = toResult(finalState);
+            output.add(report);
         }
-
-        List<String> output = runSimulation(simulationInputs);
-
-        for(String report : output) {
-            out.println(report);
-        }
+        return output;
     }
 
+    private static String toResult(RoverState rover) {
+        StringBuilder b = new StringBuilder();
+        b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
+        return b.toString();
+    }
 
 
     private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
@@ -92,7 +87,6 @@ public class TestableCore {
             for(Instruction currentInstruction : roverDefinition.instructions) {
                 RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
-                // Fake collision detection
                 if (grid.isOccupied(roverAfterInstruction.posX, roverAfterInstruction.posY)) {
                     break;
                 }
@@ -187,12 +181,6 @@ public class TestableCore {
         }
     }
 
-    private static String toResult(RoverState rover) {
-        StringBuilder b = new StringBuilder();
-        b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
-        return b.toString();
-    }
-
     private static class Parser {
         private static GridDefinition parseGrid(String grid) {
             String [] args = grid.split(" ");
@@ -277,15 +265,6 @@ public class TestableCore {
         }
     }
 
-    private static List<String> toResult(List<RoverState> simulationResults) {
-        List<String> output = new ArrayList<>();
-        for(RoverState finalState : simulationResults) {
-            String report = toResult(finalState);
-            output.add(report);
-        }
-        return output;
-    }
-
     private static SimulationDefinition parseSimulation(List<String> simulationInputs) {
         final int FIRST_ROVER_OFFSET = 1;
         final int ROVER_RECORD_LENGTH = 2;
@@ -306,6 +285,25 @@ public class TestableCore {
         }
 
         return new SimulationDefinition(grid, rovers);
+    }
+
+    static void runTest(InputStream in, PrintStream out) throws IOException {
+
+        List<String> simulationInputs = new ArrayList<>();
+        {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            String currentLine;
+            while((currentLine = reader.readLine()) != null) {
+                simulationInputs.add(currentLine);
+            }
+        }
+
+        List<String> output = runSimulation(simulationInputs);
+
+        for(String report : output) {
+            out.println(report);
+        }
     }
 
     public static void main(String[] args) throws IOException {
