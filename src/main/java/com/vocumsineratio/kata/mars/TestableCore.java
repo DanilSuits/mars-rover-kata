@@ -247,7 +247,10 @@ public class TestableCore {
     }
 
     private static GridDefinition parseGrid(String grid) {
-        return new GridDefinition(6,6);
+
+        final int maxRight = 6;
+        final int maxUp = 6;
+        return new GridDefinition(maxRight, maxUp);
     }
 
     private static RoverState parseRoverState(String state) {
