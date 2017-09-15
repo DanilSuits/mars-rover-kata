@@ -248,11 +248,9 @@ public class TestableCore {
 
     private static GridDefinition parseGrid(String grid) {
         String [] args = grid.split(" ");
-        final int posX = Integer.parseInt(args[0]);
-        final int posY = Integer.parseInt(args[1]);
+        final int maxRight = Integer.parseInt(args[0]);
+        final int maxUp = Integer.parseInt(args[1]);
 
-        final int maxRight = posX;
-        final int maxUp = posY;
         return new GridDefinition(maxRight, maxUp);
     }
 
