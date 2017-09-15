@@ -241,6 +241,10 @@ public class TestableCore {
         return b.toString();
     }
 
+    private static GridDefinition parseGrid(String grid) {
+        return new GridDefinition();
+    }
+
     private static RoverState parseRoverState(String state) {
         String [] args = state.split(" ");
         final int posX = Integer.parseInt(args[0]);
@@ -266,6 +270,8 @@ public class TestableCore {
         final int ROVER_INSTRUCTIONS_OFFSET = 1;
 
         List<RoverDefinition> rovers = new ArrayList<>();
+        String gridInputs = simulationInputs.get(0);
+        final GridDefinition grid = parseGrid(gridInputs);
 
         for(int recordOffset = FIRST_ROVER_OFFSET; recordOffset < simulationInputs.size(); recordOffset += ROVER_RECORD_LENGTH) {
             String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
@@ -278,7 +284,6 @@ public class TestableCore {
             rovers.add(roverDefinition);
         }
 
-        final GridDefinition grid = new GridDefinition();
         return new SimulationDefinition(grid, rovers);
     }
 
