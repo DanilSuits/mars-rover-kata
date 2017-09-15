@@ -187,65 +187,6 @@ public class TestableCore {
         }
     }
 
-    private static List<Instruction> parseInstructions(String instructions) {
-        Map<Character, Instruction> instructionSet = new HashMap<>();
-        instructionSet.put('M', new Instruction() {
-            @Override
-            public RoverState applyTo(RoverState currentState) {
-
-                Map<String, Move> moves = new HashMap<>();
-                {
-                    moves.put("W", new Move(-1, 0));
-                    moves.put("E", new Move(1, 0));
-                    moves.put("N", new Move(0, 1));
-                    moves.put("S", new Move(0, -1));
-                }
-
-                Move move = moves.get(currentState.orientation);
-                int posX = currentState.posX + move.offsetX;
-                int posY = currentState.posY + move.offsetY;
-
-                return new RoverState(posX, posY, currentState.orientation);
-            }
-        });
-
-        final String TURN_LEFT = "NWSEN";
-        final String TURN_RIGHT = new StringBuilder(TURN_LEFT).reverse().toString();
-
-        instructionSet.put('L', new Instruction() {
-            @Override
-            public RoverState applyTo(RoverState currentState) {
-                String orientation = currentState.orientation;
-
-
-                int pos = TURN_LEFT.indexOf(orientation);
-                String result = TURN_LEFT.substring(pos + 1, pos + 2);
-
-                return new RoverState(currentState.posX, currentState.posY, result);
-
-            }
-        });
-
-        instructionSet.put('R', new Instruction() {
-            @Override
-            public RoverState applyTo(RoverState currentState) {
-                String orientation = currentState.orientation;
-
-                int pos = TURN_RIGHT.indexOf(orientation);
-                String result = TURN_RIGHT.substring(pos + 1, pos + 2);
-
-                return new RoverState(currentState.posX, currentState.posY, result);
-            }
-        }) ;
-
-        List<Instruction> program = new ArrayList<>();
-        for(char command : instructions.toCharArray()) {
-            Instruction currentInstruction = instructionSet.get(command);
-            program.add(currentInstruction);
-        }
-        return program;
-    }
-
     private static String toResult(RoverState rover) {
         StringBuilder b = new StringBuilder();
         b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
@@ -274,6 +215,65 @@ public class TestableCore {
             List<Instruction> program = parseInstructions(instructions) ;
 
             return new RoverDefinition(roverState, program);
+        }
+
+        private static List<Instruction> parseInstructions(String instructions) {
+            Map<Character, Instruction> instructionSet = new HashMap<>();
+            instructionSet.put('M', new Instruction() {
+                @Override
+                public RoverState applyTo(RoverState currentState) {
+
+                    Map<String, Move> moves = new HashMap<>();
+                    {
+                        moves.put("W", new Move(-1, 0));
+                        moves.put("E", new Move(1, 0));
+                        moves.put("N", new Move(0, 1));
+                        moves.put("S", new Move(0, -1));
+                    }
+
+                    Move move = moves.get(currentState.orientation);
+                    int posX = currentState.posX + move.offsetX;
+                    int posY = currentState.posY + move.offsetY;
+
+                    return new RoverState(posX, posY, currentState.orientation);
+                }
+            });
+
+            final String TURN_LEFT = "NWSEN";
+            final String TURN_RIGHT = new StringBuilder(TURN_LEFT).reverse().toString();
+
+            instructionSet.put('L', new Instruction() {
+                @Override
+                public RoverState applyTo(RoverState currentState) {
+                    String orientation = currentState.orientation;
+
+
+                    int pos = TURN_LEFT.indexOf(orientation);
+                    String result = TURN_LEFT.substring(pos + 1, pos + 2);
+
+                    return new RoverState(currentState.posX, currentState.posY, result);
+
+                }
+            });
+
+            instructionSet.put('R', new Instruction() {
+                @Override
+                public RoverState applyTo(RoverState currentState) {
+                    String orientation = currentState.orientation;
+
+                    int pos = TURN_RIGHT.indexOf(orientation);
+                    String result = TURN_RIGHT.substring(pos + 1, pos + 2);
+
+                    return new RoverState(currentState.posX, currentState.posY, result);
+                }
+            }) ;
+
+            List<Instruction> program = new ArrayList<>();
+            for(char command : instructions.toCharArray()) {
+                Instruction currentInstruction = instructionSet.get(command);
+                program.add(currentInstruction);
+            }
+            return program;
         }
     }
 
