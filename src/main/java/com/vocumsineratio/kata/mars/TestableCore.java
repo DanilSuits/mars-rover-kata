@@ -187,15 +187,6 @@ public class TestableCore {
         }
     }
 
-    private static RoverState runProgram(RoverState rover, List<Instruction> program) {
-        RoverState currentRover = rover;
-
-        for(Instruction currentInstruction : program) {
-            currentRover = currentInstruction.applyTo(currentRover);
-        }
-        return currentRover;
-    }
-
     private static List<Instruction> parseInstructions(String instructions) {
         Map<Character, Instruction> instructionSet = new HashMap<>();
         instructionSet.put('M', new Instruction() {
