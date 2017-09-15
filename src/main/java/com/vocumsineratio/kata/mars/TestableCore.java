@@ -144,10 +144,6 @@ public class TestableCore {
         public final int maxRight;
         public final int maxUp;
 
-        public GridDefinition() {
-            this(6,6);
-        }
-
         public GridDefinition(int maxRight, int maxUp) {
             this.maxRight = maxRight;
             this.maxUp = maxUp;
@@ -251,7 +247,7 @@ public class TestableCore {
     }
 
     private static GridDefinition parseGrid(String grid) {
-        return new GridDefinition();
+        return new GridDefinition(6,6);
     }
 
     private static RoverState parseRoverState(String state) {
