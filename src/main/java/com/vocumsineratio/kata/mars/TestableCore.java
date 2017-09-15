@@ -78,7 +78,7 @@ public class TestableCore {
 
     private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
         GridDefinition gridDefinition = simulationDefinition.grid;
-        Grid grid = Grid.from(gridDefinition.maxRight, gridDefinition.maxUp);
+        ArrayGrid grid = ArrayGrid.from(gridDefinition.maxRight, gridDefinition.maxUp);
 
         for(RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
@@ -106,10 +106,10 @@ public class TestableCore {
     }
 
 
-    static class Grid {
+    static class ArrayGrid {
         private final boolean [][] positions;
 
-        Grid(boolean[][] positions) {
+        ArrayGrid(boolean[][] positions) {
             this.positions = positions;
         }
 
@@ -125,9 +125,9 @@ public class TestableCore {
             return positions[posX][posY];
         }
 
-        static Grid from(int maxRight, int maxUp) {
+        static ArrayGrid from(int maxRight, int maxUp) {
             boolean [][] positions = new boolean[1 + maxRight][1 + maxUp];
-            return new Grid(positions);
+            return new ArrayGrid(positions);
         }
     }
 
