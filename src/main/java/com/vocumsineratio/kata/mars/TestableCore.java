@@ -260,14 +260,21 @@ public class TestableCore {
 
             return new GridDefinition(maxRight, maxUp);
         }
-    }
 
-    private static RoverState parseRoverState(String state) {
-        String [] args = state.split(" ");
-        final int posX = Integer.parseInt(args[0]);
-        final int posY = Integer.parseInt(args[1]);
-        final String w = args[2];
-        return new RoverState(posX, posY, w);
+        private static RoverState parseRoverState(String state) {
+            String [] args = state.split(" ");
+            final int posX = Integer.parseInt(args[0]);
+            final int posY = Integer.parseInt(args[1]);
+            final String w = args[2];
+            return new RoverState(posX, posY, w);
+        }
+
+        private static RoverDefinition parseRover(String state, String instructions) {
+            RoverState roverState = parseRoverState(state);
+            List<Instruction> program = parseInstructions(instructions) ;
+
+            return new RoverDefinition(roverState, program);
+        }
     }
 
     private static List<String> toResult(List<RoverState> simulationResults) {
@@ -294,10 +301,7 @@ public class TestableCore {
             String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
             String instructions = simulationInputs.get(ROVER_INSTRUCTIONS_OFFSET + recordOffset);
 
-            RoverState roverState = parseRoverState(roverInput);
-            List<Instruction> program = parseInstructions(instructions);
-
-            RoverDefinition roverDefinition = new RoverDefinition(roverState, program);
+            RoverDefinition roverDefinition = Parser.parseRover(roverInput, instructions);
             rovers.add(roverDefinition);
         }
 
