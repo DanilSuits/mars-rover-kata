@@ -252,12 +252,18 @@ public class TestableCore {
         return b.toString();
     }
 
-    private static GridDefinition parseGrid(String grid) {
-        String [] args = grid.split(" ");
-        final int maxRight = Integer.parseInt(args[0]);
-        final int maxUp = Integer.parseInt(args[1]);
+    private static class Parser {
+        private static GridDefinition parseGrid(String grid) {
+            String [] args = grid.split(" ");
+            final int maxRight = Integer.parseInt(args[0]);
+            final int maxUp = Integer.parseInt(args[1]);
 
-        return new GridDefinition(maxRight, maxUp);
+            return new GridDefinition(maxRight, maxUp);
+        }
+    }
+    
+    private static GridDefinition parseGrid(String grid) {
+        return Parser.parseGrid(grid);
     }
 
     private static RoverState parseRoverState(String state) {
