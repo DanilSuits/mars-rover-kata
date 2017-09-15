@@ -30,6 +30,12 @@ public class TestableCore {
         final String [] template = new String[0];
         return report.toArray(template);
     }
+    
+    static String simulateRover(String state, String instructions) {
+        String [] simulation = {"5 5", state, instructions};
+        String [] report = runSimulation(simulation);
+        return report[0];
+    }
 
     private static List<String> runSimulation(List<String> simulationInputs) {
         // NOTE: the use of Lists as the mechanism for communicating state is an
@@ -179,18 +185,6 @@ public class TestableCore {
             this.grid = grid;
             this.rovers = rovers;
         }
-    }
-
-    static String simulateRover(String state, String instructions) {
-
-        List<Instruction> program = parseInstructions(instructions);
-
-        final RoverState rover = parseRoverState(state);
-
-        RoverState currentRover = runProgram(rover, program);
-
-        return toResult(currentRover);
-
     }
 
     private static RoverState runProgram(RoverState rover, List<Instruction> program) {
