@@ -181,6 +181,12 @@ public class TestableCore {
         }
     }
 
+    static class Input {
+        enum Heading {
+            N, E, W, S
+        }
+    }
+
     private static class Parser {
         private static GridDefinition parseGrid(String grid) {
             String [] args = grid.split(" ");
@@ -195,7 +201,8 @@ public class TestableCore {
             final int posX = Integer.parseInt(args[0]);
             final int posY = Integer.parseInt(args[1]);
             final String w = args[2];
-            return new RoverState(posX, posY, w);
+            Input.Heading heading = Input.Heading.valueOf(args[2]);
+            return new RoverState(posX, posY, heading.name());
         }
 
         private static RoverDefinition parseRover(String state, String instructions) {
