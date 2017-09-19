@@ -52,12 +52,14 @@ public class TestableCore {
 
         List<RoverState> simulationResults = runSimulation(simulationDefinition);
 
-        List<String> output = toResult(simulationResults);
+        Output output = prepareReport(simulationResults);
 
-        return output;
+        List<String> lines = format(output);
+
+        return lines;
     }
 
-    private static List<String> toResult(List<RoverState> simulationResults) {
+    private static Output prepareReport(List<RoverState> simulationResults) {
         List<Output.Rover> rovers = new ArrayList<>(simulationResults.size());
         for(RoverState state : simulationResults) {
             Output.Heading heading = Output.Heading.valueOf(state.orientation);
@@ -66,9 +68,7 @@ public class TestableCore {
             rovers.add(rover);
 
         }
-        Output output = new Output(rovers);
-
-        return format(output);
+        return new Output(rovers);
     }
 
     private static List<String> format(Output output) {
