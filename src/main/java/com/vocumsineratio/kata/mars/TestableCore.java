@@ -242,6 +242,12 @@ public class TestableCore {
             return plateau;
         }
 
+        private static Input.Rover parseRover(String roverInput, String instructions) {
+            Input.Position position = Parser.parseRoverPosition(roverInput);
+            final List<Input.Instruction> instructions1 = Parser.parseInstructions(instructions);
+            return new Input.Rover(position, instructions1);
+        }
+
         private static Input.Position parseRoverPosition(String state) {
             String [] args = state.split(" ");
             final int posX = Integer.parseInt(args[0]);
@@ -255,14 +261,6 @@ public class TestableCore {
 
         private static RoverState buildRoverState(Input.Position position) {
             return new RoverState(position.coordinate.X, position.coordinate.Y, position.heading.name());
-        }
-
-        private static RoverDefinition parseRover(String state, String roverInstructions) {
-            Input.Position position = parseRoverPosition(state);
-            final List<Input.Instruction> instructions = parseInstructions(roverInstructions);
-            final Input.Rover rover = new Input.Rover(position, instructions);
-
-            return buildRover(rover);
         }
 
         private static RoverDefinition buildRover(Input.Rover rover) {
@@ -357,7 +355,9 @@ public class TestableCore {
             String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
             String instructions = simulationInputs.get(ROVER_INSTRUCTIONS_OFFSET + recordOffset);
 
-            RoverDefinition roverDefinition = Parser.parseRover(roverInput, instructions);
+            final Input.Rover rover = Parser.parseRover(roverInput, instructions);
+
+            RoverDefinition roverDefinition = Parser.buildRover(rover);
             rovers.add(roverDefinition);
         }
 
