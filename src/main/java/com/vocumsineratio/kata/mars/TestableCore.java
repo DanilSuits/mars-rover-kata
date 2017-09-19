@@ -243,6 +243,12 @@ public class TestableCore {
         }
 
         private static RoverState parseRoverState(String state) {
+            Input.Position position = parseRoverPosition(state);
+
+            return buildRoverState(position);
+        }
+
+        private static Input.Position parseRoverPosition(String state) {
             String [] args = state.split(" ");
             final int posX = Integer.parseInt(args[0]);
             final int posY = Integer.parseInt(args[1]);
@@ -250,9 +256,7 @@ public class TestableCore {
             Input.Coordinate coordinate = new Input.Coordinate(posX, posY);
             Input.Heading heading = Input.Heading.valueOf(args[2]);
 
-            Input.Position position = new Input.Position(coordinate, heading);
-
-            return buildRoverState(position);
+            return new Input.Position(coordinate, heading);
         }
 
         private static RoverState buildRoverState(Input.Position position) {
