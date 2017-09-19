@@ -68,15 +68,19 @@ public class TestableCore {
         }
         Output output = new Output(rovers);
 
+        return format(output);
+    }
+
+    private static List<String> format(Output output) {
         List<String> lines = new ArrayList<>();
         for(Output.Rover rover : output.rovers) {
-            String report = toResult(rover);
+            String report = format(rover);
             lines.add(report);
         }
         return lines;
     }
 
-    private static String toResult(Output.Rover rover) {
+    private static String format(Output.Rover rover) {
         StringBuilder b = new StringBuilder();
         b.append(rover.coordinate.X).append(" ").append(rover.coordinate.Y).append(" ").append(rover.heading.name());
         return b.toString();
