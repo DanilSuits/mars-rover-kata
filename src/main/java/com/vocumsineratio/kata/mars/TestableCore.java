@@ -182,6 +182,14 @@ public class TestableCore {
     }
 
     static class Input {
+        public final Plateau plateau;
+        public final List<Rover> rovers;
+
+        Input(Plateau plateau, List<Rover> rovers) {
+            this.plateau = plateau;
+            this.rovers = rovers;
+        }
+
         enum Heading {
             N, E, W, S
         }
@@ -359,13 +367,15 @@ public class TestableCore {
             inputRovers.add(rover);
         }
 
+        Input input = new Input(plateau, inputRovers);
+
         List<RoverDefinition> rovers = new ArrayList<>();
-        for(Input.Rover currentRover : inputRovers) {
+        for(Input.Rover currentRover : input.rovers) {
             RoverDefinition roverDefinition = Parser.buildRover(currentRover);
             rovers.add(roverDefinition);
         }
 
-        GridDefinition grid = new GridDefinition(plateau.upperRight.X, plateau.upperRight.Y);
+        GridDefinition grid = new GridDefinition(input.plateau.upperRight.X, input.plateau.upperRight.Y);
         return new SimulationDefinition(grid, rovers);
     }
 
