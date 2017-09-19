@@ -50,7 +50,7 @@ public class TestableCore {
 
         Output output = runSimulation(input);
 
-        List<String> lines = format(output);
+        List<String> lines = Formatter.format(output);
 
         return lines;
     }
@@ -76,34 +76,36 @@ public class TestableCore {
         return new Output(rovers);
     }
 
-    private static List<String> format(Output output) {
-        List<String> lines = new ArrayList<>();
-        for(Output.Rover rover : output.rovers) {
-            String report = format(rover);
-            lines.add(report);
+    static class Formatter {
+        private static List<String> format(Output output) {
+            List<String> lines = new ArrayList<>();
+            for (Output.Rover rover : output.rovers) {
+                String report = format(rover);
+                lines.add(report);
+            }
+            return lines;
         }
-        return lines;
-    }
 
-    private static String format(Output.Rover rover) {
-        final Output.Coordinate coordinate = rover.coordinate;
-        final Output.Heading heading = rover.heading;
+        private static String format(Output.Rover rover) {
+            final Output.Coordinate coordinate = rover.coordinate;
+            final Output.Heading heading = rover.heading;
 
-        return format(coordinate, heading);
-    }
+            return format(coordinate, heading);
+        }
 
-    private static String format(Output.Coordinate coordinate, Output.Heading heading) {
-        return format(
-                coordinate.X,
-                coordinate.Y,
-                heading.name()
-        );
-    }
+        private static String format(Output.Coordinate coordinate, Output.Heading heading) {
+            return format(
+                    coordinate.X,
+                    coordinate.Y,
+                    heading.name()
+            );
+        }
 
-    private static String format(int posX, int posY, String heading) {
-        StringBuilder b = new StringBuilder();
-        b.append(posX).append(" ").append(posY).append(" ").append(heading);
-        return b.toString();
+        private static String format(int posX, int posY, String heading) {
+            StringBuilder b = new StringBuilder();
+            b.append(posX).append(" ").append(posY).append(" ").append(heading);
+            return b.toString();
+        }
     }
 
 
