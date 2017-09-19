@@ -68,7 +68,8 @@ public class TestableCore {
 
     private static String toResult(RoverState rover) {
         StringBuilder b = new StringBuilder();
-        b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(rover.orientation);
+        Output.Heading heading = Output.Heading.valueOf(rover.orientation);
+        b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(heading.name());
         return b.toString();
     }
 
@@ -238,6 +239,14 @@ public class TestableCore {
                 this.instructions = instructions;
             }
         }
+    }
+
+    static class Output {
+        enum Heading {
+            N, E, W, S
+        }
+
+
     }
 
     private static class Parser {
