@@ -350,14 +350,18 @@ public class TestableCore {
         String plateauInputs = simulationInputs.get(0);
         final Input.Plateau plateau = Parser.parsePlateau(plateauInputs);
 
-        List<RoverDefinition> rovers = new ArrayList<>();
+        List<Input.Rover> inputRovers = new ArrayList<>();
         for(int recordOffset = FIRST_ROVER_OFFSET; recordOffset < simulationInputs.size(); recordOffset += ROVER_RECORD_LENGTH) {
             String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
             String instructions = simulationInputs.get(ROVER_INSTRUCTIONS_OFFSET + recordOffset);
 
             final Input.Rover rover = Parser.parseRover(roverInput, instructions);
+            inputRovers.add(rover);
+        }
 
-            RoverDefinition roverDefinition = Parser.buildRover(rover);
+        List<RoverDefinition> rovers = new ArrayList<>();
+        for(Input.Rover currentRover : inputRovers) {
+            RoverDefinition roverDefinition = Parser.buildRover(currentRover);
             rovers.add(roverDefinition);
         }
 
