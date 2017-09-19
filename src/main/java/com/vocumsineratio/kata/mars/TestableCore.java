@@ -204,6 +204,10 @@ public class TestableCore {
                 this.upperRight = upperRight;
             }
         }
+
+        enum Instruction {
+            M, L, R
+        }
     }
 
     private static class Parser {
@@ -234,9 +238,15 @@ public class TestableCore {
             return new RoverDefinition(roverState, program);
         }
 
-        private static List<Instruction> parseInstructions(String instructions) {
-            Map<Character, Instruction> instructionSet = new HashMap<>();
-            instructionSet.put('M', new Instruction() {
+        private static List<Instruction> parseInstructions(String currentLine) {
+            List<Input.Instruction> instructions = new ArrayList<>(currentLine.length());
+            for (int index = 0; index < currentLine.length(); ++index) {
+
+                instructions.add(Input.Instruction.valueOf(currentLine.substring(index, 1 + index)));
+            }
+            
+            Map<Input.Instruction, Instruction> instructionSet = new HashMap<>();
+            instructionSet.put(Input.Instruction.M, new Instruction() {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
 
@@ -259,7 +269,7 @@ public class TestableCore {
             final String TURN_LEFT = "NWSEN";
             final String TURN_RIGHT = new StringBuilder(TURN_LEFT).reverse().toString();
 
-            instructionSet.put('L', new Instruction() {
+            instructionSet.put(Input.Instruction.L, new Instruction() {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
                     String orientation = currentState.orientation;
@@ -273,7 +283,7 @@ public class TestableCore {
                 }
             });
 
-            instructionSet.put('R', new Instruction() {
+            instructionSet.put(Input.Instruction.R, new Instruction() {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
                     String orientation = currentState.orientation;
@@ -286,8 +296,8 @@ public class TestableCore {
             }) ;
 
             List<Instruction> program = new ArrayList<>();
-            for(char command : instructions.toCharArray()) {
-                Instruction currentInstruction = instructionSet.get(command);
+            for(Input.Instruction instruction : instructions) {
+                Instruction currentInstruction = instructionSet.get(instruction);
                 program.add(currentInstruction);
             }
             return program;
@@ -301,10 +311,10 @@ public class TestableCore {
         final int ROVER_STATE_OFFSET = 0;
         final int ROVER_INSTRUCTIONS_OFFSET = 1;
 
-        List<RoverDefinition> rovers = new ArrayList<>();
-        String gridInputs = simulationInputs.get(0);
-        final Input.Plateau plateau = Parser.parsePlateau(gridInputs);
+        String plateauInputs = simulationInputs.get(0);
+        final Input.Plateau plateau = Parser.parsePlateau(plateauInputs);
 
+        List<RoverDefinition> rovers = new ArrayList<>();
         for(int recordOffset = FIRST_ROVER_OFFSET; recordOffset < simulationInputs.size(); recordOffset += ROVER_RECORD_LENGTH) {
             String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
             String instructions = simulationInputs.get(ROVER_INSTRUCTIONS_OFFSET + recordOffset);
