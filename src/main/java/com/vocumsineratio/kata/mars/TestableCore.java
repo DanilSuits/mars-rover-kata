@@ -67,10 +67,12 @@ public class TestableCore {
     }
 
     private static String toResult(RoverState rover) {
-        StringBuilder b = new StringBuilder();
         Output.Heading heading = Output.Heading.valueOf(rover.orientation);
         Output.Coordinate coordinate = new Output.Coordinate(rover.posX, rover.posY);
-        b.append(coordinate.X).append(" ").append(coordinate.Y).append(" ").append(heading.name());
+        Output.Rover outputRover = new Output.Rover(coordinate, heading);
+
+        StringBuilder b = new StringBuilder();
+        b.append(outputRover.coordinate.X).append(" ").append(outputRover.coordinate.Y).append(" ").append(outputRover.heading.name());
         return b.toString();
     }
 
@@ -254,6 +256,16 @@ public class TestableCore {
             Coordinate(int x, int y) {
                 X = x;
                 Y = y;
+            }
+        }
+
+        static class Rover {
+            public final Coordinate coordinate;
+            public final Heading heading;
+
+            Rover(Coordinate coordinate, Heading heading) {
+                this.coordinate = coordinate;
+                this.heading = heading;
             }
         }
     }
