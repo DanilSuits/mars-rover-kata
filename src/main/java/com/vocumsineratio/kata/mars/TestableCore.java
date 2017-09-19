@@ -218,6 +218,16 @@ public class TestableCore {
                 this.heading = heading;
             }
         }
+
+        static class Rover {
+            public final Position position;
+            public final List<Instruction> instructions;
+
+            Rover(Position position, List<Instruction> instructions) {
+                this.position = position;
+                this.instructions = instructions;
+            }
+        }
     }
 
     private static class Parser {
@@ -240,7 +250,9 @@ public class TestableCore {
             Input.Coordinate coordinate = new Input.Coordinate(posX, posY);
             Input.Heading heading = Input.Heading.valueOf(args[2]);
 
-            return new RoverState(coordinate.X, coordinate.Y, heading.name());
+            Input.Position position = new Input.Position(coordinate, heading);
+
+            return new RoverState(position.coordinate.X, position.coordinate.Y, position.heading.name());
         }
 
         private static RoverDefinition parseRover(String state, String roverInstructions) {
