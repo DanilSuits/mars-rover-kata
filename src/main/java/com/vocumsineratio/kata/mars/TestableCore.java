@@ -60,18 +60,14 @@ public class TestableCore {
     private static List<String> toResult(List<RoverState> simulationResults) {
         List<String> output = new ArrayList<>();
         for(RoverState finalState : simulationResults) {
-            String report = toResult(finalState);
+            Output.Heading heading = Output.Heading.valueOf(finalState.orientation);
+            Output.Coordinate coordinate = new Output.Coordinate(finalState.posX, finalState.posY);
+            Output.Rover outputRover = new Output.Rover(coordinate, heading);
+
+            String report = toResult(outputRover);
             output.add(report);
         }
         return output;
-    }
-
-    private static String toResult(RoverState rover) {
-        Output.Heading heading = Output.Heading.valueOf(rover.orientation);
-        Output.Coordinate coordinate = new Output.Coordinate(rover.posX, rover.posY);
-        Output.Rover outputRover = new Output.Rover(coordinate, heading);
-
-        return toResult(outputRover);
     }
 
     private static String toResult(Output.Rover rover) {
