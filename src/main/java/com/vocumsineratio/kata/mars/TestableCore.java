@@ -208,6 +208,16 @@ public class TestableCore {
         enum Instruction {
             M, L, R
         }
+
+        static class Position {
+            public final Coordinate coordinate;
+            public final Heading heading;
+
+            Position(Coordinate coordinate, Heading heading) {
+                this.coordinate = coordinate;
+                this.heading = heading;
+            }
+        }
     }
 
     private static class Parser {
@@ -227,8 +237,10 @@ public class TestableCore {
             final int posX = Integer.parseInt(args[0]);
             final int posY = Integer.parseInt(args[1]);
             final String w = args[2];
+            Input.Coordinate coordinate = new Input.Coordinate(posX, posY);
             Input.Heading heading = Input.Heading.valueOf(args[2]);
-            return new RoverState(posX, posY, heading.name());
+
+            return new RoverState(coordinate.X, coordinate.Y, heading.name());
         }
 
         private static RoverDefinition parseRover(String state, String roverInstructions) {
