@@ -86,8 +86,15 @@ public class TestableCore {
     }
 
     private static String format(Output.Rover rover) {
+        final Output.Coordinate coordinate = rover.coordinate;
+        final Output.Heading heading = rover.heading;
+
+        return format(coordinate, heading);
+    }
+
+    private static String format(Output.Coordinate coordinate, Output.Heading heading) {
         StringBuilder b = new StringBuilder();
-        b.append(rover.coordinate.X).append(" ").append(rover.coordinate.Y).append(" ").append(rover.heading.name());
+        b.append(coordinate.X).append(" ").append(coordinate.Y).append(" ").append(heading.name());
         return b.toString();
     }
 
