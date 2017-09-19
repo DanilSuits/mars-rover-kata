@@ -252,6 +252,10 @@ public class TestableCore {
 
             Input.Position position = new Input.Position(coordinate, heading);
 
+            return buildRoverState(position);
+        }
+
+        private static RoverState buildRoverState(Input.Position position) {
             return new RoverState(position.coordinate.X, position.coordinate.Y, position.heading.name());
         }
 
