@@ -185,6 +185,16 @@ public class TestableCore {
         enum Heading {
             N, E, W, S
         }
+
+        static class Coordinate {
+            public final int X;
+            public final int Y;
+
+            Coordinate(int x, int y) {
+                X = x;
+                Y = y;
+            }
+        }
     }
 
     private static class Parser {
@@ -193,7 +203,9 @@ public class TestableCore {
             final int maxRight = Integer.parseInt(args[0]);
             final int maxUp = Integer.parseInt(args[1]);
 
-            return new GridDefinition(maxRight, maxUp);
+            Input.Coordinate upperRight = new Input.Coordinate(maxRight, maxUp);
+
+            return new GridDefinition(upperRight.X, upperRight.Y);
         }
 
         private static RoverState parseRoverState(String state) {
