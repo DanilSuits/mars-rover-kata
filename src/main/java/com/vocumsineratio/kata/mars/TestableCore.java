@@ -46,7 +46,9 @@ public class TestableCore {
         // random access, which allows me to easily document the input format?
         // A thin justification, perhaps.
 
-        SimulationDefinition simulationDefinition = parseSimulation(simulationInputs);
+        Input input = parseInput(simulationInputs);
+
+        SimulationDefinition simulationDefinition = buildSimulation(input);
 
         List<RoverState> simulationResults = runSimulation(simulationDefinition);
 
@@ -348,7 +350,7 @@ public class TestableCore {
         }
     }
 
-    private static SimulationDefinition parseSimulation(List<String> simulationInputs) {
+    private static Input parseInput(List<String> simulationInputs) {
         final int FIRST_ROVER_OFFSET = 1;
         final int ROVER_RECORD_LENGTH = 2;
 
@@ -367,8 +369,10 @@ public class TestableCore {
             inputRovers.add(rover);
         }
 
-        Input input = new Input(plateau, inputRovers);
+        return new Input(plateau, inputRovers);
+    }
 
+    private static SimulationDefinition buildSimulation(Input input) {
         List<RoverDefinition> rovers = new ArrayList<>();
         for(Input.Rover currentRover : input.rovers) {
             RoverDefinition roverDefinition = Parser.buildRover(currentRover);
