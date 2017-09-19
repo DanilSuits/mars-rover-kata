@@ -231,19 +231,24 @@ public class TestableCore {
             return new RoverState(posX, posY, heading.name());
         }
 
-        private static RoverDefinition parseRover(String state, String instructions) {
+        private static RoverDefinition parseRover(String state, String roverInstructions) {
             RoverState roverState = parseRoverState(state);
-            List<Instruction> program = parseInstructions(instructions) ;
+            final List<Input.Instruction> instructions = parseInstructions(roverInstructions);
+            List<Instruction> program = buildProgram(instructions);
 
             return new RoverDefinition(roverState, program);
         }
 
-        private static List<Instruction> parseInstructions(String currentLine) {
+        private static List<Input.Instruction> parseInstructions(String currentLine) {
             List<Input.Instruction> instructions = new ArrayList<>(currentLine.length());
             for (int index = 0; index < currentLine.length(); ++index) {
 
                 instructions.add(Input.Instruction.valueOf(currentLine.substring(index, 1 + index)));
             }
+            return instructions;
+        }
+
+        private static List<Instruction> buildProgram(List<Input.Instruction> instructions) {
             
             Map<Input.Instruction, Instruction> instructionSet = new HashMap<>();
             instructionSet.put(Input.Instruction.M, new Instruction() {
