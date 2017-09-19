@@ -46,9 +46,9 @@ public class TestableCore {
         // random access, which allows me to easily document the input format?
         // A thin justification, perhaps.
 
-        Input input = parseInput(simulationInputs);
+        Input input = Parser.parseInput(simulationInputs);
 
-        SimulationDefinition simulationDefinition = buildSimulation(input);
+        SimulationDefinition simulationDefinition = Builder.buildSimulation(input);
 
         List<RoverState> simulationResults = runSimulation(simulationDefinition);
 
@@ -269,6 +269,39 @@ public class TestableCore {
             return new Input.Position(coordinate, heading);
         }
 
+        private static List<Input.Instruction> parseInstructions(String currentLine) {
+            List<Input.Instruction> instructions = new ArrayList<>(currentLine.length());
+            for (int index = 0; index < currentLine.length(); ++index) {
+
+                instructions.add(Input.Instruction.valueOf(currentLine.substring(index, 1 + index)));
+            }
+            return instructions;
+        }
+
+        private static Input parseInput(List<String> simulationInputs) {
+            final int FIRST_ROVER_OFFSET = 1;
+            final int ROVER_RECORD_LENGTH = 2;
+
+            final int ROVER_STATE_OFFSET = 0;
+            final int ROVER_INSTRUCTIONS_OFFSET = 1;
+
+            String plateauInputs = simulationInputs.get(0);
+            final Input.Plateau plateau = Parser.parsePlateau(plateauInputs);
+
+            List<Input.Rover> inputRovers = new ArrayList<>();
+            for(int recordOffset = FIRST_ROVER_OFFSET; recordOffset < simulationInputs.size(); recordOffset += ROVER_RECORD_LENGTH) {
+                String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
+                String instructions = simulationInputs.get(ROVER_INSTRUCTIONS_OFFSET + recordOffset);
+
+                final Input.Rover rover = Parser.parseRover(roverInput, instructions);
+                inputRovers.add(rover);
+            }
+
+            return new Input(plateau, inputRovers);
+        }
+    }
+
+    static class Builder {
         private static RoverState buildRoverState(Input.Position position) {
             return new RoverState(position.coordinate.X, position.coordinate.Y, position.heading.name());
         }
@@ -280,17 +313,8 @@ public class TestableCore {
             return new RoverDefinition(roverState, program);
         }
 
-        private static List<Input.Instruction> parseInstructions(String currentLine) {
-            List<Input.Instruction> instructions = new ArrayList<>(currentLine.length());
-            for (int index = 0; index < currentLine.length(); ++index) {
-
-                instructions.add(Input.Instruction.valueOf(currentLine.substring(index, 1 + index)));
-            }
-            return instructions;
-        }
-
         private static List<Instruction> buildProgram(List<Input.Instruction> instructions) {
-            
+
             Map<Input.Instruction, Instruction> instructionSet = new HashMap<>();
             instructionSet.put(Input.Instruction.M, new Instruction() {
                 @Override
@@ -348,39 +372,17 @@ public class TestableCore {
             }
             return program;
         }
-    }
 
-    private static Input parseInput(List<String> simulationInputs) {
-        final int FIRST_ROVER_OFFSET = 1;
-        final int ROVER_RECORD_LENGTH = 2;
+        private static SimulationDefinition buildSimulation(Input input) {
+            List<RoverDefinition> rovers = new ArrayList<>();
+            for(Input.Rover currentRover : input.rovers) {
+                RoverDefinition roverDefinition = Builder.buildRover(currentRover);
+                rovers.add(roverDefinition);
+            }
 
-        final int ROVER_STATE_OFFSET = 0;
-        final int ROVER_INSTRUCTIONS_OFFSET = 1;
-
-        String plateauInputs = simulationInputs.get(0);
-        final Input.Plateau plateau = Parser.parsePlateau(plateauInputs);
-
-        List<Input.Rover> inputRovers = new ArrayList<>();
-        for(int recordOffset = FIRST_ROVER_OFFSET; recordOffset < simulationInputs.size(); recordOffset += ROVER_RECORD_LENGTH) {
-            String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
-            String instructions = simulationInputs.get(ROVER_INSTRUCTIONS_OFFSET + recordOffset);
-
-            final Input.Rover rover = Parser.parseRover(roverInput, instructions);
-            inputRovers.add(rover);
+            GridDefinition grid = new GridDefinition(input.plateau.upperRight.X, input.plateau.upperRight.Y);
+            return new SimulationDefinition(grid, rovers);
         }
-
-        return new Input(plateau, inputRovers);
-    }
-
-    private static SimulationDefinition buildSimulation(Input input) {
-        List<RoverDefinition> rovers = new ArrayList<>();
-        for(Input.Rover currentRover : input.rovers) {
-            RoverDefinition roverDefinition = Parser.buildRover(currentRover);
-            rovers.add(roverDefinition);
-        }
-
-        GridDefinition grid = new GridDefinition(input.plateau.upperRight.X, input.plateau.upperRight.Y);
-        return new SimulationDefinition(grid, rovers);
     }
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
