@@ -260,9 +260,10 @@ public class TestableCore {
         private static RoverDefinition parseRover(String state, String roverInstructions) {
             Input.Position position = parseRoverPosition(state);
             final List<Input.Instruction> instructions = parseInstructions(roverInstructions);
+            final Input.Rover rover = new Input.Rover(position, instructions);
 
-            RoverState roverState = buildRoverState(position);
-            List<Instruction> program = buildProgram(instructions);
+            RoverState roverState = buildRoverState(rover.position);
+            List<Instruction> program = buildProgram(rover.instructions);
 
             return new RoverDefinition(roverState, program);
         }
