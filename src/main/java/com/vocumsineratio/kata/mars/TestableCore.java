@@ -262,6 +262,10 @@ public class TestableCore {
             final List<Input.Instruction> instructions = parseInstructions(roverInstructions);
             final Input.Rover rover = new Input.Rover(position, instructions);
 
+            return buildRover(rover);
+        }
+
+        private static RoverDefinition buildRover(Input.Rover rover) {
             RoverState roverState = buildRoverState(rover.position);
             List<Instruction> program = buildProgram(rover.instructions);
 
