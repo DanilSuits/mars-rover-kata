@@ -93,10 +93,11 @@ public class TestableCore {
     }
 
     private static String format(Output.Coordinate coordinate, Output.Heading heading) {
-        final int posX = coordinate.X;
-        final int posY = coordinate.Y;
-        final String cardinalDirection = heading.name();
-        return format(posX, posY, cardinalDirection);
+        return format(
+                coordinate.X,
+                coordinate.Y,
+                heading.name()
+        );
     }
 
     private static String format(int posX, int posY, String heading) {
