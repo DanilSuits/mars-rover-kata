@@ -195,17 +195,27 @@ public class TestableCore {
                 Y = y;
             }
         }
+
+        static class Plateau {
+            public final Coordinate upperRight;
+            public final Coordinate lowerLeft = new Coordinate(0,0);
+
+            Plateau(Coordinate upperRight) {
+                this.upperRight = upperRight;
+            }
+        }
     }
 
     private static class Parser {
-        private static GridDefinition parseGrid(String grid) {
+        private static Input.Plateau parsePlateau(String grid) {
             String [] args = grid.split(" ");
             final int maxRight = Integer.parseInt(args[0]);
             final int maxUp = Integer.parseInt(args[1]);
 
             Input.Coordinate upperRight = new Input.Coordinate(maxRight, maxUp);
+            Input.Plateau plateau = new Input.Plateau(upperRight);
 
-            return new GridDefinition(upperRight.X, upperRight.Y);
+            return plateau;
         }
 
         private static RoverState parseRoverState(String state) {
@@ -293,7 +303,7 @@ public class TestableCore {
 
         List<RoverDefinition> rovers = new ArrayList<>();
         String gridInputs = simulationInputs.get(0);
-        final GridDefinition grid = Parser.parseGrid(gridInputs);
+        final Input.Plateau plateau = Parser.parsePlateau(gridInputs);
 
         for(int recordOffset = FIRST_ROVER_OFFSET; recordOffset < simulationInputs.size(); recordOffset += ROVER_RECORD_LENGTH) {
             String roverInput = simulationInputs.get(ROVER_STATE_OFFSET + recordOffset);
@@ -303,6 +313,7 @@ public class TestableCore {
             rovers.add(roverDefinition);
         }
 
+        GridDefinition grid = new GridDefinition(plateau.upperRight.X, plateau.upperRight.Y);
         return new SimulationDefinition(grid, rovers);
     }
 
