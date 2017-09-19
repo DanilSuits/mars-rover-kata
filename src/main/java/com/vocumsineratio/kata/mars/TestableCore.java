@@ -71,8 +71,12 @@ public class TestableCore {
         Output.Coordinate coordinate = new Output.Coordinate(rover.posX, rover.posY);
         Output.Rover outputRover = new Output.Rover(coordinate, heading);
 
+        return toResult(outputRover);
+    }
+
+    private static String toResult(Output.Rover rover) {
         StringBuilder b = new StringBuilder();
-        b.append(outputRover.coordinate.X).append(" ").append(outputRover.coordinate.Y).append(" ").append(outputRover.heading.name());
+        b.append(rover.coordinate.X).append(" ").append(rover.coordinate.Y).append(" ").append(rover.heading.name());
         return b.toString();
     }
 
