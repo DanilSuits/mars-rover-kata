@@ -48,15 +48,20 @@ public class TestableCore {
 
         Input input = Parser.parseInput(simulationInputs);
 
-        SimulationDefinition simulationDefinition = Builder.buildSimulation(input);
-
-        List<RoverState> simulationResults = runSimulation(simulationDefinition);
-
-        Output output = prepareReport(simulationResults);
+        Output output = runSimulation(input);
 
         List<String> lines = format(output);
 
         return lines;
+    }
+
+    private static Output runSimulation(Input input) {
+        SimulationDefinition simulationDefinition = Builder.buildSimulation(input);
+
+        List<RoverState> simulationResults = runSimulation(simulationDefinition);
+
+        final Output output = prepareReport(simulationResults);
+        return output;
     }
 
     private static Output prepareReport(List<RoverState> simulationResults) {
