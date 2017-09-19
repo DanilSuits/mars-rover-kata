@@ -58,16 +58,18 @@ public class TestableCore {
     }
 
     private static List<String> toResult(List<RoverState> simulationResults) {
-        List<Output.Rover> output = new ArrayList<>(simulationResults.size());
+        List<Output.Rover> rovers = new ArrayList<>(simulationResults.size());
         for(RoverState state : simulationResults) {
             Output.Heading heading = Output.Heading.valueOf(state.orientation);
             Output.Coordinate coordinate = new Output.Coordinate(state.posX, state.posY);
             Output.Rover rover = new Output.Rover(coordinate, heading);
-            output.add(rover);
+            rovers.add(rover);
 
         }
+        Output output = new Output(rovers);
+
         List<String> lines = new ArrayList<>();
-        for(Output.Rover rover : output) {
+        for(Output.Rover rover : output.rovers) {
             String report = toResult(rover);
             lines.add(report);
         }
@@ -249,6 +251,12 @@ public class TestableCore {
     }
 
     static class Output {
+        public final List<Rover> rovers;
+
+        Output(List<Rover> rovers) {
+            this.rovers = rovers;
+        }
+
         enum Heading {
             N, E, W, S
         }
