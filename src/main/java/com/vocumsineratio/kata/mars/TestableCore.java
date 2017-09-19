@@ -69,7 +69,8 @@ public class TestableCore {
     private static String toResult(RoverState rover) {
         StringBuilder b = new StringBuilder();
         Output.Heading heading = Output.Heading.valueOf(rover.orientation);
-        b.append(rover.posX).append(" ").append(rover.posY).append(" ").append(heading.name());
+        Output.Coordinate coordinate = new Output.Coordinate(rover.posX, rover.posY);
+        b.append(coordinate.X).append(" ").append(coordinate.Y).append(" ").append(heading.name());
         return b.toString();
     }
 
@@ -246,7 +247,15 @@ public class TestableCore {
             N, E, W, S
         }
 
+        static class Coordinate {
+            public final int X;
+            public final int Y;
 
+            Coordinate(int x, int y) {
+                X = x;
+                Y = y;
+            }
+        }
     }
 
     private static class Parser {
