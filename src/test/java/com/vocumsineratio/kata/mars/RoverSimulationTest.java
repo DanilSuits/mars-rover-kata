@@ -9,6 +9,13 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
+import static org.testng.Assert.fail;
+
 /**
  * @author Danil Suits (danil@vast.com)
  */
@@ -87,8 +94,34 @@ public class RoverSimulationTest {
     }
 
     private void checkSimulation(String initialState, String instructions, String expectedState) {
-        String finalState = TestableCore.simulateRover(initialState, instructions);
-        Assert.assertEquals(finalState, expectedState);
+
+        String [] input = {"5 5", initialState, instructions};
+        String [] expectedReport = { expectedState };
+
+        checkSimulation(input, expectedReport);
+    }
+
+    private void checkSimulation(String[] input, String[] expectedReport) {
+        final String NEWLINE = "\n";
+        StringBuilder inputBuilder = new StringBuilder();
+        for (String line : input) {
+            inputBuilder.append(line).append(NEWLINE);
+        }
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(inputBuilder.toString().getBytes());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(baos);
+
+
+        try {
+            TestableCore.runTest(inputStream, out);
+        } catch (IOException e) {
+            fail(e.getMessage());
+        }
+
+        String [] actualReport = new String(baos.toString()).split(NEWLINE);
+
+        Assert.assertEquals(actualReport, expectedReport);
     }
 
     @Test
@@ -96,8 +129,7 @@ public class RoverSimulationTest {
         String [] simulation = toArray("5 5", "2 0 N", "M", "1 0 E", "MM");
         String [] expectedReport = toArray("2 1 N", "3 0 E");
 
-        String [] actualReport = TestableCore.runSimulation(simulation);
-        Assert.assertEquals(actualReport, expectedReport);
+        checkSimulation(simulation, expectedReport);
     }
 
     @Test
@@ -137,8 +169,7 @@ public class RoverSimulationTest {
     }
 
     private void checkCollision(String[] simulation, String[] expectedReport) {
-        String [] actualReport = TestableCore.simulateCollision(simulation);
-        Assert.assertEquals(actualReport, expectedReport);
+        checkSimulation(simulation, expectedReport);
     }
 
     private String [] toArray(String ... items) {
