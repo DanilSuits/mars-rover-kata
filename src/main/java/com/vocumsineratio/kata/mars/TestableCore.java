@@ -37,14 +37,6 @@ public class TestableCore {
             }
         }
 
-        List<String> output = runSimulation(simulationInputs);
-
-        for(String report : output) {
-            out.println(report);
-        }
-    }
-
-    private static List<String> runSimulation(List<String> simulationInputs) {
         // NOTE: the use of Lists as the mechanism for communicating state is an
         // arbitrary choice at this point, I just want something that looks like
         // a pure function  f: immutable state -> immutable state
@@ -59,7 +51,9 @@ public class TestableCore {
 
         List<String> lines = Formatter.format(output);
 
-        return lines;
+        for(String report : lines) {
+            out.println(report);
+        }
     }
 
     private static Output runSimulation(Input input) {
