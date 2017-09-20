@@ -27,6 +27,4 @@ public class TestableCore {
 
         Console.writeTo(out, output);
     }
-
-
 }

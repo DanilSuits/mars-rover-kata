@@ -11,8 +11,8 @@ import java.util.List;
  * @author Danil Suits (danil@vast.com)
  */
 class Input {
-    public final Plateau plateau;
-    public final List<Rover> rovers;
+    final Plateau plateau;
+    final List<Rover> rovers;
 
     Input(Plateau plateau, List<Rover> rovers) {
         this.plateau = plateau;
@@ -24,8 +24,8 @@ class Input {
     }
 
     static class Coordinate {
-        public final int X;
-        public final int Y;
+        final int X;
+        final int Y;
 
         Coordinate(int x, int y) {
             X = x;
@@ -34,8 +34,8 @@ class Input {
     }
 
     static class Plateau {
-        public final Coordinate upperRight;
-        public final Coordinate lowerLeft = new Coordinate(0, 0);
+        final Coordinate upperRight;
+        final Coordinate lowerLeft = new Coordinate(0, 0);
 
         Plateau(Coordinate upperRight) {
             this.upperRight = upperRight;
@@ -47,8 +47,8 @@ class Input {
     }
 
     static class Position {
-        public final Coordinate coordinate;
-        public final Heading heading;
+        final Coordinate coordinate;
+        final Heading heading;
 
         Position(Coordinate coordinate, Heading heading) {
             this.coordinate = coordinate;
@@ -57,8 +57,8 @@ class Input {
     }
 
     static class Rover {
-        public final Position position;
-        public final List<Instruction> instructions;
+        final Position position;
+        final List<Instruction> instructions;
 
         Rover(Position position, List<Instruction> instructions) {
             this.position = position;

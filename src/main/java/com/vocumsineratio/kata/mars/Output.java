@@ -11,7 +11,7 @@ import java.util.List;
  * @author Danil Suits (danil@vast.com)
  */
 class Output {
-    public final List<Rover> rovers;
+    final List<Rover> rovers;
 
     Output(List<Rover> rovers) {
         this.rovers = rovers;
@@ -22,8 +22,8 @@ class Output {
     }
 
     static class Coordinate {
-        public final int X;
-        public final int Y;
+        final int X;
+        final int Y;
 
         Coordinate(int x, int y) {
             X = x;
@@ -32,8 +32,8 @@ class Output {
     }
 
     static class Rover {
-        public final Coordinate coordinate;
-        public final Heading heading;
+        final Coordinate coordinate;
+        final Heading heading;
 
         Rover(Coordinate coordinate, Heading heading) {
             this.coordinate = coordinate;
