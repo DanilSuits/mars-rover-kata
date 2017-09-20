@@ -412,10 +412,7 @@ public class TestableCore {
         }
 
         List<String> output = runSimulation(simulationInputs);
-        {
-            // TEST CALIBRATION
-            output = new ArrayList<>();
-        }
+
         for(String report : output) {
             out.println(report);
         }
