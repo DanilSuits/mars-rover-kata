@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,21 +19,29 @@ import java.util.Map;
  * @author Danil Suits (danil@vast.com)
  */
 public class TestableCore {
-    static String[] simulateCollision(String[] simulation) {
-        return runSimulation(simulation);
+    public static void main(String[] args) throws IOException {
+        // This is my proof that the thin shell can invoke
+        // the function provided by the testable core.
+        runTest(System.in, System.out);
     }
 
-    static String[] runSimulation(String[] simulation) {
-        List<String> simulationInputs = Arrays.asList(simulation);
-        List<String> report = runSimulation(simulationInputs);
-        final String [] template = new String[0];
-        return report.toArray(template);
-    }
-    
-    static String simulateRover(String state, String instructions) {
-        String [] simulation = {"5 5", state, instructions};
-        String [] report = runSimulation(simulation);
-        return report[0];
+    static void runTest(InputStream in, PrintStream out) throws IOException {
+
+        List<String> simulationInputs = new ArrayList<>();
+        {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+            String currentLine;
+            while((currentLine = reader.readLine()) != null) {
+                simulationInputs.add(currentLine);
+            }
+        }
+
+        List<String> output = runSimulation(simulationInputs);
+
+        for(String report : output) {
+            out.println(report);
+        }
     }
 
     private static List<String> runSimulation(List<String> simulationInputs) {
@@ -397,30 +404,5 @@ public class TestableCore {
             GridDefinition grid = new GridDefinition(input.plateau.upperRight.X, input.plateau.upperRight.Y);
             return new SimulationDefinition(grid, rovers);
         }
-    }
-
-    static void runTest(InputStream in, PrintStream out) throws IOException {
-
-        List<String> simulationInputs = new ArrayList<>();
-        {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-            String currentLine;
-            while((currentLine = reader.readLine()) != null) {
-                simulationInputs.add(currentLine);
-            }
-        }
-
-        List<String> output = runSimulation(simulationInputs);
-
-        for(String report : output) {
-            out.println(report);
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        // This is my proof that the thin shell can invoke
-        // the function provided by the testable core.
-        runTest(System.in, System.out);
     }
 }
