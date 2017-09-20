@@ -27,32 +27,42 @@ public class TestableCore {
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
 
-        List<String> simulationInputs = new ArrayList<>();
-        {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-
-            String currentLine;
-            while((currentLine = reader.readLine()) != null) {
-                simulationInputs.add(currentLine);
-            }
-        }
-
-        // NOTE: the use of Lists as the mechanism for communicating state is an
-        // arbitrary choice at this point, I just want something that looks like
-        // a pure function  f: immutable state -> immutable state
-
-        // In this case, I'm using lists, because that makes it easy to use
-        // random access, which allows me to easily document the input format?
-        // A thin justification, perhaps.
-
-        Input input = Parser.parseInput(simulationInputs);
+        Input input = Console.readFrom(in);
 
         Output output = runSimulation(input);
 
-        List<String> lines = Formatter.format(output);
+        Console.writeTo(out, output);
+    }
 
-        for(String report : lines) {
-            out.println(report);
+    static class Console {
+        static Input readFrom(InputStream in) throws IOException {
+            List<String> simulationInputs = new ArrayList<>();
+            {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+
+                String currentLine;
+                while ((currentLine = reader.readLine()) != null) {
+                    simulationInputs.add(currentLine);
+                }
+            }
+
+            // NOTE: the use of Lists as the mechanism for communicating state is an
+            // arbitrary choice at this point, I just want something that looks like
+            // a pure function  f: immutable state -> immutable state
+
+            // In this case, I'm using lists, because that makes it easy to use
+            // random access, which allows me to easily document the input format?
+            // A thin justification, perhaps.
+
+            return Parser.parseInput(simulationInputs);
+        }
+
+        static void writeTo(PrintStream out, Output output) {
+            List<String> lines = Formatter.format(output);
+
+            for (String report : lines) {
+                out.println(report);
+            }
         }
     }
 
