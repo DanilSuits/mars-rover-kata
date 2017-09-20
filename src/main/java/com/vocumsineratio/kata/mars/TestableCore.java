@@ -173,6 +173,7 @@ public class TestableCore {
         }
     }
 
+
     static class RoverState {
         final int posX;
         final int posY;
@@ -225,15 +226,30 @@ public class TestableCore {
             final int maxRight = Integer.parseInt(args[0]);
             final int maxUp = Integer.parseInt(args[1]);
 
-            Input.Coordinate upperRight = new Input.Coordinate(maxRight, maxUp);
-            Input.Plateau plateau = new Input.Plateau(upperRight);
+            return createPlateau(
+                    createCoordinate(
+                            maxRight,
+                            maxUp
+                    )
+            );
+        }
 
-            return plateau;
+        private static Input.Coordinate createCoordinate(int maxRight, int maxUp) {
+            return new Input.Coordinate(maxRight, maxUp);
+        }
+
+        private static Input.Plateau createPlateau(Input.Coordinate upperRight) {
+            return new Input.Plateau(upperRight);
         }
 
         private static Input.Rover parseRover(String roverInput, String instructions) {
-            Input.Position position = Parser.parseRoverPosition(roverInput);
-            final List<Input.Instruction> instructions1 = Parser.parseInstructions(instructions);
+            return createRover(
+                    Parser.parseRoverPosition(roverInput),
+                    Parser.parseInstructions(instructions)
+            );
+        }
+
+        private static Input.Rover createRover(Input.Position position, List<Input.Instruction> instructions1) {
             return new Input.Rover(position, instructions1);
         }
 
@@ -241,20 +257,39 @@ public class TestableCore {
             String [] args = state.split(" ");
             final int posX = Integer.parseInt(args[0]);
             final int posY = Integer.parseInt(args[1]);
-            final String w = args[2];
-            Input.Coordinate coordinate = new Input.Coordinate(posX, posY);
-            Input.Heading heading = Input.Heading.valueOf(args[2]);
+            final String heading = args[2];
 
+            return createPosition(posX, posY, heading);
+        }
+
+        private static Input.Position createPosition(int posX, int posY, String heading) {
+
+            return createPosition(
+                    createCoordinate(posX, posY)
+                    , createHeading(heading)
+            );
+        }
+
+        private static Input.Position createPosition(Input.Coordinate coordinate, Input.Heading heading) {
             return new Input.Position(coordinate, heading);
+        }
+
+        private static Input.Heading createHeading(String w) {
+            return Input.Heading.valueOf(w);
         }
 
         private static List<Input.Instruction> parseInstructions(String currentLine) {
             List<Input.Instruction> instructions = new ArrayList<>(currentLine.length());
             for (int index = 0; index < currentLine.length(); ++index) {
 
-                instructions.add(Input.Instruction.valueOf(currentLine.substring(index, 1 + index)));
+                final String instructionCode = currentLine.substring(index, 1 + index);
+                instructions.add(createInstruction(instructionCode));
             }
             return instructions;
+        }
+
+        private static Input.Instruction createInstruction(String instructionCode) {
+            return Input.Instruction.valueOf(instructionCode);
         }
 
         private static Input parseInput(List<String> simulationInputs) {
