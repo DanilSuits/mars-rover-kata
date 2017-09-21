@@ -6,6 +6,8 @@
 package com.vocumsineratio.kata.mars;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,6 +101,58 @@ class Model {
         }
     }
 
+    interface Heading<T extends Heading<T>> {
+        T left();
+        T right();
+    }
+
+    enum SimpleHeading implements Heading<SimpleHeading> {
+        N {
+            @Override
+            public SimpleHeading left() {
+                return W;
+            }
+
+            @Override
+            public SimpleHeading right() {
+                return E;
+            }
+        },
+        E {
+            @Override
+            public SimpleHeading left() {
+                return N;
+            }
+
+            @Override
+            public SimpleHeading right() {
+                return S;
+            }
+        },
+        W {
+            @Override
+            public SimpleHeading left() {
+                return S;
+            }
+
+            @Override
+            public SimpleHeading right() {
+                return N;
+            }
+        },
+        S {
+            @Override
+            public SimpleHeading left() {
+                return E;
+            }
+
+            @Override
+            public SimpleHeading right() {
+                return W;
+            }
+        };
+
+    }
 
     static class RoverState {
         final int posX;
@@ -189,12 +243,9 @@ class Model {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
                     String orientation = currentState.orientation;
+                    Heading heading = SimpleHeading.valueOf(orientation);
 
-
-                    int pos = TURN_LEFT.indexOf(orientation);
-                    String result = TURN_LEFT.substring(pos + 1, pos + 2);
-
-                    return new RoverState(currentState.posX, currentState.posY, result);
+                    return new RoverState(currentState.posX, currentState.posY, heading.left().toString());
 
                 }
             });
@@ -203,11 +254,9 @@ class Model {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
                     String orientation = currentState.orientation;
+                    Heading heading = SimpleHeading.valueOf(orientation);
 
-                    int pos = TURN_RIGHT.indexOf(orientation);
-                    String result = TURN_RIGHT.substring(pos + 1, pos + 2);
-
-                    return new RoverState(currentState.posX, currentState.posY, result);
+                    return new RoverState(currentState.posX, currentState.posY, heading.right().toString());
                 }
             });
 
