@@ -5,6 +5,8 @@
  */
 package com.vocumsineratio.kata.mars;
 
+import sun.java2d.pipe.SpanShapeRenderer;
+
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.EnumSet;
@@ -243,16 +245,16 @@ class Model {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
 
-                    Map<String, Move> moves = new HashMap<>();
+                    Map<SimpleHeading, Move> moves = new EnumMap<>(SimpleHeading.class);
                     {
-                        moves.put("W", new Move(-1, 0));
-                        moves.put("E", new Move(1, 0));
-                        moves.put("N", new Move(0, 1));
-                        moves.put("S", new Move(0, -1));
+                        moves.put(SimpleHeading.W, new Move(-1, 0));
+                        moves.put(SimpleHeading.E, new Move(1, 0));
+                        moves.put(SimpleHeading.N, new Move(0, 1));
+                        moves.put(SimpleHeading.S, new Move(0, -1));
                     }
 
                     SimpleHeading heading = currentState.orientation;
-                    Move move = moves.get(heading.name());
+                    Move move = moves.get(heading);
                     int posX = currentState.posX + move.offsetX;
                     int posY = currentState.posY + move.offsetY;
 
