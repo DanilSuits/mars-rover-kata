@@ -28,7 +28,7 @@ class Model {
     private static Output prepareReport(List<RoverState> simulationResults) {
         List<Output.Rover> rovers = new ArrayList<>(simulationResults.size());
         for (RoverState state : simulationResults) {
-            SimpleHeading source = SimpleHeading.valueOf(state.orientation);
+            SimpleHeading source = state.orientation;
 
             // TODO: EnumMap?
             Output.Heading heading = Output.Heading.valueOf(source.name());
@@ -104,12 +104,15 @@ class Model {
         }
     }
 
-    interface Heading<T extends Heading<T>> {
-        T left();
-        T right();
+    static class Domain {
+        interface Heading<T extends Heading<T>> {
+            T left();
+
+            T right();
+        }
     }
 
-    enum SimpleHeading implements Heading<SimpleHeading> {
+    enum SimpleHeading implements Domain.Heading<SimpleHeading> {
         N {
             @Override
             public SimpleHeading left() {
@@ -160,9 +163,9 @@ class Model {
     static class RoverState {
         final int posX;
         final int posY;
-        final String orientation;
+        final SimpleHeading orientation;
 
-        RoverState(int posX, int posY, String orientation) {
+        RoverState(int posX, int posY, SimpleHeading orientation) {
             this.posX = posX;
             this.posY = posY;
             this.orientation = orientation;
@@ -208,7 +211,7 @@ class Model {
         private static RoverState buildRoverState(Input.Position position) {
             // TODO: this is probably an enum map
             SimpleHeading heading = SimpleHeading.valueOf(position.heading.name());
-            return new RoverState(position.coordinate.X, position.coordinate.Y, heading.name());
+            return new RoverState(position.coordinate.X, position.coordinate.Y, heading);
         }
 
         private static RoverDefinition buildRover(Input.Rover rover) {
@@ -233,22 +236,21 @@ class Model {
                         moves.put("S", new Move(0, -1));
                     }
 
-                    SimpleHeading heading = SimpleHeading.valueOf(currentState.orientation);
+                    SimpleHeading heading = currentState.orientation;
                     Move move = moves.get(heading.name());
                     int posX = currentState.posX + move.offsetX;
                     int posY = currentState.posY + move.offsetY;
 
-                    return new RoverState(posX, posY, heading.name());
+                    return new RoverState(posX, posY, heading);
                 }
             });
 
             instructionSet.put(Input.Instruction.L, new Instruction() {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
-                    String orientation = currentState.orientation;
-                    SimpleHeading heading = SimpleHeading.valueOf(orientation);
+                    SimpleHeading heading = currentState.orientation;
 
-                    return new RoverState(currentState.posX, currentState.posY, heading.left().name());
+                    return new RoverState(currentState.posX, currentState.posY, heading.left());
 
                 }
             });
@@ -256,10 +258,9 @@ class Model {
             instructionSet.put(Input.Instruction.R, new Instruction() {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
-                    String orientation = currentState.orientation;
-                    SimpleHeading heading = SimpleHeading.valueOf(orientation);
+                    SimpleHeading heading = currentState.orientation;
 
-                    return new RoverState(currentState.posX, currentState.posY, heading.right().name());
+                    return new RoverState(currentState.posX, currentState.posY, heading.right());
                 }
             });
 
