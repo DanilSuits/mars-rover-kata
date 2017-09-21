@@ -228,7 +228,8 @@ class Model {
                         moves.put("S", new Move(0, -1));
                     }
 
-                    Move move = moves.get(currentState.orientation);
+                    SimpleHeading heading = SimpleHeading.valueOf(currentState.orientation);
+                    Move move = moves.get(heading.name());
                     int posX = currentState.posX + move.offsetX;
                     int posY = currentState.posY + move.offsetY;
 
@@ -236,16 +237,13 @@ class Model {
                 }
             });
 
-            final String TURN_LEFT = "NWSEN";
-            final String TURN_RIGHT = new StringBuilder(TURN_LEFT).reverse().toString();
-
             instructionSet.put(Input.Instruction.L, new Instruction() {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
                     String orientation = currentState.orientation;
-                    Heading heading = SimpleHeading.valueOf(orientation);
+                    SimpleHeading heading = SimpleHeading.valueOf(orientation);
 
-                    return new RoverState(currentState.posX, currentState.posY, heading.left().toString());
+                    return new RoverState(currentState.posX, currentState.posY, heading.left().name());
 
                 }
             });
@@ -254,9 +252,9 @@ class Model {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
                     String orientation = currentState.orientation;
-                    Heading heading = SimpleHeading.valueOf(orientation);
+                    SimpleHeading heading = SimpleHeading.valueOf(orientation);
 
-                    return new RoverState(currentState.posX, currentState.posY, heading.right().toString());
+                    return new RoverState(currentState.posX, currentState.posY, heading.right().name());
                 }
             });
 
