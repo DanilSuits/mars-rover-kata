@@ -28,7 +28,10 @@ class Model {
     private static Output prepareReport(List<RoverState> simulationResults) {
         List<Output.Rover> rovers = new ArrayList<>(simulationResults.size());
         for (RoverState state : simulationResults) {
-            Output.Heading heading = Output.Heading.valueOf(state.orientation);
+            SimpleHeading source = SimpleHeading.valueOf(state.orientation);
+
+            // TODO: EnumMap?
+            Output.Heading heading = Output.Heading.valueOf(source.name());
             Output.Coordinate coordinate = new Output.Coordinate(state.posX, state.posY);
             Output.Rover rover = new Output.Rover(coordinate, heading);
             rovers.add(rover);
@@ -203,7 +206,9 @@ class Model {
 
     static class Builder {
         private static RoverState buildRoverState(Input.Position position) {
-            return new RoverState(position.coordinate.X, position.coordinate.Y, position.heading.name());
+            // TODO: this is probably an enum map
+            SimpleHeading heading = SimpleHeading.valueOf(position.heading.name());
+            return new RoverState(position.coordinate.X, position.coordinate.Y, heading.name());
         }
 
         private static RoverDefinition buildRover(Input.Rover rover) {
@@ -233,7 +238,7 @@ class Model {
                     int posX = currentState.posX + move.offsetX;
                     int posY = currentState.posY + move.offsetY;
 
-                    return new RoverState(posX, posY, currentState.orientation);
+                    return new RoverState(posX, posY, heading.name());
                 }
             });
 
