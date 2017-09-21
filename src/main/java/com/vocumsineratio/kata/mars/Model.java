@@ -110,6 +110,11 @@ class Model {
 
             T right();
         }
+
+        interface Rover<R extends Rover<R>> {
+            R left();
+            R right();
+        }
     }
 
     enum SimpleHeading implements Domain.Heading<SimpleHeading> {
@@ -160,7 +165,7 @@ class Model {
 
     }
 
-    static class RoverState {
+    static class RoverState implements Domain.Rover<RoverState> {
         final int posX;
         final int posY;
         final SimpleHeading orientation;
@@ -169,6 +174,16 @@ class Model {
             this.posX = posX;
             this.posY = posY;
             this.orientation = orientation;
+        }
+
+        @Override
+        public RoverState left() {
+            return new RoverState(posX, posY, orientation.left());
+        }
+
+        @Override
+        public RoverState right() {
+            return new RoverState(posX, posY, orientation.right());
         }
     }
 
@@ -248,9 +263,7 @@ class Model {
             instructionSet.put(Input.Instruction.L, new Instruction() {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
-                    SimpleHeading heading = currentState.orientation;
-
-                    return new RoverState(currentState.posX, currentState.posY, heading.left());
+                    return currentState.left();
 
                 }
             });
@@ -258,9 +271,7 @@ class Model {
             instructionSet.put(Input.Instruction.R, new Instruction() {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
-                    SimpleHeading heading = currentState.orientation;
-
-                    return new RoverState(currentState.posX, currentState.posY, heading.right());
+                    return currentState.right();
                 }
             });
 
