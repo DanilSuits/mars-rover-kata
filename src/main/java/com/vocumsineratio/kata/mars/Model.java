@@ -5,11 +5,8 @@
  */
 package com.vocumsineratio.kata.mars;
 
-import sun.java2d.pipe.SpanShapeRenderer;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -107,10 +104,10 @@ class Model {
     }
 
     static class Domain {
-        interface Heading<T extends Domain.Heading<T>> {
-            T left();
+        interface Heading<Heading extends Domain.Heading> {
+            Heading left();
 
-            T right();
+            Heading right();
         }
 
         interface Rover<R extends Domain.Rover<R>> {
