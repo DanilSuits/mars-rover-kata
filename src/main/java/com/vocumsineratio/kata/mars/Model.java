@@ -77,13 +77,15 @@ class Model {
             boolean isOccupied(Rover rover);
         }
 
-        interface Plateau<Rover extends Domain.Rover> {
-            Plateau<Rover> roverArrived(Rover rover);
-            Plateau<Rover> roverLeft(Rover rover);
+        interface Plateau<T extends Plateau<T, R>, R extends Domain.Rover<R>> {
+            T roverArrived(R rover);
+            T roverLeft(R rover);
         }
     }
     
-    private static SimulationDefinition runSimulation(ArrayGrid grid, SimulationDefinition simulationDefinition) {
+    private static
+    <Plateau extends Domain.Plateau<Plateau, RoverState> & Domain.PlateauView<RoverState>>
+    SimulationDefinition runSimulation(Plateau grid, SimulationDefinition simulationDefinition) {
         SimulationDefinition simulationResult = new SimulationDefinition(simulationDefinition.grid, new ArrayList<>());
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
@@ -117,7 +119,7 @@ class Model {
         return currentRover;
     }
 
-    static class ArrayGrid implements Domain.Plateau<RoverState>, Domain.PlateauView<RoverState> {
+    static class ArrayGrid implements Domain.Plateau<ArrayGrid, RoverState>, Domain.PlateauView<RoverState> {
 
         private final boolean[][] positions;
 
