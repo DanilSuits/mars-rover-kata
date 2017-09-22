@@ -89,6 +89,10 @@ class Model {
         interface Report<T extends Report<T, R>, R extends Domain.Rover<R>> {
             T add(R rover);
         }
+
+        interface Instruction<R extends Domain.Rover<R>> {
+            R applyTo(R currentState);
+        }
     }
 
     static final class ReportBuilder implements Domain.Report<ReportBuilder, RoverState>{
@@ -117,7 +121,8 @@ class Model {
     }
 
     private static
-    <Plateau extends Domain.Plateau<Plateau, RoverState> & Domain.PlateauView<RoverState>, Report extends Domain.Report<Report, RoverState>>
+    <Plateau extends Domain.Plateau<Plateau, RoverState> & Domain.PlateauView<RoverState>,
+    Report extends Domain.Report<Report, RoverState>>
     Report runSimulation(Plateau grid, SimulationDefinition simulationDefinition, Report reportBuilder) {
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
@@ -127,7 +132,7 @@ class Model {
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
-            final List<Instruction<RoverState>> instructions = roverDefinition.instructions;
+            final List<Domain.Instruction<RoverState>> instructions = roverDefinition.instructions;
 
             grid = grid.roverLeft(currentRover);
             RoverState finalState = runProgram(grid, currentRover, instructions);
@@ -141,10 +146,10 @@ class Model {
 
     private static
     <Rover extends Domain.Rover<Rover>,
-    Program extends Iterable<Instruction<Rover>>,
+    Program extends Iterable<Domain.Instruction<Rover>>,
     Plateau extends Domain.PlateauView<Rover>>
     Rover runProgram(Plateau grid, Rover currentRover, Program program) {
-        for (Instruction<Rover> currentInstruction : program) {
+        for (Domain.Instruction<Rover> currentInstruction : program) {
             Rover roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
             if (grid.isOccupied(roverAfterInstruction)) {
@@ -308,15 +313,11 @@ class Model {
         }
     }
 
-    interface Instruction<Rover extends Domain.Rover<Rover>> {
-        Rover applyTo(Rover currentState);
-    }
-
     static class RoverDefinition {
         public final RoverState state;
-        public final List<Instruction<RoverState>> instructions;
+        public final List<Domain.Instruction<RoverState>> instructions;
 
-        RoverDefinition(RoverState state, List<Instruction<RoverState>> instructions) {
+        RoverDefinition(RoverState state, List<Domain.Instruction<RoverState>> instructions) {
             this.state = state;
             this.instructions = instructions;
         }
@@ -352,23 +353,23 @@ class Model {
 
         private static RoverDefinition buildRover(Input.Rover rover) {
             RoverState roverState = buildRoverState(rover.position);
-            List<Instruction<RoverState>> program = buildProgram(rover.instructions);
+            List<Domain.Instruction<RoverState>> program = buildProgram(rover.instructions);
 
             return new RoverDefinition(roverState, program);
         }
 
-        private static List<Instruction<RoverState>> buildProgram(List<Input.Instruction> instructions) {
+        private static List<Domain.Instruction<RoverState>> buildProgram(List<Input.Instruction> instructions) {
 
 
-            Map<Input.Instruction, Instruction<RoverState>> instructionSet = new HashMap<>();
+            Map<Input.Instruction, Domain.Instruction<RoverState>> instructionSet = new HashMap<>();
             
             instructionSet.put(Input.Instruction.M, rover -> rover.move());
             instructionSet.put(Input.Instruction.L, rover -> rover.left());
             instructionSet.put(Input.Instruction.R, rover -> rover.right());
 
-            List<Instruction<RoverState>> program = new ArrayList<>();
+            List<Domain.Instruction<RoverState>> program = new ArrayList<>();
             for (Input.Instruction instruction : instructions) {
-                Instruction currentInstruction = instructionSet.get(instruction);
+                Domain.Instruction currentInstruction = instructionSet.get(instruction);
                 program.add(currentInstruction);
             }
             return program;
