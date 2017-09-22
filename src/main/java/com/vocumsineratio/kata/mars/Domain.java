@@ -37,14 +37,28 @@ class Domain {
         T add(R rover);
     }
 
-    interface Instruction<R extends Position> {
-        R applyTo(R currentState);
+    interface Instruction<P extends Position> {
+        P applyTo(P currentState);
     }
 
-    static <Position extends Domain.Position,
-            Plateau extends Domain.Plateau<Plateau, Position> & PlateauView<Position>,
-            Report extends Domain.Report<Report, Position>,
-            Simulation extends Domain.Simulation<Position, Plateau>>
+    interface Rover<P extends Position> {
+        P position();
+
+        Iterable<Instruction<P>> program();
+    }
+
+    interface Simulation<R extends Position, P extends PlateauView<R> & Plateau<P, R>> {
+        P plateau();
+
+        Iterable<? extends Rover<R>> rovers();
+    }
+
+
+    static
+    <Position extends Domain.Position,
+    Plateau extends Domain.Plateau<Plateau, Position> & PlateauView<Position>,
+    Report extends Domain.Report<Report, Position>,
+    Simulation extends Domain.Simulation<Position, Plateau>>
     Report runSimulation(Simulation simulation, Report reportBuilder) {
         Plateau plateau = simulation.plateau();
         
@@ -75,18 +89,5 @@ class Domain {
         }
 
         return reportBuilder;
-    }
-
-    // TODO: Name?
-    interface Rover<P extends Position> {
-        P position();
-
-        Iterable<Instruction<P>> program();
-    }
-
-    interface Simulation<R extends Position, P extends PlateauView<R> & Plateau<P, R>> {
-        P plateau();
-
-        Iterable<? extends Rover<R>> rovers();
     }
 }
