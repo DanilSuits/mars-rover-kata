@@ -77,7 +77,7 @@ class Model {
             boolean isOccupied(Rover rover);
         }
 
-        interface Plateau<T extends Plateau<T, R>, R extends Domain.Rover<R>> {
+        interface Plateau<T extends Domain.Plateau<T, R>, R extends Domain.Rover<R>> {
             T roverArrived(R rover);
             T roverLeft(R rover);
         }
