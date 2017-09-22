@@ -59,6 +59,30 @@ class Model {
         return runSimulation(grid, simulationDefinition);
     }
 
+    static class Domain {
+        interface Heading<Heading extends Domain.Heading> {
+            Heading left();
+
+            Heading right();
+        }
+
+        interface Rover<Rover extends Domain.Rover> {
+            Rover left();
+            Rover right();
+
+            Rover move();
+        }
+
+        interface PlateauView<Rover extends Domain.Rover> {
+            boolean isOccupied(Rover rover);
+        }
+
+        interface Plateau<Rover extends Domain.Rover> {
+            Plateau<Rover> roverArrived(Rover rover);
+            Plateau<Rover> roverLeft(Rover rover);
+        }
+    }
+    
     private static SimulationDefinition runSimulation(ArrayGrid grid, SimulationDefinition simulationDefinition) {
         SimulationDefinition simulationResult = new SimulationDefinition(simulationDefinition.grid, new ArrayList<>());
 
@@ -92,31 +116,6 @@ class Model {
         }
         return currentRover;
     }
-
-    static class Domain {
-        interface Heading<Heading extends Domain.Heading> {
-            Heading left();
-
-            Heading right();
-        }
-
-        interface Rover<Rover extends Domain.Rover> {
-            Rover left();
-            Rover right();
-
-            Rover move();
-        }
-
-        interface PlateauView<Rover extends Domain.Rover> {
-            boolean isOccupied(Rover rover);
-        }
-
-        interface Plateau<Rover extends Domain.Rover> {
-            Plateau<Rover> roverArrived(Rover rover);
-            Plateau<Rover> roverLeft(Rover rover);
-        }
-    }
-
 
     static class ArrayGrid implements Domain.Plateau<RoverState>, Domain.PlateauView<RoverState> {
 
