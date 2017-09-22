@@ -95,7 +95,7 @@ class Model {
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
-            final List<Instruction> instructions = roverDefinition.instructions;
+            final List<Instruction<RoverState>> instructions = roverDefinition.instructions;
 
             grid = grid.roverLeft(currentRover);
             RoverState finalState = runProgram(grid, currentRover, instructions);
@@ -107,7 +107,7 @@ class Model {
         return simulationResult;
     }
 
-    private static RoverState runProgram(Domain.PlateauView<RoverState> grid, RoverState currentRover, List<Instruction> program) {
+    private static RoverState runProgram(Domain.PlateauView<RoverState> grid, RoverState currentRover, List<Instruction<RoverState>> program) {
         for (Instruction<RoverState> currentInstruction : program) {
             RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
@@ -278,9 +278,9 @@ class Model {
 
     static class RoverDefinition {
         public final RoverState state;
-        public final List<Instruction> instructions;
+        public final List<Instruction<RoverState>> instructions;
 
-        RoverDefinition(RoverState state, List<Instruction> instructions) {
+        RoverDefinition(RoverState state, List<Instruction<RoverState>> instructions) {
             this.state = state;
             this.instructions = instructions;
         }
@@ -316,21 +316,21 @@ class Model {
 
         private static RoverDefinition buildRover(Input.Rover rover) {
             RoverState roverState = buildRoverState(rover.position);
-            List<Instruction> program = buildProgram(rover.instructions);
+            List<Instruction<RoverState>> program = buildProgram(rover.instructions);
 
             return new RoverDefinition(roverState, program);
         }
 
-        private static List<Instruction> buildProgram(List<Input.Instruction> instructions) {
+        private static List<Instruction<RoverState>> buildProgram(List<Input.Instruction> instructions) {
 
 
-            Map<Input.Instruction, Instruction> instructionSet = new HashMap<>();
+            Map<Input.Instruction, Instruction<RoverState>> instructionSet = new HashMap<>();
             
             instructionSet.put(Input.Instruction.M, rover -> rover.move());
             instructionSet.put(Input.Instruction.L, rover -> rover.left());
             instructionSet.put(Input.Instruction.R, rover -> rover.right());
 
-            List<Instruction> program = new ArrayList<>();
+            List<Instruction<RoverState>> program = new ArrayList<>();
             for (Input.Instruction instruction : instructions) {
                 Instruction currentInstruction = instructionSet.get(instruction);
                 program.add(currentInstruction);
