@@ -43,6 +43,10 @@ class Domain {
         Iterable<Instruction<P>> program();
     }
 
+    enum Letter {
+        M, L, R
+    }
+
     interface Input<R extends Position, P extends PlateauView<R> & Plateau<P, R>> {
         P plateau();
 
