@@ -255,27 +255,10 @@ class Model {
 
 
             Map<Input.Instruction, Instruction> instructionSet = new HashMap<>();
-            instructionSet.put(Input.Instruction.M, new Instruction() {
-                @Override
-                public RoverState applyTo(RoverState currentState) {
-                    return currentState.move();
-                }
-            });
-
-            instructionSet.put(Input.Instruction.L, new Instruction() {
-                @Override
-                public RoverState applyTo(RoverState currentState) {
-                    return currentState.left();
-
-                }
-            });
-
-            instructionSet.put(Input.Instruction.R, new Instruction() {
-                @Override
-                public RoverState applyTo(RoverState currentState) {
-                    return currentState.right();
-                }
-            });
+            
+            instructionSet.put(Input.Instruction.M, rover -> rover.move());
+            instructionSet.put(Input.Instruction.L, rover -> rover.left());
+            instructionSet.put(Input.Instruction.R, rover -> rover.right());
 
             List<Instruction> program = new ArrayList<>();
             for (Input.Instruction instruction : instructions) {
