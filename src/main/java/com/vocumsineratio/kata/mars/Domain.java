@@ -45,30 +45,31 @@ class Domain {
             Plateau extends Domain.Plateau<Plateau, Position> & PlateauView<Position>,
             Report extends Domain.Report<Report, Position>,
             Simulation extends Domain.Simulation<Position, Plateau>>
-    Report runSimulation(Plateau grid, Simulation simulationDefinition, Report reportBuilder) {
-
-        for (Rover<Position> rover : simulationDefinition.rovers()) {
+    Report runSimulation(Plateau _plateau, Simulation simulation, Report reportBuilder) {
+        Plateau plateau = simulation.plateau();
+        
+        for (Rover<Position> rover : simulation.rovers()) {
             Position position = rover.position();
-            grid = grid.roverArrived(position);
+            plateau = plateau.roverArrived(position);
         }
 
-        for (Rover<Position> rover : simulationDefinition.rovers()) {
+        for (Rover<Position> rover : simulation.rovers()) {
 
             Position position = rover.position();
             final Iterable<Instruction<Position>> instructions = rover.program();
 
-            grid = grid.roverLeft(position);
+            plateau = plateau.roverLeft(position);
             Position startPosition = position;
             for (Instruction<Position> currentInstruction : instructions) {
                 Position endPosition = currentInstruction.applyTo(startPosition);
 
-                if (grid.isOccupied(endPosition)) {
+                if (plateau.isOccupied(endPosition)) {
                     break;
                 }
                 startPosition = endPosition;
             }
             Position finalState = startPosition;
-            grid = grid.roverArrived(finalState);
+            plateau = plateau.roverArrived(finalState);
 
             reportBuilder = reportBuilder.add(finalState);
         }
