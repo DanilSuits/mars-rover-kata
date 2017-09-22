@@ -113,6 +113,8 @@ class Model {
         interface Rover<Rover extends Domain.Rover> {
             Rover left();
             Rover right();
+
+            Rover move(Move move);
         }
     }
 
@@ -183,6 +185,11 @@ class Model {
         @Override
         public RoverState right() {
             return new RoverState(posX, posY, orientation.right());
+        }
+
+        @Override
+        public RoverState move(Move move) {
+            return new RoverState(posX + move.offsetX, posY + move.offsetY, orientation);
         }
     }
 
