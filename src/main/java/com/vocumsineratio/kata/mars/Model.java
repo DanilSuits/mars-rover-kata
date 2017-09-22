@@ -93,6 +93,23 @@ class Model {
         interface Instruction<R extends Domain.Rover<R>> {
             R applyTo(R currentState);
         }
+
+        static
+        <Rover extends Domain.Rover<Rover>,
+                Program extends Iterable<Domain.Instruction<Rover>>,
+                Plateau extends Domain.PlateauView<Rover>>
+        Rover runProgram(Plateau grid, Rover currentRover, Program program) {
+            for (Domain.Instruction<Rover> currentInstruction : program) {
+                Rover roverAfterInstruction = currentInstruction.applyTo(currentRover);
+
+                if (grid.isOccupied(roverAfterInstruction)) {
+                    break;
+                }
+                currentRover = roverAfterInstruction;
+            }
+            return currentRover;
+        }
+
     }
 
     static final class ReportBuilder implements Domain.Report<ReportBuilder, RoverState>{
@@ -135,29 +152,13 @@ class Model {
             final List<Domain.Instruction<RoverState>> instructions = roverDefinition.instructions;
 
             grid = grid.roverLeft(currentRover);
-            RoverState finalState = runProgram(grid, currentRover, instructions);
+            RoverState finalState = Domain.runProgram(grid, currentRover, instructions);
             grid = grid.roverArrived(finalState);
 
             reportBuilder = reportBuilder.add(finalState);
         }
 
         return reportBuilder;
-    }
-
-    private static
-    <Rover extends Domain.Rover<Rover>,
-    Program extends Iterable<Domain.Instruction<Rover>>,
-    Plateau extends Domain.PlateauView<Rover>>
-    Rover runProgram(Plateau grid, Rover currentRover, Program program) {
-        for (Domain.Instruction<Rover> currentInstruction : program) {
-            Rover roverAfterInstruction = currentInstruction.applyTo(currentRover);
-
-            if (grid.isOccupied(roverAfterInstruction)) {
-                break;
-            }
-            currentRover = roverAfterInstruction;
-        }
-        return currentRover;
     }
 
     static final class ArrayGrid implements Domain.Plateau<ArrayGrid, RoverState>, Domain.PlateauView<RoverState> {
