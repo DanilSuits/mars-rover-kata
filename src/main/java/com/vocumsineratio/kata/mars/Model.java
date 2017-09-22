@@ -46,7 +46,7 @@ class Model {
 
     private static List<RoverState> projectResults(SimulationDefinition simulationResult) {
         List<RoverState> out = new ArrayList<>();
-        final Iterable<Domain.Rover<RoverState>> entries = simulationResult.entries();
+        final Iterable<Domain.Rover<RoverState>> entries = simulationResult.rovers();
         for(Domain.Rover<RoverState> entry : entries) {
             out.add(entry.position());
         }
@@ -78,7 +78,7 @@ class Model {
         public ReportBuilder add(RoverState r) {
             ArrayList<Domain.Rover<RoverState>> rovers = new ArrayList<>();
 
-            for (Domain.Rover<RoverState> entry : definition.entries()) {
+            for (Domain.Rover<RoverState> entry : definition.rovers()) {
                 rovers.add(entry);
             }
 
@@ -291,7 +291,7 @@ class Model {
         }
 
         @Override
-        public Iterable<Domain.Rover<RoverState>> entries() {
+        public Iterable<Domain.Rover<RoverState>> rovers() {
             return rovers;
         }
     }

@@ -62,12 +62,12 @@ class Domain {
             Simulation extends Domain.Simulation<Position, Plateau>>
     Report runSimulation(Plateau grid, Simulation simulationDefinition, Report reportBuilder) {
 
-        for (Rover<Position> entry : simulationDefinition.entries()) {
+        for (Rover<Position> entry : simulationDefinition.rovers()) {
             Position position = entry.position();
             grid = grid.roverArrived(position);
         }
 
-        for (Rover<Position> entry : simulationDefinition.entries()) {
+        for (Rover<Position> entry : simulationDefinition.rovers()) {
 
             Position position = entry.position();
             final Iterable<Instruction<Position>> instructions = entry.program();
@@ -92,6 +92,6 @@ class Domain {
     interface Simulation<R extends Position, P extends PlateauView<R> & Plateau<P, R>> {
         P plateau();
 
-        Iterable<? extends Rover<R>> entries();
+        Iterable<? extends Rover<R>> rovers();
     }
 }
