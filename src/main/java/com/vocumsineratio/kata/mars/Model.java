@@ -107,13 +107,13 @@ class Model {
     }
 
     static class Domain {
-        interface Heading<T extends Heading<T>> {
+        interface Heading<T extends Domain.Heading<T>> {
             T left();
 
             T right();
         }
 
-        interface Rover<R extends Rover<R>> {
+        interface Rover<R extends Domain.Rover<R>> {
             R left();
             R right();
         }
