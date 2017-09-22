@@ -64,7 +64,7 @@ class Model {
         return reportBuilder.build();
     }
 
-    static final class ReportBuilder implements Domain.Report<ReportBuilder, RoverState>{
+    private static final class ReportBuilder implements Domain.Report<ReportBuilder, RoverState>{
         private final SimulationDefinition definition;
 
         ReportBuilder(GridDefinition grid) {
@@ -93,7 +93,7 @@ class Model {
         }
     }
 
-    static final class ArrayGrid implements Domain.Plateau<ArrayGrid, RoverState>, Domain.PlateauView<RoverState> {
+    private static final class ArrayGrid implements Domain.Plateau<ArrayGrid, RoverState>, Domain.PlateauView<RoverState> {
 
         private final boolean[][] positions;
 
@@ -152,7 +152,7 @@ class Model {
         }
     }
 
-    static class Move {
+    private static class Move {
         final int offsetX;
         final int offsetY;
 
@@ -162,7 +162,7 @@ class Model {
         }
     }
 
-    enum SimpleHeading implements Domain.Heading<SimpleHeading> {
+    private enum SimpleHeading implements Domain.Heading<SimpleHeading> {
         N {
             @Override
             public SimpleHeading left() {
@@ -210,7 +210,7 @@ class Model {
 
     }
 
-    static final class RoverState implements Domain.Rover<RoverState> {
+    private static final class RoverState implements Domain.Rover<RoverState> {
         final int posX;
         final int posY;
         final SimpleHeading orientation;
@@ -246,7 +246,7 @@ class Model {
         }
     }
 
-    static class RoverDefinition implements Domain.Entry<RoverState> {
+    private static class RoverDefinition implements Domain.Entry<RoverState> {
         public final RoverState state;
         public final List<Domain.Instruction<RoverState>> instructions;
 
@@ -266,7 +266,7 @@ class Model {
         }
     }
 
-    static class GridDefinition {
+    private static class GridDefinition {
         public final int maxRight;
         public final int maxUp;
 
@@ -276,7 +276,7 @@ class Model {
         }
     }
 
-    static class SimulationDefinition implements Domain.Simulation<RoverState, ArrayGrid> {
+    private static class SimulationDefinition implements Domain.Simulation<RoverState, ArrayGrid> {
         public final GridDefinition grid;
         public final Iterable<Domain.Entry<RoverState>> rovers;
 
@@ -297,7 +297,7 @@ class Model {
     }
 
 
-    static class Builder {
+    private static class Builder {
         private static RoverState buildRoverState(Input.Position position) {
             // TODO: this is probably an enum map
             SimpleHeading heading = SimpleHeading.valueOf(position.heading.name());
