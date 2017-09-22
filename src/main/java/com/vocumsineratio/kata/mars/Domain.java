@@ -6,7 +6,6 @@
 package com.vocumsineratio.kata.mars;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -74,10 +73,7 @@ class Domain {
             plateau = plateau.roverArrived(position);
         }
 
-        Map<Letter, Instruction<Position>> instructionSet = new EnumMap<>(Letter.class);
-        instructionSet.put(Letter.M, Position::move);
-        instructionSet.put(Letter.L, Position::left);
-        instructionSet.put(Letter.R, Position::right);
+        Map<Letter, Instruction<Position>> instructionSet = getInstructionSet();
 
         for (Rover<Position> rover : input.rovers()) {
 
@@ -102,5 +98,15 @@ class Domain {
         }
 
         return output;
+    }
+
+    private static
+    <Position extends Domain.Position<Position>>
+    Map<Letter, Instruction<Position>> getInstructionSet() {
+        Map<Letter, Instruction<Position>> instructionSet = new EnumMap<>(Letter.class);
+        instructionSet.put(Letter.M, Position::move);
+        instructionSet.put(Letter.L, Position::left);
+        instructionSet.put(Letter.R, Position::right);
+        return instructionSet;
     }
 }
