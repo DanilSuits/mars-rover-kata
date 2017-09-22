@@ -110,6 +110,11 @@ class Model {
             return currentRover;
         }
 
+        // TODO: Name?
+        interface Entry<R extends Domain.Rover<R>> {
+            R rover();
+            Iterable<Domain.Instruction<R>> program();
+        }
     }
 
     static final class ReportBuilder implements Domain.Report<ReportBuilder, RoverState>{
@@ -143,13 +148,13 @@ class Model {
     Report runSimulation(Plateau grid, SimulationDefinition simulationDefinition, Report reportBuilder) {
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState state = roverDefinition.state;
+            RoverState state = roverDefinition.rover();
             grid = grid.roverArrived(state);
         }
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState currentRover = roverDefinition.state;
-            final List<Domain.Instruction<RoverState>> instructions = roverDefinition.instructions;
+            RoverState currentRover = roverDefinition.rover();
+            final Iterable<Domain.Instruction<RoverState>> instructions = roverDefinition.program();
 
             grid = grid.roverLeft(currentRover);
             RoverState finalState = Domain.runProgram(grid, currentRover, instructions);
@@ -314,13 +319,23 @@ class Model {
         }
     }
 
-    static class RoverDefinition {
+    static class RoverDefinition implements Domain.Entry<RoverState> {
         public final RoverState state;
         public final List<Domain.Instruction<RoverState>> instructions;
 
         RoverDefinition(RoverState state, List<Domain.Instruction<RoverState>> instructions) {
             this.state = state;
             this.instructions = instructions;
+        }
+
+        @Override
+        public RoverState rover() {
+            return state;
+        }
+
+        @Override
+        public Iterable<Domain.Instruction<RoverState>> program() {
+            return instructions;
         }
     }
 
