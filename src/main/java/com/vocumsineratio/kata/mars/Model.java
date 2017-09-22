@@ -166,7 +166,7 @@ class Model {
 
     }
 
-    static class RoverState implements Domain.Rover {
+    static class RoverState implements Domain.Rover<RoverState> {
         final int posX;
         final int posY;
         final SimpleHeading orientation;
