@@ -41,7 +41,7 @@ class Model {
 
     private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
         GridDefinition gridDefinition = simulationDefinition.grid;
-        ArrayGrid grid = ArrayGrid.from(gridDefinition.maxRight, gridDefinition.maxUp);
+        Domain.Plateau<RoverState> grid = ArrayGrid.from(gridDefinition.maxRight, gridDefinition.maxUp);
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
@@ -55,7 +55,7 @@ class Model {
             for (Instruction<RoverState> currentInstruction : roverDefinition.instructions) {
                 RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
-                if (grid.isOccupied(roverAfterInstruction.posX, roverAfterInstruction.posY)) {
+                if (grid.isOccupied(roverAfterInstruction)) {
                     break;
                 }
                 currentRover = roverAfterInstruction;
@@ -65,6 +65,28 @@ class Model {
             simulationResults.add(finalState);
         }
         return simulationResults;
+    }
+
+    static class Domain {
+        interface Heading<Heading extends Domain.Heading> {
+            Heading left();
+
+            Heading right();
+        }
+
+        interface Rover<Rover extends Domain.Rover> {
+            Rover left();
+            Rover right();
+
+            Rover move();
+        }
+
+        interface Plateau<Rover extends Domain.Rover> {
+            void roverArrived(Rover rover);
+            void roverLeft(Rover rover);
+
+            boolean isOccupied(Rover rover);
+        }
     }
 
 
@@ -116,28 +138,6 @@ class Model {
         Move(int offsetX, int offsetY) {
             this.offsetX = offsetX;
             this.offsetY = offsetY;
-        }
-    }
-
-    static class Domain {
-        interface Heading<Heading extends Domain.Heading> {
-            Heading left();
-
-            Heading right();
-        }
-
-        interface Rover<Rover extends Domain.Rover> {
-            Rover left();
-            Rover right();
-
-            Rover move();
-        }
-
-        interface Plateau<Rover extends Domain.Rover> {
-            void roverArrived(Rover rover);
-            void roverLeft(Rover rover);
-
-            boolean isOccupied(Rover rover);
         }
     }
 
