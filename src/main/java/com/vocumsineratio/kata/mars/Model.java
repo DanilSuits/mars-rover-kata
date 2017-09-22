@@ -46,13 +46,13 @@ class Model {
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
-            grid.roverArrived(state);
+            grid = grid.roverArrived(state);
         }
 
         SimulationDefinition simulationResult = new SimulationDefinition(simulationDefinition.grid, new ArrayList<>());
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
-            grid.roverLeft(currentRover);
+            grid = grid.roverLeft(currentRover);
             for (Instruction<RoverState> currentInstruction : roverDefinition.instructions) {
                 RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
@@ -62,7 +62,7 @@ class Model {
                 currentRover = roverAfterInstruction;
             }
             RoverState finalState = currentRover;
-            grid.roverArrived(finalState);
+            grid = grid.roverArrived(finalState);
             simulationResult.rovers.add(new RoverDefinition(finalState, Collections.EMPTY_LIST));
         }
 
@@ -92,8 +92,8 @@ class Model {
         }
 
         interface Plateau<Rover extends Domain.Rover> {
-            void roverArrived(Rover rover);
-            void roverLeft(Rover rover);
+            Plateau<Rover> roverArrived(Rover rover);
+            Plateau<Rover> roverLeft(Rover rover);
 
             boolean isOccupied(Rover rover);
         }
@@ -126,13 +126,15 @@ class Model {
         }
 
         @Override
-        public void roverArrived(RoverState rover) {
+        public ArrayGrid roverArrived(RoverState rover) {
             roverArrived(rover.posX, rover.posY);
+            return this;
         }
 
         @Override
-        public void roverLeft(RoverState rover) {
+        public ArrayGrid roverLeft(RoverState rover) {
             roverLeft(rover.posX, rover.posY);
+            return this;
         }
 
         @Override
