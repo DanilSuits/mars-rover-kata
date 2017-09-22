@@ -41,7 +41,7 @@ class Domain {
         R applyTo(R currentState);
     }
 
-    static <Position extends Domain.Position,
+    private static <Position extends Domain.Position,
             Program extends Iterable<Instruction<Position>>,
             Plateau extends PlateauView<Position>>
     Position runProgram(Plateau grid, Position startPosition, Program program) {
