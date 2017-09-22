@@ -108,18 +108,36 @@ class Model {
             this.positions = positions;
         }
 
-        private void roverArrived(int posX, int posY) {
-            positions[posX][posY] = true;
+        private ArrayGrid roverArrived(int posX, int posY) {
+            boolean [][]clone = cloneState();
+            clone[posX][posY] = true;
+            return new ArrayGrid(clone);
         }
 
-        private void roverLeft(int posX, int posY) {
-            positions[posX][posY] = false;
+        private ArrayGrid roverLeft(int posX, int posY) {
+            boolean [][]clone = cloneState();
+            clone[posX][posY] = false;
+            return new ArrayGrid(clone);
         }
 
         private boolean isOccupied(int posX, int posY) {
             return positions[posX][posY];
         }
 
+        private boolean [][] cloneState() {
+            int maxX = positions.length;
+            int maxY = positions[0].length;
+
+            boolean [][] clone = new boolean[maxX][maxY];
+
+            for (int posX = 0; posX < maxX; ++posX) {
+                for(int posY = 0; posY < maxY; ++posY) {
+                    clone[posX][posY] = positions[posX][posY];
+                }
+            }
+
+            return clone;
+        }
         static ArrayGrid from(int maxRight, int maxUp) {
             boolean[][] positions = new boolean[1 + maxRight][1 + maxUp];
             return new ArrayGrid(positions);
@@ -127,14 +145,12 @@ class Model {
 
         @Override
         public ArrayGrid roverArrived(RoverState rover) {
-            roverArrived(rover.posX, rover.posY);
-            return this;
+            return roverArrived(rover.posX, rover.posY);
         }
 
         @Override
         public ArrayGrid roverLeft(RoverState rover) {
-            roverLeft(rover.posX, rover.posY);
-            return this;
+            return roverLeft(rover.posX, rover.posY);
         }
 
         @Override
