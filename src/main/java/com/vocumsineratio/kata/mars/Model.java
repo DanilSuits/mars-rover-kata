@@ -56,6 +56,10 @@ class Model {
         GridDefinition gridDefinition = simulationDefinition.grid;
         ArrayGrid grid = ArrayGrid.from(gridDefinition.maxRight, gridDefinition.maxUp);
 
+        return runSimulation(grid, simulationDefinition);
+    }
+
+    private static SimulationDefinition runSimulation(ArrayGrid grid, SimulationDefinition simulationDefinition) {
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
             grid = grid.roverArrived(state);
