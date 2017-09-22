@@ -45,7 +45,7 @@ class Domain {
             Plateau extends Domain.Plateau<Plateau, Position> & PlateauView<Position>,
             Report extends Domain.Report<Report, Position>,
             Simulation extends Domain.Simulation<Position, Plateau>>
-    Report runSimulation(Plateau _plateau, Simulation simulation, Report reportBuilder) {
+    Report runSimulation(Simulation simulation, Report reportBuilder) {
         Plateau plateau = simulation.plateau();
         
         for (Rover<Position> rover : simulation.rovers()) {

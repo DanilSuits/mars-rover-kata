@@ -54,12 +54,9 @@ class Model {
     }
 
     private static SimulationDefinition runSimulation(SimulationDefinition simulationDefinition) {
-        GridDefinition gridDefinition = simulationDefinition.grid;
-        ArrayGrid grid = ArrayGrid.from(gridDefinition.maxRight, gridDefinition.maxUp);
-
         ReportBuilder reportBuilder = new ReportBuilder(simulationDefinition.grid);
 
-        reportBuilder = Domain.runSimulation(grid, simulationDefinition, reportBuilder);
+        reportBuilder = Domain.runSimulation(simulationDefinition, reportBuilder);
 
         return reportBuilder.build();
     }
