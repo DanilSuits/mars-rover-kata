@@ -76,15 +76,15 @@ class Model {
             this.positions = positions;
         }
 
-        void roverArrived(int posX, int posY) {
+        private void roverArrived(int posX, int posY) {
             positions[posX][posY] = true;
         }
 
-        void roverLeft(int posX, int posY) {
+        private void roverLeft(int posX, int posY) {
             positions[posX][posY] = false;
         }
 
-        boolean isOccupied(int posX, int posY) {
+        private boolean isOccupied(int posX, int posY) {
             return positions[posX][posY];
         }
 
