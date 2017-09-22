@@ -60,18 +60,21 @@ class Model {
     }
 
     private static SimulationDefinition runSimulation(ArrayGrid grid, SimulationDefinition simulationDefinition) {
+        SimulationDefinition simulationResult = new SimulationDefinition(simulationDefinition.grid, new ArrayList<>());
+
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
             grid = grid.roverArrived(state);
         }
 
-        SimulationDefinition simulationResult = new SimulationDefinition(simulationDefinition.grid, new ArrayList<>());
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
-            grid = grid.roverLeft(currentRover);
             final List<Instruction> instructions = roverDefinition.instructions;
+
+            grid = grid.roverLeft(currentRover);
             RoverState finalState = runProgram(grid, currentRover, instructions);
             grid = grid.roverArrived(finalState);
+
             simulationResult.rovers.add(new RoverDefinition(finalState, Collections.EMPTY_LIST));
         }
 
