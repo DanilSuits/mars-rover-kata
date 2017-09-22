@@ -140,7 +140,9 @@ class Model {
     }
 
     private static
-    <Rover extends Domain.Rover<Rover>, Program extends Iterable<Instruction<Rover>>, Plateau extends Domain.PlateauView<Rover>>
+    <Rover extends Domain.Rover<Rover>,
+    Program extends Iterable<Instruction<Rover>>,
+    Plateau extends Domain.PlateauView<Rover>>
     Rover runProgram(Plateau grid, Rover currentRover, Program program) {
         for (Instruction<Rover> currentInstruction : program) {
             Rover roverAfterInstruction = currentInstruction.applyTo(currentRover);
