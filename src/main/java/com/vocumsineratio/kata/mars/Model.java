@@ -82,11 +82,37 @@ class Model {
             P roverLeft(R rover);
         }
     }
-    
+
+    static class ReportBuilder {
+        private final SimulationDefinition definition;
+
+        ReportBuilder(GridDefinition grid) {
+            this(new SimulationDefinition(grid, Collections.EMPTY_LIST));
+        }
+
+        ReportBuilder(SimulationDefinition current) {
+            this.definition = current;
+        }
+
+        ReportBuilder add(RoverState r) {
+            ArrayList<RoverDefinition> rovers = new ArrayList<>(1 + definition.rovers.size());
+            rovers.addAll(definition.rovers);
+            rovers.add(new RoverDefinition(r, Collections.EMPTY_LIST));
+
+            SimulationDefinition next = new SimulationDefinition(definition.grid, rovers);
+            return new ReportBuilder(next);
+        }
+
+        SimulationDefinition build() {
+            return definition;
+        }
+    }
+
     private static
     <Plateau extends Domain.Plateau<Plateau, RoverState> & Domain.PlateauView<RoverState>>
     SimulationDefinition runSimulation(Plateau grid, SimulationDefinition simulationDefinition) {
-        SimulationDefinition simulationResult = new SimulationDefinition(simulationDefinition.grid, new ArrayList<>());
+
+        ReportBuilder reportBuilder = new ReportBuilder(simulationDefinition.grid);
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
@@ -101,10 +127,10 @@ class Model {
             RoverState finalState = runProgram(grid, currentRover, instructions);
             grid = grid.roverArrived(finalState);
 
-            simulationResult.rovers.add(new RoverDefinition(finalState, Collections.EMPTY_LIST));
+            reportBuilder = reportBuilder.add(finalState);
         }
 
-        return simulationResult;
+        return reportBuilder.build();
     }
 
     private static
