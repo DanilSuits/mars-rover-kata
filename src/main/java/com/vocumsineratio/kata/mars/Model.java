@@ -56,7 +56,11 @@ class Model {
         GridDefinition gridDefinition = simulationDefinition.grid;
         ArrayGrid grid = ArrayGrid.from(gridDefinition.maxRight, gridDefinition.maxUp);
 
-        return runSimulation(grid, simulationDefinition);
+        ReportBuilder reportBuilder = new ReportBuilder(simulationDefinition.grid);
+
+        reportBuilder = runSimulation(grid, simulationDefinition, reportBuilder);
+
+        return reportBuilder.build();
     }
 
     static class Domain {
@@ -110,9 +114,7 @@ class Model {
 
     private static
     <Plateau extends Domain.Plateau<Plateau, RoverState> & Domain.PlateauView<RoverState>>
-    SimulationDefinition runSimulation(Plateau grid, SimulationDefinition simulationDefinition) {
-
-        ReportBuilder reportBuilder = new ReportBuilder(simulationDefinition.grid);
+    ReportBuilder runSimulation(Plateau grid, SimulationDefinition simulationDefinition, ReportBuilder reportBuilder) {
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
@@ -130,7 +132,7 @@ class Model {
             reportBuilder = reportBuilder.add(finalState);
         }
 
-        return reportBuilder.build();
+        return reportBuilder;
     }
 
     private static
