@@ -114,7 +114,7 @@ class Model {
             Rover left();
             Rover right();
 
-            Rover move(Move move);
+            Rover move();
         }
     }
 
@@ -188,7 +188,16 @@ class Model {
         }
 
         @Override
-        public RoverState move(Move move) {
+        public RoverState move() {
+            final Map<SimpleHeading, Move> moves = new EnumMap<>(SimpleHeading.class);
+            {
+                moves.put(SimpleHeading.W, new Move(-1, 0));
+                moves.put(SimpleHeading.E, new Move(1, 0));
+                moves.put(SimpleHeading.N, new Move(0, 1));
+                moves.put(SimpleHeading.S, new Move(0, -1));
+            }
+
+            Move move = moves.get(orientation);
             return new RoverState(posX + move.offsetX, posY + move.offsetY, orientation);
         }
     }
@@ -244,25 +253,12 @@ class Model {
 
         private static List<Instruction> buildProgram(List<Input.Instruction> instructions) {
 
+
             Map<Input.Instruction, Instruction> instructionSet = new HashMap<>();
             instructionSet.put(Input.Instruction.M, new Instruction() {
                 @Override
                 public RoverState applyTo(RoverState currentState) {
-
-                    Map<SimpleHeading, Move> moves = new EnumMap<>(SimpleHeading.class);
-                    {
-                        moves.put(SimpleHeading.W, new Move(-1, 0));
-                        moves.put(SimpleHeading.E, new Move(1, 0));
-                        moves.put(SimpleHeading.N, new Move(0, 1));
-                        moves.put(SimpleHeading.S, new Move(0, -1));
-                    }
-
-                    SimpleHeading heading = currentState.orientation;
-                    Move move = moves.get(heading);
-                    int posX = currentState.posX + move.offsetX;
-                    int posY = currentState.posY + move.offsetY;
-
-                    return new RoverState(posX, posY, heading);
+                    return currentState.move();
                 }
             });
 
