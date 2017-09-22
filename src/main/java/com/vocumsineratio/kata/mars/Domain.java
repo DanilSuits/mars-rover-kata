@@ -33,10 +33,6 @@ class Domain {
         P roverLeft(R rover);
     }
 
-    interface Report<T extends Report<T, R>, R extends Position> {
-        T add(R rover);
-    }
-
     interface Instruction<P extends Position> {
         P applyTo(P currentState);
     }
@@ -47,27 +43,30 @@ class Domain {
         Iterable<Instruction<P>> program();
     }
 
-    interface Simulation<R extends Position, P extends PlateauView<R> & Plateau<P, R>> {
+    interface Input<R extends Position, P extends PlateauView<R> & Plateau<P, R>> {
         P plateau();
 
         Iterable<? extends Rover<R>> rovers();
     }
 
+    interface Output<O extends Output<O, R>, R extends Position> {
+        O add(R rover);
+    }
 
     static
     <Position extends Domain.Position,
     Plateau extends Domain.Plateau<Plateau, Position> & PlateauView<Position>,
-    Report extends Domain.Report<Report, Position>,
-    Simulation extends Domain.Simulation<Position, Plateau>>
-    Report runSimulation(Simulation simulation, Report reportBuilder) {
-        Plateau plateau = simulation.plateau();
+    Output extends Domain.Output<Output, Position>,
+    Input extends Domain.Input<Position, Plateau>>
+    Output runSimulation(Input input, Output output) {
+        Plateau plateau = input.plateau();
         
-        for (Rover<Position> rover : simulation.rovers()) {
+        for (Rover<Position> rover : input.rovers()) {
             Position position = rover.position();
             plateau = plateau.roverArrived(position);
         }
 
-        for (Rover<Position> rover : simulation.rovers()) {
+        for (Rover<Position> rover : input.rovers()) {
 
             Position position = rover.position();
             final Iterable<Instruction<Position>> instructions = rover.program();
@@ -85,9 +84,9 @@ class Domain {
             Position finalState = startPosition;
             plateau = plateau.roverArrived(finalState);
 
-            reportBuilder = reportBuilder.add(finalState);
+            output = output.add(finalState);
         }
 
-        return reportBuilder;
+        return output;
     }
 }

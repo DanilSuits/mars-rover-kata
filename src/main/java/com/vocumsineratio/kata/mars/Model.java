@@ -61,7 +61,7 @@ class Model {
         return reportBuilder.build();
     }
 
-    private static final class ReportBuilder implements Domain.Report<ReportBuilder, RoverState>{
+    private static final class ReportBuilder implements Domain.Output<ReportBuilder, RoverState>{
         private final SimulationDefinition definition;
 
         ReportBuilder(GridDefinition grid) {
@@ -273,7 +273,7 @@ class Model {
         }
     }
 
-    private static class SimulationDefinition implements Domain.Simulation<RoverState, ArrayGrid> {
+    private static class SimulationDefinition implements Domain.Input<RoverState, ArrayGrid> {
         public final GridDefinition grid;
         public final Iterable<Domain.Rover<RoverState>> rovers;
 
