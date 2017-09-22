@@ -148,13 +148,16 @@ class Model {
     Report runSimulation(Plateau grid, SimulationDefinition simulationDefinition, Report reportBuilder) {
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState state = roverDefinition.rover();
+            Domain.Entry<RoverState> entry = roverDefinition;
+            RoverState state = entry.rover();
             grid = grid.roverArrived(state);
         }
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            RoverState currentRover = roverDefinition.rover();
-            final Iterable<Domain.Instruction<RoverState>> instructions = roverDefinition.program();
+            Domain.Entry<RoverState> entry = roverDefinition;
+
+            RoverState currentRover = entry.rover();
+            final Iterable<Domain.Instruction<RoverState>> instructions = entry.program();
 
             grid = grid.roverLeft(currentRover);
             RoverState finalState = Domain.runProgram(grid, currentRover, instructions);
