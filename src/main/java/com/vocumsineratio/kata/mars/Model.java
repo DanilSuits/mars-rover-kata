@@ -46,8 +46,9 @@ class Model {
 
     private static List<RoverState> projectResults(SimulationDefinition simulationResult) {
         List<RoverState> out = new ArrayList<>();
-        for(RoverDefinition rover : simulationResult.rovers) {
-            out.add(rover.state);
+        final Iterable<Domain.Entry<RoverState>> entries = simulationResult.entries();
+        for(Domain.Entry<RoverState> entry : entries) {
+            out.add(entry.rover());
         }
         return out;
     }
@@ -96,8 +97,8 @@ class Model {
 
         static
         <Rover extends Domain.Rover<Rover>,
-                Program extends Iterable<Domain.Instruction<Rover>>,
-                Plateau extends Domain.PlateauView<Rover>>
+        Program extends Iterable<Domain.Instruction<Rover>>,
+        Plateau extends Domain.PlateauView<Rover>>
         Rover runProgram(Plateau grid, Rover currentRover, Program program) {
             for (Domain.Instruction<Rover> currentInstruction : program) {
                 Rover roverAfterInstruction = currentInstruction.applyTo(currentRover);
@@ -115,6 +116,11 @@ class Model {
             R rover();
             Iterable<Domain.Instruction<R>> program();
         }
+
+        interface Simulation<R extends Domain.Rover<R>, P extends Domain.PlateauView<R> & Domain.Plateau<P,R>> {
+            P plateau();
+            Iterable<? extends Entry<R>> entries();
+        }
     }
 
     static final class ReportBuilder implements Domain.Report<ReportBuilder, RoverState>{
@@ -129,8 +135,12 @@ class Model {
         }
 
         public ReportBuilder add(RoverState r) {
-            ArrayList<RoverDefinition> rovers = new ArrayList<>(1 + definition.rovers.size());
-            rovers.addAll(definition.rovers);
+            ArrayList<Domain.Entry<RoverState>> rovers = new ArrayList<>();
+
+            for (Domain.Entry<RoverState> entry : definition.entries()) {
+                rovers.add(entry);
+            }
+
             rovers.add(new RoverDefinition(r, Collections.EMPTY_LIST));
 
             SimulationDefinition next = new SimulationDefinition(definition.grid, rovers);
@@ -147,14 +157,12 @@ class Model {
     Report extends Domain.Report<Report, RoverState>>
     Report runSimulation(Plateau grid, SimulationDefinition simulationDefinition, Report reportBuilder) {
 
-        for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            Domain.Entry<RoverState> entry = roverDefinition;
+        for (Domain.Entry<RoverState> entry : simulationDefinition.rovers) {
             RoverState state = entry.rover();
             grid = grid.roverArrived(state);
         }
 
-        for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
-            Domain.Entry<RoverState> entry = roverDefinition;
+        for (Domain.Entry<RoverState> entry : simulationDefinition.rovers) {
 
             RoverState currentRover = entry.rover();
             final Iterable<Domain.Instruction<RoverState>> instructions = entry.program();
@@ -352,13 +360,23 @@ class Model {
         }
     }
 
-    static class SimulationDefinition {
+    static class SimulationDefinition implements Domain.Simulation<RoverState, ArrayGrid> {
         public final GridDefinition grid;
-        public final List<RoverDefinition> rovers;
+        public final Iterable<Domain.Entry<RoverState>> rovers;
 
-        public SimulationDefinition(GridDefinition grid, List<RoverDefinition> rovers) {
+        public SimulationDefinition(GridDefinition grid, Iterable<Domain.Entry<RoverState>> rovers) {
             this.grid = grid;
             this.rovers = rovers;
+        }
+
+        @Override
+        public ArrayGrid plateau() {
+            return ArrayGrid.from(grid.maxRight, grid.maxUp);
+        }
+
+        @Override
+        public Iterable<Domain.Entry<RoverState>> entries() {
+            return rovers;
         }
     }
 
@@ -395,7 +413,7 @@ class Model {
         }
 
         private static SimulationDefinition buildSimulation(Input input) {
-            List<RoverDefinition> rovers = new ArrayList<>();
+            List<Domain.Entry<RoverState>> rovers = new ArrayList<>();
             for (Input.Rover currentRover : input.rovers) {
                 RoverDefinition roverDefinition = Builder.buildRover(currentRover);
                 rovers.add(roverDefinition);
