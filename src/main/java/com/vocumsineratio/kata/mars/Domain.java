@@ -41,21 +41,6 @@ class Domain {
         R applyTo(R currentState);
     }
 
-    private static <Position extends Domain.Position,
-            Program extends Iterable<Instruction<Position>>,
-            Plateau extends PlateauView<Position>>
-    Position runProgram(Plateau grid, Position startPosition, Program program) {
-        for (Instruction<Position> currentInstruction : program) {
-            Position endPosition = currentInstruction.applyTo(startPosition);
-
-            if (grid.isOccupied(endPosition)) {
-                break;
-            }
-            startPosition = endPosition;
-        }
-        return startPosition;
-    }
-
     static <Position extends Domain.Position,
             Plateau extends Domain.Plateau<Plateau, Position> & PlateauView<Position>,
             Report extends Domain.Report<Report, Position>,
@@ -73,7 +58,16 @@ class Domain {
             final Iterable<Instruction<Position>> instructions = rover.program();
 
             grid = grid.roverLeft(position);
-            Position finalState = Domain.runProgram(grid, position, instructions);
+            Position startPosition = position;
+            for (Instruction<Position> currentInstruction : instructions) {
+                Position endPosition = currentInstruction.applyTo(startPosition);
+
+                if (grid.isOccupied(endPosition)) {
+                    break;
+                }
+                startPosition = endPosition;
+            }
+            Position finalState = startPosition;
             grid = grid.roverArrived(finalState);
 
             reportBuilder = reportBuilder.add(finalState);
