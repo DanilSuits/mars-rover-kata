@@ -210,7 +210,7 @@ class Model {
 
     }
 
-    private static final class RoverState implements Domain.Rover<RoverState> {
+    private static final class RoverState implements Domain.Position<RoverState> {
         final int posX;
         final int posY;
         final SimpleHeading orientation;
