@@ -19,9 +19,9 @@ class Model {
     static Output runSimulation(Input input) {
         SimulationDefinition simulationDefinition = Builder.buildSimulation(input);
 
-        List<RoverState> simulationResults = runSimulation(simulationDefinition);
+        SimulationDefinition simulationResults = runSimulation(simulationDefinition);
 
-        final Output output = prepareReport(simulationResults);
+        final Output output = prepareReport(projectResults(simulationResults));
         return output;
     }
 
@@ -40,7 +40,7 @@ class Model {
         return new Output(rovers);
     }
 
-    private static List<RoverState> runSimulation(SimulationDefinition simulationDefinition) {
+    private static SimulationDefinition runSimulation(SimulationDefinition simulationDefinition) {
         GridDefinition gridDefinition = simulationDefinition.grid;
         Domain.Plateau<RoverState> grid = ArrayGrid.from(gridDefinition.maxRight, gridDefinition.maxUp);
 
@@ -71,7 +71,7 @@ class Model {
             simulationResult.rovers.add(new RoverDefinition(state, Collections.emptyList()));
         }
 
-        return projectResults(simulationResult);
+        return simulationResult;
     }
 
     private static List<RoverState> projectResults(SimulationDefinition simulationResult) {
