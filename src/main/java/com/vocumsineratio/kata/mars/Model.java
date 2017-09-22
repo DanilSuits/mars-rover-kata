@@ -65,20 +65,25 @@ class Model {
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
             grid = grid.roverLeft(currentRover);
-            for (Instruction<RoverState> currentInstruction : roverDefinition.instructions) {
-                RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
-
-                if (grid.isOccupied(roverAfterInstruction)) {
-                    break;
-                }
-                currentRover = roverAfterInstruction;
-            }
-            RoverState finalState = currentRover;
+            final List<Instruction> instructions = roverDefinition.instructions;
+            RoverState finalState = runProgram(grid, currentRover, instructions);
             grid = grid.roverArrived(finalState);
             simulationResult.rovers.add(new RoverDefinition(finalState, Collections.EMPTY_LIST));
         }
 
         return simulationResult;
+    }
+
+    private static RoverState runProgram(Domain.Plateau<RoverState> grid, RoverState currentRover, List<Instruction> program) {
+        for (Instruction<RoverState> currentInstruction : program) {
+            RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
+
+            if (grid.isOccupied(roverAfterInstruction)) {
+                break;
+            }
+            currentRover = roverAfterInstruction;
+        }
+        return currentRover;
     }
 
     static class Domain {
