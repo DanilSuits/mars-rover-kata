@@ -85,9 +85,13 @@ class Model {
             P roverArrived(R rover);
             P roverLeft(R rover);
         }
+
+        interface Report<T extends Report<T, R>, R extends Domain.Rover<R>> {
+            T add(R rover);
+        }
     }
 
-    static class ReportBuilder {
+    static final class ReportBuilder implements Domain.Report<ReportBuilder, RoverState>{
         private final SimulationDefinition definition;
 
         ReportBuilder(GridDefinition grid) {
@@ -98,7 +102,7 @@ class Model {
             this.definition = current;
         }
 
-        ReportBuilder add(RoverState r) {
+        public ReportBuilder add(RoverState r) {
             ArrayList<RoverDefinition> rovers = new ArrayList<>(1 + definition.rovers.size());
             rovers.addAll(definition.rovers);
             rovers.add(new RoverDefinition(r, Collections.EMPTY_LIST));
@@ -113,8 +117,8 @@ class Model {
     }
 
     private static
-    <Plateau extends Domain.Plateau<Plateau, RoverState> & Domain.PlateauView<RoverState>>
-    ReportBuilder runSimulation(Plateau grid, SimulationDefinition simulationDefinition, ReportBuilder reportBuilder) {
+    <Plateau extends Domain.Plateau<Plateau, RoverState> & Domain.PlateauView<RoverState>, Report extends Domain.Report<Report, RoverState>>
+    Report runSimulation(Plateau grid, SimulationDefinition simulationDefinition, Report reportBuilder) {
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
