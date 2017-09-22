@@ -15,7 +15,7 @@ class Domain {
         H right();
     }
 
-    interface Position<R extends Position> {
+    interface Position<R extends Position<R>> {
         R left();
 
         R right();
@@ -58,7 +58,7 @@ class Domain {
     }
 
     static
-    <Position extends Domain.Position,
+    <Position extends Domain.Position<Position>,
     Plateau extends Domain.Plateau<Plateau, Position> & PlateauView<Position>,
     Output extends Domain.Output<Output, Position>,
     Input extends Domain.Input<Position, Plateau>>
