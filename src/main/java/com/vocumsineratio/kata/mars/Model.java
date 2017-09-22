@@ -153,7 +153,7 @@ class Model {
         return currentRover;
     }
 
-    static class ArrayGrid implements Domain.Plateau<ArrayGrid, RoverState>, Domain.PlateauView<RoverState> {
+    static final class ArrayGrid implements Domain.Plateau<ArrayGrid, RoverState>, Domain.PlateauView<RoverState> {
 
         private final boolean[][] positions;
 
@@ -270,7 +270,7 @@ class Model {
 
     }
 
-    static class RoverState implements Domain.Rover<RoverState> {
+    static final class RoverState implements Domain.Rover<RoverState> {
         final int posX;
         final int posY;
         final SimpleHeading orientation;
