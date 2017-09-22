@@ -110,9 +110,9 @@ class Model {
             Heading right();
         }
 
-        interface Rover<R extends Domain.Rover<R>> {
-            R left();
-            R right();
+        interface Rover<Rover extends Domain.Rover> {
+            Rover left();
+            Rover right();
         }
     }
 
@@ -164,7 +164,7 @@ class Model {
 
     }
 
-    static class RoverState implements Domain.Rover<RoverState> {
+    static class RoverState implements Domain.Rover {
         final int posX;
         final int posY;
         final SimpleHeading orientation;
