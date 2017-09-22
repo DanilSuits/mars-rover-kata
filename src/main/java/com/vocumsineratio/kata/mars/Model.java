@@ -54,7 +54,7 @@ class Model {
 
     private static SimulationDefinition runSimulation(SimulationDefinition simulationDefinition) {
         GridDefinition gridDefinition = simulationDefinition.grid;
-        Domain.Plateau<RoverState> grid = ArrayGrid.from(gridDefinition.maxRight, gridDefinition.maxUp);
+        ArrayGrid grid = ArrayGrid.from(gridDefinition.maxRight, gridDefinition.maxUp);
 
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState state = roverDefinition.state;
@@ -74,7 +74,7 @@ class Model {
         return simulationResult;
     }
 
-    private static RoverState runProgram(Domain.Plateau<RoverState> grid, RoverState currentRover, List<Instruction> program) {
+    private static RoverState runProgram(Domain.PlateauView<RoverState> grid, RoverState currentRover, List<Instruction> program) {
         for (Instruction<RoverState> currentInstruction : program) {
             RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
@@ -100,16 +100,18 @@ class Model {
             Rover move();
         }
 
+        interface PlateauView<Rover extends Domain.Rover> {
+            boolean isOccupied(Rover rover);
+        }
+
         interface Plateau<Rover extends Domain.Rover> {
             Plateau<Rover> roverArrived(Rover rover);
             Plateau<Rover> roverLeft(Rover rover);
-
-            boolean isOccupied(Rover rover);
         }
     }
 
 
-    static class ArrayGrid implements Domain.Plateau<RoverState>{
+    static class ArrayGrid implements Domain.Plateau<RoverState>, Domain.PlateauView<RoverState> {
 
         private final boolean[][] positions;
 
