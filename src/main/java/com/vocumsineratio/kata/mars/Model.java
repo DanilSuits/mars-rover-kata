@@ -21,8 +21,12 @@ class Model {
 
         SimulationDefinition simulationResults = runSimulation(simulationDefinition);
 
-        final Output output = prepareReport(projectResults(simulationResults));
+        final Output output = prepareReport(simulationResults);
         return output;
+    }
+
+    private static Output prepareReport(SimulationDefinition simulationResults) {
+        return prepareReport(projectResults(simulationResults));
     }
 
     private static Output prepareReport(List<RoverState> simulationResults) {
@@ -38,6 +42,14 @@ class Model {
 
         }
         return new Output(rovers);
+    }
+
+    private static List<RoverState> projectResults(SimulationDefinition simulationResult) {
+        List<RoverState> out = new ArrayList<>();
+        for(RoverDefinition rover : simulationResult.rovers) {
+            out.add(rover.state);
+        }
+        return out;
     }
 
     private static SimulationDefinition runSimulation(SimulationDefinition simulationDefinition) {
@@ -67,14 +79,6 @@ class Model {
         }
 
         return simulationResult;
-    }
-
-    private static List<RoverState> projectResults(SimulationDefinition simulationResult) {
-        List<RoverState> out = new ArrayList<>();
-        for(RoverDefinition rover : simulationResult.rovers) {
-            out.add(rover.state);
-        }
-        return out;
     }
 
     static class Domain {
