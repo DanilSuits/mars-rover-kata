@@ -6,6 +6,7 @@
 package com.vocumsineratio.kata.mars;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +65,17 @@ class Model {
             grid.roverArrived(finalState);
             simulationResults.add(finalState);
         }
-        return simulationResults;
+
+        SimulationDefinition simulationResult = new SimulationDefinition(simulationDefinition.grid, new ArrayList<>());
+        for(RoverState state : simulationResults) {
+            simulationResult.rovers.add(new RoverDefinition(state, Collections.emptyList()));
+        }
+
+        List<RoverState> out = new ArrayList<>();
+        for(RoverDefinition rover : simulationResult.rovers) {
+            out.add(rover.state);
+        }
+        return out;
     }
 
     static class Domain {
