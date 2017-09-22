@@ -153,23 +153,24 @@ class Model {
     }
 
     static
-    <Plateau extends Domain.Plateau<Plateau, RoverState> & Domain.PlateauView<RoverState>,
-    Report extends Domain.Report<Report, RoverState>,
-    Simulation extends Domain.Simulation<RoverState, Plateau>>
+    <Rover extends Domain.Rover<Rover>,
+    Plateau extends Domain.Plateau<Plateau, Rover> & Domain.PlateauView<Rover>,
+    Report extends Domain.Report<Report, Rover>,
+    Simulation extends Domain.Simulation<Rover, Plateau>>
     Report runSimulation(Plateau grid, Simulation simulationDefinition, Report reportBuilder) {
 
-        for (Domain.Entry<RoverState> entry : simulationDefinition.entries()) {
-            RoverState state = entry.rover();
+        for (Domain.Entry<Rover> entry : simulationDefinition.entries()) {
+            Rover state = entry.rover();
             grid = grid.roverArrived(state);
         }
 
-        for (Domain.Entry<RoverState> entry : simulationDefinition.entries()) {
+        for (Domain.Entry<Rover> entry : simulationDefinition.entries()) {
 
-            RoverState currentRover = entry.rover();
-            final Iterable<Domain.Instruction<RoverState>> instructions = entry.program();
+            Rover currentRover = entry.rover();
+            final Iterable<Domain.Instruction<Rover>> instructions = entry.program();
 
             grid = grid.roverLeft(currentRover);
-            RoverState finalState = Domain.runProgram(grid, currentRover, instructions);
+            Rover finalState = Domain.runProgram(grid, currentRover, instructions);
             grid = grid.roverArrived(finalState);
 
             reportBuilder = reportBuilder.add(finalState);
