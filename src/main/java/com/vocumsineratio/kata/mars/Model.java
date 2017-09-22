@@ -52,7 +52,7 @@ class Model {
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
             grid.roverLeft(currentRover.posX, currentRover.posY);
-            for (Instruction currentInstruction : roverDefinition.instructions) {
+            for (Instruction<RoverState> currentInstruction : roverDefinition.instructions) {
                 RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
                 if (grid.isOccupied(roverAfterInstruction.posX, roverAfterInstruction.posY)) {
@@ -202,8 +202,8 @@ class Model {
         }
     }
 
-    interface Instruction {
-        RoverState applyTo(RoverState currentState);
+    interface Instruction<Rover extends Domain.Rover<Rover>> {
+        Rover applyTo(Rover currentState);
     }
 
     static class RoverDefinition {
