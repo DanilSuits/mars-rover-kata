@@ -59,7 +59,7 @@ class Model {
 
         ReportBuilder reportBuilder = new ReportBuilder(simulationDefinition.grid);
 
-        reportBuilder = runSimulation(grid, simulationDefinition, reportBuilder);
+        reportBuilder = Domain.runSimulation(grid, simulationDefinition, reportBuilder);
 
         return reportBuilder.build();
     }
@@ -111,6 +111,33 @@ class Model {
             return currentRover;
         }
 
+        static
+        <Rover extends Domain.Rover<Rover>,
+                Plateau extends Domain.Plateau<Plateau, Rover> & Domain.PlateauView<Rover>,
+                Report extends Domain.Report<Report, Rover>,
+                Simulation extends Domain.Simulation<Rover, Plateau>>
+        Report runSimulation(Plateau grid, Simulation simulationDefinition, Report reportBuilder) {
+
+            for (Domain.Entry<Rover> entry : simulationDefinition.entries()) {
+                Rover state = entry.rover();
+                grid = grid.roverArrived(state);
+            }
+
+            for (Domain.Entry<Rover> entry : simulationDefinition.entries()) {
+
+                Rover currentRover = entry.rover();
+                final Iterable<Domain.Instruction<Rover>> instructions = entry.program();
+
+                grid = grid.roverLeft(currentRover);
+                Rover finalState = Domain.runProgram(grid, currentRover, instructions);
+                grid = grid.roverArrived(finalState);
+
+                reportBuilder = reportBuilder.add(finalState);
+            }
+
+            return reportBuilder;
+        }
+
         // TODO: Name?
         interface Entry<R extends Domain.Rover<R>> {
             R rover();
@@ -150,33 +177,6 @@ class Model {
         SimulationDefinition build() {
             return definition;
         }
-    }
-
-    static
-    <Rover extends Domain.Rover<Rover>,
-    Plateau extends Domain.Plateau<Plateau, Rover> & Domain.PlateauView<Rover>,
-    Report extends Domain.Report<Report, Rover>,
-    Simulation extends Domain.Simulation<Rover, Plateau>>
-    Report runSimulation(Plateau grid, Simulation simulationDefinition, Report reportBuilder) {
-
-        for (Domain.Entry<Rover> entry : simulationDefinition.entries()) {
-            Rover state = entry.rover();
-            grid = grid.roverArrived(state);
-        }
-
-        for (Domain.Entry<Rover> entry : simulationDefinition.entries()) {
-
-            Rover currentRover = entry.rover();
-            final Iterable<Domain.Instruction<Rover>> instructions = entry.program();
-
-            grid = grid.roverLeft(currentRover);
-            Rover finalState = Domain.runProgram(grid, currentRover, instructions);
-            grid = grid.roverArrived(finalState);
-
-            reportBuilder = reportBuilder.add(finalState);
-        }
-
-        return reportBuilder;
     }
 
     static final class ArrayGrid implements Domain.Plateau<ArrayGrid, RoverState>, Domain.PlateauView<RoverState> {
