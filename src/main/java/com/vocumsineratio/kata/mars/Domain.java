@@ -5,6 +5,10 @@
  */
 package com.vocumsineratio.kata.mars;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author Danil Suits (danil@vast.com)
  */
@@ -40,7 +44,7 @@ class Domain {
     interface Rover<P extends Position> {
         P position();
 
-        Iterable<Instruction<P>> program();
+        Iterable<Letter> program();
     }
 
     enum Letter {
@@ -70,15 +74,21 @@ class Domain {
             plateau = plateau.roverArrived(position);
         }
 
+        Map<Letter, Instruction<Position>> instructionSet = new EnumMap<>(Letter.class);
+        instructionSet.put(Letter.M, Position::move);
+        instructionSet.put(Letter.L, Position::left);
+        instructionSet.put(Letter.R, Position::right);
+
         for (Rover<Position> rover : input.rovers()) {
 
             Position position = rover.position();
-            final Iterable<Instruction<Position>> instructions = rover.program();
+            final Iterable<Letter> instructions = rover.program();
 
             plateau = plateau.roverLeft(position);
             Position startPosition = position;
-            for (Instruction<Position> currentInstruction : instructions) {
-                Position endPosition = currentInstruction.applyTo(startPosition);
+            for (Letter letter : instructions) {
+
+                Position endPosition = instructionSet.get(letter).applyTo(startPosition);
 
                 if (plateau.isOccupied(endPosition)) {
                     break;

@@ -245,9 +245,9 @@ class Model {
 
     private static class RoverDefinition implements Domain.Rover<RoverState> {
         public final RoverState state;
-        public final List<Domain.Instruction<RoverState>> instructions;
+        public final List<Domain.Letter> instructions;
 
-        RoverDefinition(RoverState state, List<Domain.Instruction<RoverState>> instructions) {
+        RoverDefinition(RoverState state, List<Domain.Letter> instructions) {
             this.state = state;
             this.instructions = instructions;
         }
@@ -258,7 +258,7 @@ class Model {
         }
 
         @Override
-        public Iterable<Domain.Instruction<RoverState>> program() {
+        public Iterable<Domain.Letter> program() {
             return instructions;
         }
     }
@@ -303,12 +303,12 @@ class Model {
 
         private static RoverDefinition buildRover(Input.Rover rover) {
             RoverState roverState = buildRoverState(rover.position);
-            List<Domain.Instruction<RoverState>> program = buildProgram(rover.instructions);
+            List<Domain.Letter> program = buildProgram(rover.instructions);
 
             return new RoverDefinition(roverState, program);
         }
 
-        private static List<Domain.Instruction<RoverState>> buildProgram(List<Input.Instruction> instructions) {
+        private static List<Domain.Letter> buildProgram(List<Input.Instruction> instructions) {
 
 
             Map<Input.Instruction, Domain.Instruction<RoverState>> instructionSet = new HashMap<>();
@@ -317,10 +317,9 @@ class Model {
             instructionSet.put(Input.Instruction.L, rover -> rover.left());
             instructionSet.put(Input.Instruction.R, rover -> rover.right());
 
-            List<Domain.Instruction<RoverState>> program = new ArrayList<>();
+            List<Domain.Letter> program = new ArrayList<>();
             for (Input.Instruction instruction : instructions) {
-                Domain.Instruction currentInstruction = instructionSet.get(instruction);
-                program.add(currentInstruction);
+                program.add(Domain.Letter.valueOf(instruction.name()));
             }
             return program;
         }
