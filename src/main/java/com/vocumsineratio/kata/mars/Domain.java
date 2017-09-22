@@ -62,15 +62,15 @@ class Domain {
             Simulation extends Domain.Simulation<Position, Plateau>>
     Report runSimulation(Plateau grid, Simulation simulationDefinition, Report reportBuilder) {
 
-        for (Rover<Position> entry : simulationDefinition.rovers()) {
-            Position position = entry.position();
+        for (Rover<Position> rover : simulationDefinition.rovers()) {
+            Position position = rover.position();
             grid = grid.roverArrived(position);
         }
 
-        for (Rover<Position> entry : simulationDefinition.rovers()) {
+        for (Rover<Position> rover : simulationDefinition.rovers()) {
 
-            Position position = entry.position();
-            final Iterable<Instruction<Position>> instructions = entry.program();
+            Position position = rover.position();
+            final Iterable<Instruction<Position>> instructions = rover.program();
 
             grid = grid.roverLeft(position);
             Position finalState = Domain.runProgram(grid, position, instructions);
