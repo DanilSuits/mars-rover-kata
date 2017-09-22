@@ -49,7 +49,7 @@ class Model {
             grid.roverArrived(state);
         }
 
-        List<RoverState> simulationResults = new ArrayList<>();
+        SimulationDefinition simulationResult = new SimulationDefinition(simulationDefinition.grid, new ArrayList<>());
         for (RoverDefinition roverDefinition : simulationDefinition.rovers) {
             RoverState currentRover = roverDefinition.state;
             grid.roverLeft(currentRover);
@@ -63,12 +63,7 @@ class Model {
             }
             RoverState finalState = currentRover;
             grid.roverArrived(finalState);
-            simulationResults.add(finalState);
-        }
-
-        SimulationDefinition simulationResult = new SimulationDefinition(simulationDefinition.grid, new ArrayList<>());
-        for(RoverState state : simulationResults) {
-            simulationResult.rovers.add(new RoverDefinition(state, Collections.emptyList()));
+            simulationResult.rovers.add(new RoverDefinition(finalState, Collections.EMPTY_LIST));
         }
 
         return simulationResult;
