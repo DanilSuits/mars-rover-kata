@@ -71,6 +71,10 @@ class Model {
             simulationResult.rovers.add(new RoverDefinition(state, Collections.emptyList()));
         }
 
+        return projectResults(simulationResult);
+    }
+
+    private static List<RoverState> projectResults(SimulationDefinition simulationResult) {
         List<RoverState> out = new ArrayList<>();
         for(RoverDefinition rover : simulationResult.rovers) {
             out.add(rover.state);
