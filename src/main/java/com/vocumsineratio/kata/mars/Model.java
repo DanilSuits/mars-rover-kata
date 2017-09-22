@@ -107,9 +107,11 @@ class Model {
         return simulationResult;
     }
 
-    private static RoverState runProgram(Domain.PlateauView<RoverState> grid, RoverState currentRover, List<Instruction<RoverState>> program) {
-        for (Instruction<RoverState> currentInstruction : program) {
-            RoverState roverAfterInstruction = currentInstruction.applyTo(currentRover);
+    private static
+    <Rover extends Domain.Rover<Rover>>
+    Rover runProgram(Domain.PlateauView<Rover> grid, Rover currentRover, List<Instruction<Rover>> program) {
+        for (Instruction<Rover> currentInstruction : program) {
+            Rover roverAfterInstruction = currentInstruction.applyTo(currentRover);
 
             if (grid.isOccupied(roverAfterInstruction)) {
                 break;
