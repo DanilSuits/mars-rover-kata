@@ -52,13 +52,18 @@ public class TestableCore {
                 }
             }
 
+            int POSITION_OFFSET = 0;
+            int INSTRUCTION_OFFSET = 1;
+
+            int NEXT_INSTRUCTION_OFFSET = 1;
+
             for(int index = 1; index < lines.size(); index += 2){
-                String position = lines.get(0 + index);
-                String instructions = lines.get(1 + index);
+                String position = lines.get(POSITION_OFFSET + index);
+                String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
                 if ("1 2 N".equals(position) && "L".equals(instructions)) {
-                    lines.set(0 + index, "1 2 W");
-                    lines.set(1 + index, instructions.substring(1));
+                    lines.set(POSITION_OFFSET + index, "1 2 W");
+                    lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
                 }
             }
 
