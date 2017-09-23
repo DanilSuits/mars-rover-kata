@@ -13,6 +13,10 @@ import java.io.PrintStream;
  */
 public class TestableCore {
     static void runTest(InputStream in, PrintStream out) {
+        {
+            // FOR TEST CALIBRATION ONLY
+            if (true) return;
+        }
         // Simplest thing that can possibly work
         out.println("1 3 N");
         out.println("5 1 E");
