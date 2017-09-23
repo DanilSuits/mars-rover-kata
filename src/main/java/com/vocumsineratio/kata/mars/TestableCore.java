@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Danil Suits (danil@vast.com)
@@ -22,10 +24,17 @@ public class TestableCore {
         }
         // Simplest thing that can possibly work
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        reader.readLine();
-        reader.readLine();
-        String instructions = reader.readLine();
-        if (! instructions.isEmpty()) {
+
+        // Primitive Parsing.
+        List<String> lines = new ArrayList<>();
+        String line;
+        while(true) {
+            line = reader.readLine();
+            if (null == line) break;
+            lines.add(line);
+        }
+
+        if (! lines.get(2).isEmpty()) {
             out.println("1 3 N");
             out.println("5 1 E");
             return;
