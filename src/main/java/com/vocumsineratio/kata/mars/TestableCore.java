@@ -53,7 +53,10 @@ public class TestableCore {
             }
 
             for(int index = 1; index < lines.size(); index += 2){
-                if ("1 2 N".equals(lines.get(0 + index)) && "L".equals(lines.get(1 + index))) {
+                String position = lines.get(0 + index);
+                String instructions = lines.get(1 + index);
+
+                if ("1 2 N".equals(position) && "L".equals(instructions)) {
                     lines.set(0 + index, "1 2 W");
                     lines.set(1 + index, "");
                 }
