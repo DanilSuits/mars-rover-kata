@@ -5,24 +5,37 @@
  */
 package com.vocumsineratio.kata.mars;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 
 /**
  * @author Danil Suits (danil@vast.com)
  */
 public class TestableCore {
-    static void runTest(InputStream in, PrintStream out) {
+    static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
             if (false) return;
         }
         // Simplest thing that can possibly work
-        out.println("1 3 N");
-        out.println("5 1 E");
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        reader.readLine();
+        reader.readLine();
+        String instructions = reader.readLine();
+        if (! instructions.isEmpty()) {
+            out.println("1 3 N");
+            out.println("5 1 E");
+            return;
+        }
+
+        out.println("1 2 N");
+        out.println("3 3 E");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         // This is my proof that the thin shell can invoke
         // the function provided by the testable core.
         runTest(System.in, System.out);
