@@ -58,7 +58,7 @@ public class TestableCore {
 
                 if ("1 2 N".equals(position) && "L".equals(instructions)) {
                     lines.set(0 + index, "1 2 W");
-                    lines.set(1 + index, "");
+                    lines.set(1 + index, instructions.substring(1));
                 }
             }
 
