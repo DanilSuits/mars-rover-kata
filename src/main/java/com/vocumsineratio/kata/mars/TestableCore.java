@@ -15,7 +15,7 @@ public class TestableCore {
     static void runTest(InputStream in, PrintStream out) {
         {
             // FOR TEST CALIBRATION ONLY
-            if (true) return;
+            if (false) return;
         }
         // Simplest thing that can possibly work
         out.println("1 3 N");
