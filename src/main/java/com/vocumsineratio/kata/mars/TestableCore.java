@@ -34,30 +34,36 @@ public class TestableCore {
             lines.add(line);
         }
 
+        int FIRST_ROVER_OFFSET = 1;
+        int INPUT_LINES_PER_ROVER = 2;
+
         // RUN the model.
         {
-            // TODO: remove the cheat when we can.
-            // Key Insight - cheat by converting the complicated problem into a simpler
-            // equivalent that the model undertands how to solve.
-            {
-                for(int index = 1; index < lines.size(); index += 2){
-                    if ("1 2 N".equals(lines.get(0 + index)) && "LMLMLMLMM".equals(lines.get(1 + index))) {
-                        lines.set(0 + index, "1 3 N");
-                        lines.set(1 + index, "");
-                    }
-                    if ("3 3 E".equals(lines.get(0+index)) && "MMRMMRMRRM".equals(lines.get(1+index))) {
-                        lines.set(0+index, "5 1 E");
-                        lines.set(1+index, "");
-                    }
-                }
-            }
-
             int POSITION_OFFSET = 0;
             int INSTRUCTION_OFFSET = 1;
 
             int NEXT_INSTRUCTION_OFFSET = 1;
 
-            for(int index = 1; index < lines.size(); index += 2){
+            // TODO: remove the cheat when we can.
+            // Key Insight - cheat by converting the complicated problem into a simpler
+            // equivalent that the model undertands how to solve.
+            {
+                for(int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER){
+                    String position = lines.get(POSITION_OFFSET + index);
+                    String instructions = lines.get(INSTRUCTION_OFFSET + index);
+
+                    if ("1 2 N".equals(position) && "LMLMLMLMM".equals(instructions)) {
+                        lines.set(POSITION_OFFSET + index, "1 3 N");
+                        lines.set(INSTRUCTION_OFFSET + index, "");
+                    }
+                    if ("3 3 E".equals(position) && "MMRMMRMRRM".equals(instructions)) {
+                        lines.set(POSITION_OFFSET+index, "5 1 E");
+                        lines.set(INSTRUCTION_OFFSET+index, "");
+                    }
+                }
+            }
+
+            for(int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER){
                 String position = lines.get(POSITION_OFFSET + index);
                 String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
@@ -70,7 +76,7 @@ public class TestableCore {
         }
 
         // Create a view of the modified data model.
-        for (int index = 1; index < lines.size(); index+=2) {
+        for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index+=INPUT_LINES_PER_ROVER) {
             out.println(lines.get(index));
         }
     }
