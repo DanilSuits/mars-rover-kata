@@ -5,6 +5,7 @@
  */
 package com.vocumsineratio.kata.mars;
 
+import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Danil Suits (danil@vast.com)
@@ -22,17 +24,10 @@ public class TestableCore {
             // FOR TEST CALIBRATION ONLY
             if (false) return;
         }
-        // Simplest thing that can possibly work
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-        // Primitive Parsing.
-        List<String> lines = new ArrayList<>();
-        String line;
-        while(true) {
-            line = reader.readLine();
-            if (null == line) break;
-            lines.add(line);
-        }
+        // Stream Parsing.
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        List<String> lines = reader.lines().collect(Collectors.toList());
 
         int FIRST_ROVER_OFFSET = 1;
         int INPUT_LINES_PER_ROVER = 2;
@@ -69,8 +64,13 @@ public class TestableCore {
                     String position = lines.get(POSITION_OFFSET + index);
                     String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
-                    if ("1 2 N".equals(position) && "L".equals(instructions.substring(0,1))) {
-                        lines.set(POSITION_OFFSET + index, "1 2 W");
+                    String startLocation = "1 2";
+                    String startHeading = "N";
+                    String startPosition = startLocation + " " + startHeading;
+                    if (startPosition.equals(position) && "L".equals(instructions.substring(0,1))) {
+                        String endHeading = "W";
+                        String endPosition = startLocation + " " + endHeading;
+                        lines.set(POSITION_OFFSET + index, endPosition);
                         lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
                     }
                 }
