@@ -57,10 +57,12 @@ public class TestableCore {
                         if ("1 2 W".equals(position) && "MLMLMLMM".equals(instructions)) {
                             lines.set(POSITION_OFFSET + index, "1 3 N");
                             lines.set(INSTRUCTION_OFFSET + index, "");
+                            break;
                         }
                         if ("3 3 E".equals(position) && "MMRMMRMRRM".equals(instructions)) {
                             lines.set(POSITION_OFFSET + index, "5 1 E");
                             lines.set(INSTRUCTION_OFFSET + index, "");
+                            break;
                         }
                     }
 
