@@ -45,30 +45,32 @@ public class TestableCore {
             int NEXT_INSTRUCTION_OFFSET = 1;
 
             for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER) {
-                
-                // TODO: remove the cheat when we can.
-                // Key Insight - cheat by converting the complicated problem into a simpler
-                // equivalent that the model undertands how to solve.
-                {
+
+                while (! lines.get(INSTRUCTION_OFFSET + index).isEmpty()) {
+                    // TODO: remove the cheat when we can.
+                    // Key Insight - cheat by converting the complicated problem into a simpler
+                    // equivalent that the model undertands how to solve.
+                    {
+                        String position = lines.get(POSITION_OFFSET + index);
+                        String instructions = lines.get(INSTRUCTION_OFFSET + index);
+
+                        if ("1 2 N".equals(position) && "LMLMLMLMM".equals(instructions)) {
+                            lines.set(POSITION_OFFSET + index, "1 3 N");
+                            lines.set(INSTRUCTION_OFFSET + index, "");
+                        }
+                        if ("3 3 E".equals(position) && "MMRMMRMRRM".equals(instructions)) {
+                            lines.set(POSITION_OFFSET + index, "5 1 E");
+                            lines.set(INSTRUCTION_OFFSET + index, "");
+                        }
+                    }
+
                     String position = lines.get(POSITION_OFFSET + index);
                     String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
-                    if ("1 2 N".equals(position) && "LMLMLMLMM".equals(instructions)) {
-                        lines.set(POSITION_OFFSET + index, "1 3 N");
-                        lines.set(INSTRUCTION_OFFSET + index, "");
+                    if ("1 2 N".equals(position) && "L".equals(instructions)) {
+                        lines.set(POSITION_OFFSET + index, "1 2 W");
+                        lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
                     }
-                    if ("3 3 E".equals(position) && "MMRMMRMRRM".equals(instructions)) {
-                        lines.set(POSITION_OFFSET + index, "5 1 E");
-                        lines.set(INSTRUCTION_OFFSET + index, "");
-                    }
-                }
-                
-                String position = lines.get(POSITION_OFFSET + index);
-                String instructions = lines.get(INSTRUCTION_OFFSET + index);
-
-                if ("1 2 N".equals(position) && "L".equals(instructions)) {
-                    lines.set(POSITION_OFFSET + index, "1 2 W");
-                    lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
                 }
             }
 
