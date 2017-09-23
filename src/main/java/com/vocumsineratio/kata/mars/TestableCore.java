@@ -40,8 +40,8 @@ public class TestableCore {
             return;
         }
 
-        out.println("1 2 N");
-        out.println("3 3 E");
+        out.println(lines.get(1));
+        out.println(lines.get(3));
     }
 
     public static void main(String[] args) throws IOException {
