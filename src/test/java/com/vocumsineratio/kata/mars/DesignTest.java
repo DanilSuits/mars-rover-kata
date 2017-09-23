@@ -25,6 +25,11 @@ public class DesignTest {
     }
 
     @Test
+    public void testReversedSample() throws IOException {
+        check("5 5\n3 3 E\nMMRMMRMRRM\n1 2 N\nLMLMLMLMM", "5 1 E\n1 3 N\n");
+    }
+
+    @Test
     public void testWithNoInstructions() throws IOException {
         // If the rovers don't have any instructions, then they should stay put.
         check("5 5\n1 2 N\n\n3 3 E\n\n", "1 2 N\n3 3 E\n");
