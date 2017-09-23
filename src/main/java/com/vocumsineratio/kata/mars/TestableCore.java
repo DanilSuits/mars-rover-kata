@@ -40,8 +40,10 @@ public class TestableCore {
             return;
         }
 
-        out.println(lines.get(1));
-        out.println(lines.get(3));
+        // Create a view of the modified data model.
+        for (int index = 1; index < lines.size(); index+=2) {
+            out.println(lines.get(index));
+        }
     }
 
     public static void main(String[] args) throws IOException {
