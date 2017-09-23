@@ -23,6 +23,12 @@ public class DesignTest {
         check("5 5\n1 2 N\nLMLMLMLMM\n3 3 E\nMMRMMRMRRM\n", "1 3 N\n5 1 E\n");
     }
 
+    @Test
+    public void testWithNoInstructions() {
+        // If the rovers don't have any instructions, then they should stay put.
+        check("5 5\n1 2 N\n\n3 3 E\n\n", "1 2 N\n3 3 E\n");
+    }
+    
     private void check(String input, String expectedOutput) {
         InputStream in = new ByteArrayInputStream(input.getBytes());
 
