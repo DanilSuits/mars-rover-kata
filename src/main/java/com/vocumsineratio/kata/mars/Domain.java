@@ -12,18 +12,10 @@ import java.util.Map;
  * @author Danil Suits (danil@vast.com)
  */
 class Domain {
-    interface Heading<H extends Heading> {
-        H left();
+    interface Input<R extends Position, P extends PlateauView<R> & Plateau<P, R>> {
+        P plateau();
 
-        H right();
-    }
-
-    interface Position<R extends Position<R>> {
-        R left();
-
-        R right();
-
-        R move();
+        Iterable<? extends Rover<R>> squad();
     }
 
     interface PlateauView<R extends Position> {
@@ -36,28 +28,36 @@ class Domain {
         P roverLeft(R rover);
     }
 
-    interface Instruction<P extends Position> {
-        P applyTo(P currentState);
-    }
-
     interface Rover<P extends Position> {
         P position();
 
         Iterable<Letter> program();
     }
 
+    interface Position<P extends Position<P>> {
+        P left();
+
+        P right();
+
+        P move();
+    }
+
     enum Letter {
         M, L, R
     }
 
-    interface Input<R extends Position, P extends PlateauView<R> & Plateau<P, R>> {
-        P plateau();
-
-        Iterable<? extends Rover<R>> rovers();
+    interface Instruction<P extends Position> {
+        P applyTo(P currentState);
     }
 
-    interface Output<O extends Output<O, R>, R extends Position> {
-        O add(R rover);
+    interface Heading<H extends Heading> {
+        H left();
+
+        H right();
+    }
+
+    interface Output<O extends Output<O, P>, P extends Position> {
+        O add(P position);
     }
 
     static
@@ -68,14 +68,14 @@ class Domain {
     Output runSimulation(Input input, Output output) {
         Plateau plateau = input.plateau();
         
-        for (Rover<Position> rover : input.rovers()) {
+        for (Rover<Position> rover : input.squad()) {
             Position position = rover.position();
             plateau = plateau.roverArrived(position);
         }
 
         Map<Letter, Instruction<Position>> instructionSet = getInstructionSet();
 
-        for (Rover<Position> rover : input.rovers()) {
+        for (Rover<Position> rover : input.squad()) {
 
             Position position = rover.position();
             final Iterable<Letter> instructions = rover.program();

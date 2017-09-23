@@ -8,7 +8,6 @@ package com.vocumsineratio.kata.mars;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +45,7 @@ class Model {
 
     private static List<RoverState> projectResults(SimulationDefinition simulationResult) {
         List<RoverState> out = new ArrayList<>();
-        final Iterable<Domain.Rover<RoverState>> entries = simulationResult.rovers();
+        final Iterable<Domain.Rover<RoverState>> entries = simulationResult.squad();
         for(Domain.Rover<RoverState> entry : entries) {
             out.add(entry.position());
         }
@@ -75,7 +74,7 @@ class Model {
         public ReportBuilder add(RoverState r) {
             ArrayList<Domain.Rover<RoverState>> rovers = new ArrayList<>();
 
-            for (Domain.Rover<RoverState> entry : definition.rovers()) {
+            for (Domain.Rover<RoverState> entry : definition.squad()) {
                 rovers.add(entry);
             }
 
@@ -288,7 +287,7 @@ class Model {
         }
 
         @Override
-        public Iterable<Domain.Rover<RoverState>> rovers() {
+        public Iterable<Domain.Rover<RoverState>> squad() {
             return rovers;
         }
     }
@@ -309,13 +308,6 @@ class Model {
         }
 
         private static List<Domain.Letter> buildProgram(List<Input.Instruction> instructions) {
-
-
-            Map<Input.Instruction, Domain.Instruction<RoverState>> instructionSet = new HashMap<>();
-            
-            instructionSet.put(Input.Instruction.M, rover -> rover.move());
-            instructionSet.put(Input.Instruction.L, rover -> rover.left());
-            instructionSet.put(Input.Instruction.R, rover -> rover.right());
 
             List<Domain.Letter> program = new ArrayList<>();
             for (Input.Instruction instruction : instructions) {
