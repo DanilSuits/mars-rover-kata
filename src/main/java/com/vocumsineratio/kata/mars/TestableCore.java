@@ -40,16 +40,11 @@ public class TestableCore {
             // Key Insight - cheat by converting the complicated problem into a simpler
             // equivalent that the model undertands how to solve.
             {
-                {
-                    int index = 1;
+                for(int index = 1; index < lines.size(); index += 2){
                     if ("1 2 N".equals(lines.get(0 + index)) && "LMLMLMLMM".equals(lines.get(1 + index))) {
                         lines.set(0 + index, "1 3 N");
                         lines.set(1 + index, "");
                     }
-                }
-
-                {
-                    int index = 3;
                     if ("3 3 E".equals(lines.get(0+index)) && "MMRMMRMRRM".equals(lines.get(1+index))) {
                         lines.set(0+index, "5 1 E");
                         lines.set(1+index, "");
