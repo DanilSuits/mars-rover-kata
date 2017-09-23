@@ -44,11 +44,12 @@ public class TestableCore {
 
             int NEXT_INSTRUCTION_OFFSET = 1;
 
-            // TODO: remove the cheat when we can.
-            // Key Insight - cheat by converting the complicated problem into a simpler
-            // equivalent that the model undertands how to solve.
-            {
-                for(int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER){
+            for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER) {
+                
+                // TODO: remove the cheat when we can.
+                // Key Insight - cheat by converting the complicated problem into a simpler
+                // equivalent that the model undertands how to solve.
+                {
                     String position = lines.get(POSITION_OFFSET + index);
                     String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
@@ -57,13 +58,11 @@ public class TestableCore {
                         lines.set(INSTRUCTION_OFFSET + index, "");
                     }
                     if ("3 3 E".equals(position) && "MMRMMRMRRM".equals(instructions)) {
-                        lines.set(POSITION_OFFSET+index, "5 1 E");
-                        lines.set(INSTRUCTION_OFFSET+index, "");
+                        lines.set(POSITION_OFFSET + index, "5 1 E");
+                        lines.set(INSTRUCTION_OFFSET + index, "");
                     }
                 }
-            }
-
-            for(int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER){
+                
                 String position = lines.get(POSITION_OFFSET + index);
                 String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
