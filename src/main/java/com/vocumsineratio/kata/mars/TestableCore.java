@@ -37,6 +37,7 @@ public class TestableCore {
     static final EnumMap<CompassPoint, CompassPoint> RIGHT = new EnumMap<>(CompassPoint.class);
     static {
         RIGHT.put(CompassPoint.E, CompassPoint.S);
+        RIGHT.put(CompassPoint.S, CompassPoint.W);
     }
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
