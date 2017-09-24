@@ -91,6 +91,10 @@ public class TestableCore {
                             String endPosition = startLocation + " " + endHeading;
                             lines.set(POSITION_OFFSET + index, endPosition);
                         }
+
+                        if ("M".equals(currentInstruction)) {
+                            lines.set(POSITION_OFFSET + index, "1 1 W");
+                        }
                         lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
                     }
                 }
