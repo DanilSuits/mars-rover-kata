@@ -95,11 +95,18 @@ public class TestableCore {
                         lines.set(POSITION_OFFSET + index, endPosition);
                     }
 
-                    String startLocation = "1 2";
-                    if (startLocation.equals(currentLocation)) {
+                    if ("M".equals(currentInstruction)) {
+                        if (currentLocation.equals("1 2")) {
+                            String [] rawCoordinates = currentLocation.split(" ");
+                            int xPos = Integer.parseInt(rawCoordinates[0]);
+                            int yPos = Integer.parseInt(rawCoordinates[1]);
 
-                        if ("M".equals(currentInstruction)) {
-                            lines.set(POSITION_OFFSET + index, "1 1 W");
+                            if (CompassPoint.W.equals(currentHeading)) {
+                                yPos -= 1;
+                            }
+                            
+                            String endLocation = xPos + " " + yPos;
+                            lines.set(POSITION_OFFSET + index, endLocation + " " + currentHeading.name());
                         }
                     }
                 }
