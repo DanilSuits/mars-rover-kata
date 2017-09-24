@@ -79,14 +79,15 @@ public class TestableCore {
                     String position = lines.get(POSITION_OFFSET + index);
                     String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
+                    // TODO: real parsing
+                    final String currentLocation = position.substring(0, position.length()-2);
+                    final String startHeading = position.substring(position.length() - 1);
+                    final CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
+
                     final String currentInstruction = instructions.substring(0, 1);
 
                     String startLocation = "1 2";
-                    if (position.startsWith(startLocation)) {
-                        String currentLocation = position.substring(0, position.length()-2);
-
-                        final String startHeading = position.substring(position.length() - 1);
-                        final CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
+                    if (startLocation.equals(currentLocation)) {
 
                         if ("L".equals(currentInstruction)) {
                             String endHeading = LEFT.get(currentHeading).name();
