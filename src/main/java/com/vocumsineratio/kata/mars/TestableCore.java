@@ -77,10 +77,10 @@ public class TestableCore {
                     String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
                     String startLocation = "1 2";
-                    String startHeading = CompassPoint.N.name();
-                    String startPosition = startLocation + " " + startHeading;
-                    if (startPosition.equals(position) && "L".equals(instructions.substring(0,1))) {
-                        String endHeading = LEFT.get(CompassPoint.N).name();
+                    if (position.startsWith(startLocation) && "L".equals(instructions.substring(0,1))) {
+                        final String startHeading = position.substring(position.length() - 1);
+                        final CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
+                        String endHeading = LEFT.get(currentHeading).name();
                         String endPosition = startLocation + " " + endHeading;
                         lines.set(POSITION_OFFSET + index, endPosition);
                         lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
