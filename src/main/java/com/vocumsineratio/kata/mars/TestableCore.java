@@ -64,7 +64,7 @@ public class TestableCore {
                         String position = lines.get(POSITION_OFFSET + index);
                         String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
-                        if ("1 1 S".equals(position) && "MLMLMM".equals(instructions)) {
+                        if ("0 2 S".equals(position) && "MLMLMM".equals(instructions)) {
                             lines.set(POSITION_OFFSET + index, "1 3 N");
                             lines.set(INSTRUCTION_OFFSET + index, "");
                             break;
@@ -101,7 +101,7 @@ public class TestableCore {
                         int yPos = Integer.parseInt(rawCoordinates[1]);
 
                         if (CompassPoint.W.equals(currentHeading)) {
-                            yPos -= 1;
+                            xPos -= 1;
                         }
 
                         String endLocation = xPos + " " + yPos;
