@@ -39,7 +39,8 @@ public class DesignTest {
     @DataProvider(name = "simplePrograms")
     Object[][] simplePrograms () {
         return new Object[][] {
-                {"1 2 N", "L", "1 2 W"}
+                {"1 2 N", "L", "1 2 W"},
+                {"1 2 W", "L", "1 2 S"}
         } ;
     }
     
