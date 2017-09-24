@@ -23,13 +23,14 @@ import java.util.stream.IntStream;
  */
 public class TestableCore {
     enum CompassPoint {
-        N, W, S
+        N, W, S, E
     }
 
     static final EnumMap<CompassPoint, CompassPoint> LEFT = new EnumMap<>(CompassPoint.class);
     static {
         LEFT.put(CompassPoint.N, CompassPoint.W);
         LEFT.put(CompassPoint.W, CompassPoint.S);
+        LEFT.put(CompassPoint.S, CompassPoint.E);
     }
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
