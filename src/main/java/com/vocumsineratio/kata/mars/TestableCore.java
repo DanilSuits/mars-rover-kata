@@ -12,6 +12,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -23,6 +25,12 @@ public class TestableCore {
     enum CompassPoint {
         N, W
     }
+
+    static final EnumMap<CompassPoint, CompassPoint> LEFT = new EnumMap<>(CompassPoint.class);
+    static {
+        LEFT.put(CompassPoint.N, CompassPoint.W);
+    }
+
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
@@ -72,7 +80,7 @@ public class TestableCore {
                     String startHeading = CompassPoint.N.name();
                     String startPosition = startLocation + " " + startHeading;
                     if (startPosition.equals(position) && "L".equals(instructions.substring(0,1))) {
-                        String endHeading = CompassPoint.W.name();
+                        String endHeading = LEFT.get(CompassPoint.N).name();
                         String endPosition = startLocation + " " + endHeading;
                         lines.set(POSITION_OFFSET + index, endPosition);
                         lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
