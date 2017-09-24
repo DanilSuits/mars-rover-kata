@@ -79,14 +79,19 @@ public class TestableCore {
                     String position = lines.get(POSITION_OFFSET + index);
                     String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
+                    final String currentInstruction = instructions.substring(0, 1);
+
                     String startLocation = "1 2";
-                    if (position.startsWith(startLocation) && "L".equals(instructions.substring(0,1))) {
+                    if (position.startsWith(startLocation)) {
                         final String startHeading = position.substring(position.length() - 1);
                         final CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
-                        String endHeading = LEFT.get(currentHeading).name();
-                        String endPosition = startLocation + " " + endHeading;
-                        lines.set(POSITION_OFFSET + index, endPosition);
-                        lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
+
+                        if ("L".equals(currentInstruction)) {
+                            String endHeading = LEFT.get(currentHeading).name();
+                            String endPosition = startLocation + " " + endHeading;
+                            lines.set(POSITION_OFFSET + index, endPosition);
+                            lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
+                        }
                     }
                 }
             }
