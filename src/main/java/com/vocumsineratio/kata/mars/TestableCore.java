@@ -104,6 +104,10 @@ public class TestableCore {
                             xPos -= 1;
                         }
 
+                        if (CompassPoint.E.equals(currentHeading)) {
+                            xPos += 1;
+                        }
+
                         if (CompassPoint.S.equals(currentHeading)) {
                             yPos -= 1;
                         }
