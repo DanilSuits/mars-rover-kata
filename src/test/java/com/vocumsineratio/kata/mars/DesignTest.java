@@ -40,7 +40,8 @@ public class DesignTest {
     Object[][] simplePrograms () {
         return new Object[][] {
                 {"1 2 N", "L", "1 2 W"},
-                {"1 2 W", "L", "1 2 S"}
+                {"1 2 W", "L", "1 2 S"},
+                {"1 2 S", "L", "1 2 E"}
         } ;
     }
     
