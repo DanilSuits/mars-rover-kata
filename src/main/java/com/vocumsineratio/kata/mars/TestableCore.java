@@ -14,11 +14,15 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * @author Danil Suits (danil@vast.com)
  */
 public class TestableCore {
+    enum CompassPoint {
+        N, W
+    }
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
@@ -65,10 +69,10 @@ public class TestableCore {
                     String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
                     String startLocation = "1 2";
-                    String startHeading = "N";
+                    String startHeading = CompassPoint.N.name();
                     String startPosition = startLocation + " " + startHeading;
                     if (startPosition.equals(position) && "L".equals(instructions.substring(0,1))) {
-                        String endHeading = "W";
+                        String endHeading = CompassPoint.W.name();
                         String endPosition = startLocation + " " + endHeading;
                         lines.set(POSITION_OFFSET + index, endPosition);
                         lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
@@ -78,10 +82,10 @@ public class TestableCore {
 
         }
 
-        // Create a view of the modified data model.
-        for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index+=INPUT_LINES_PER_ROVER) {
-            out.println(lines.get(index));
-        }
+        IntStream.range(0, lines.size())
+                .filter( n -> (n % 2) == 1)
+                .mapToObj(n -> lines.get(n))
+                .forEach(out::println);
     }
 
     public static void main(String[] args) throws IOException {
