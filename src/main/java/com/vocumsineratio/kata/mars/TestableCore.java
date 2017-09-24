@@ -112,6 +112,10 @@ public class TestableCore {
                             yPos -= 1;
                         }
 
+                        if (CompassPoint.N.equals(currentHeading)) {
+                            yPos += 1;
+                        }
+
                         String endLocation = xPos + " " + yPos;
                         lines.set(POSITION_OFFSET + index, endLocation + " " + currentHeading.name());
                     }
