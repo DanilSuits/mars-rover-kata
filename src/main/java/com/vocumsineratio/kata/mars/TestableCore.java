@@ -38,6 +38,7 @@ public class TestableCore {
     static {
         RIGHT.put(CompassPoint.E, CompassPoint.S);
         RIGHT.put(CompassPoint.S, CompassPoint.W);
+        RIGHT.put(CompassPoint.W, CompassPoint.N);
     }
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
