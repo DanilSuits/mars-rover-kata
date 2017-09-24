@@ -59,3 +59,10 @@ The output for each rover should be its final co-ordinates and heading.
 
     1 3 N
     5 1 E
+
+## Exercises
+
+* [20170922](https://github.com/DanilSuits/mars-rover-kata/commits/20170922)
+  * This is my current attempt
+* [20170906](https://github.com/DanilSuits/mars-rover-kata/commits/20170906)
+  * Initial attempt
