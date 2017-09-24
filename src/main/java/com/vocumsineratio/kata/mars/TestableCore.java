@@ -69,7 +69,7 @@ public class TestableCore {
                             lines.set(INSTRUCTION_OFFSET + index, "");
                             break;
                         }
-                        if ("3 3 E".equals(position) && "MMRMMRMRRM".equals(instructions)) {
+                        if ("5 3 E".equals(position) && "RMMRMRRM".equals(instructions)) {
                             lines.set(POSITION_OFFSET + index, "5 1 E");
                             lines.set(INSTRUCTION_OFFSET + index, "");
                             break;
