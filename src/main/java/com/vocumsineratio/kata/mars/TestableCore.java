@@ -90,8 +90,8 @@ public class TestableCore {
                             String endHeading = LEFT.get(currentHeading).name();
                             String endPosition = startLocation + " " + endHeading;
                             lines.set(POSITION_OFFSET + index, endPosition);
-                            lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
                         }
+                        lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
                     }
                 }
             }
