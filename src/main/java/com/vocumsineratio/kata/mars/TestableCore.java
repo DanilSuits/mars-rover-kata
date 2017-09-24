@@ -83,12 +83,14 @@ public class TestableCore {
 
                     String startLocation = "1 2";
                     if (position.startsWith(startLocation)) {
+                        String currentLocation = position.substring(0, position.length()-2);
+
                         final String startHeading = position.substring(position.length() - 1);
                         final CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
 
                         if ("L".equals(currentInstruction)) {
                             String endHeading = LEFT.get(currentHeading).name();
-                            String endPosition = startLocation + " " + endHeading;
+                            String endPosition = currentLocation + " " + endHeading;
                             lines.set(POSITION_OFFSET + index, endPosition);
                         }
 
