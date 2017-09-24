@@ -34,6 +34,11 @@ public class TestableCore {
         LEFT.put(CompassPoint.E, CompassPoint.N);
     }
 
+    static final EnumMap<CompassPoint, CompassPoint> RIGHT = new EnumMap<>(CompassPoint.class);
+    static {
+        RIGHT.put(CompassPoint.E, CompassPoint.S);
+    }
+
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
@@ -91,7 +96,7 @@ public class TestableCore {
                     }
 
                     if ("R".equals(currentInstruction)) {
-                        String endHeading = "S";
+                        String endHeading = RIGHT.get(currentHeading).name();
                         String endPosition = currentLocation + " " + endHeading;
                         lines.set(POSITION_OFFSET + index, endPosition);
                     }
