@@ -90,6 +90,12 @@ public class TestableCore {
                         lines.set(POSITION_OFFSET + index, endPosition);
                     }
 
+                    if ("R".equals(currentInstruction)) {
+                        String endHeading = "S";
+                        String endPosition = currentLocation + " " + endHeading;
+                        lines.set(POSITION_OFFSET + index, endPosition);
+                    }
+
                     if ("M".equals(currentInstruction)) {
                         String[] rawCoordinates = currentLocation.split(" ");
                         int xPos = Integer.parseInt(rawCoordinates[0]);
