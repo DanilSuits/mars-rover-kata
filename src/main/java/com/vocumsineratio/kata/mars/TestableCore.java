@@ -84,7 +84,10 @@ public class TestableCore {
                     final String startHeading = position.substring(position.length() - 1);
                     final CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
 
+                    // TODO: real parsing
                     final String currentInstruction = instructions.substring(0, 1);
+                    final String remainingInstructions = instructions.substring(NEXT_INSTRUCTION_OFFSET);
+                    lines.set(INSTRUCTION_OFFSET + index, remainingInstructions);
 
                     String startLocation = "1 2";
                     if (startLocation.equals(currentLocation)) {
@@ -98,7 +101,6 @@ public class TestableCore {
                         if ("M".equals(currentInstruction)) {
                             lines.set(POSITION_OFFSET + index, "1 1 W");
                         }
-                        lines.set(INSTRUCTION_OFFSET + index, instructions.substring(NEXT_INSTRUCTION_OFFSET));
                     }
                 }
             }
