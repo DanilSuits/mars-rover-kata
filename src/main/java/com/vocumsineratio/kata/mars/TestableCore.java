@@ -89,14 +89,14 @@ public class TestableCore {
                     final String remainingInstructions = instructions.substring(NEXT_INSTRUCTION_OFFSET);
                     lines.set(INSTRUCTION_OFFSET + index, remainingInstructions);
 
+                    if ("L".equals(currentInstruction)) {
+                        String endHeading = LEFT.get(currentHeading).name();
+                        String endPosition = currentLocation + " " + endHeading;
+                        lines.set(POSITION_OFFSET + index, endPosition);
+                    }
+
                     String startLocation = "1 2";
                     if (startLocation.equals(currentLocation)) {
-
-                        if ("L".equals(currentInstruction)) {
-                            String endHeading = LEFT.get(currentHeading).name();
-                            String endPosition = currentLocation + " " + endHeading;
-                            lines.set(POSITION_OFFSET + index, endPosition);
-                        }
 
                         if ("M".equals(currentInstruction)) {
                             lines.set(POSITION_OFFSET + index, "1 1 W");
