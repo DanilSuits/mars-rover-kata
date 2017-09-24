@@ -70,7 +70,7 @@ public class TestableCore {
                         String position = lines.get(POSITION_OFFSET + index);
                         String instructions = lines.get(INSTRUCTION_OFFSET + index);
 
-                        if ("5 1 S".equals(position) && "RMRRM".equals(instructions)) {
+                        if ("5 1 W".equals(position) && "MRRM".equals(instructions)) {
                             lines.set(POSITION_OFFSET + index, "5 1 E");
                             lines.set(INSTRUCTION_OFFSET + index, "");
                             break;
