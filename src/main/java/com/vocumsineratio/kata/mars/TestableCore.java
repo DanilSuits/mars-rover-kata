@@ -82,36 +82,38 @@ public class TestableCore {
                     final String remainingInstructions = instructions.substring(NEXT_INSTRUCTION_OFFSET);
                     lines.set(INSTRUCTION_OFFSET + index, remainingInstructions);
 
-                    if ("L".equals(currentInstruction)) {
-                        currentHeading = LEFT.get(currentHeading);
-                        String endLocation = xPos + " " + yPos;
-                        lines.set(POSITION_OFFSET + index, endLocation + " " + currentHeading.name());
+                    // PROCESS INSTRUCTIONS
+                    {
+                        if ("L".equals(currentInstruction)) {
+                            currentHeading = LEFT.get(currentHeading);
+                        }
+
+                        if ("R".equals(currentInstruction)) {
+                            currentHeading = RIGHT.get(currentHeading);
+                        }
+
+                        if ("M".equals(currentInstruction)) {
+
+                            if (CompassPoint.W.equals(currentHeading)) {
+                                xPos -= 1;
+                            }
+
+                            if (CompassPoint.E.equals(currentHeading)) {
+                                xPos += 1;
+                            }
+
+                            if (CompassPoint.S.equals(currentHeading)) {
+                                yPos -= 1;
+                            }
+
+                            if (CompassPoint.N.equals(currentHeading)) {
+                                yPos += 1;
+                            }
+                        }
                     }
 
-                    if ("R".equals(currentInstruction)) {
-                        currentHeading = RIGHT.get(currentHeading);
-                        String endLocation = xPos + " " + yPos;
-                        lines.set(POSITION_OFFSET + index, endLocation + " " + currentHeading.name());
-                    }
-
-                    if ("M".equals(currentInstruction)) {
-
-                        if (CompassPoint.W.equals(currentHeading)) {
-                            xPos -= 1;
-                        }
-
-                        if (CompassPoint.E.equals(currentHeading)) {
-                            xPos += 1;
-                        }
-
-                        if (CompassPoint.S.equals(currentHeading)) {
-                            yPos -= 1;
-                        }
-
-                        if (CompassPoint.N.equals(currentHeading)) {
-                            yPos += 1;
-                        }
-
+                    // UPDATE STATE
+                    {
                         String endLocation = xPos + " " + yPos;
                         lines.set(POSITION_OFFSET + index, endLocation + " " + currentHeading.name());
                     }
