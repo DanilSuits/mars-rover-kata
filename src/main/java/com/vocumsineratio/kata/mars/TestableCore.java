@@ -71,6 +71,9 @@ public class TestableCore {
 
                     // TODO: real parsing
                     final String currentLocation = position.substring(0, position.length()-2);
+                    String[] rawCoordinates = currentLocation.split(" ");
+                    int xPos = Integer.parseInt(rawCoordinates[0]);
+                    int yPos = Integer.parseInt(rawCoordinates[1]);
                     final String startHeading = position.substring(position.length() - 1);
                     final CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
 
@@ -92,9 +95,6 @@ public class TestableCore {
                     }
 
                     if ("M".equals(currentInstruction)) {
-                        String[] rawCoordinates = currentLocation.split(" ");
-                        int xPos = Integer.parseInt(rawCoordinates[0]);
-                        int yPos = Integer.parseInt(rawCoordinates[1]);
 
                         if (CompassPoint.W.equals(currentHeading)) {
                             xPos -= 1;
