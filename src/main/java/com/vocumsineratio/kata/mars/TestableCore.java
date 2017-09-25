@@ -15,6 +15,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Danil Suits (danil@vast.com)
@@ -115,6 +116,90 @@ public class TestableCore {
         static final int NEXT_INSTRUCTION_OFFSET = 1;
     }
 
+    static class Model {
+        static class BookOfRecord {
+            final List<Rover> squad;
+
+            BookOfRecord(List<Rover> squad) {
+                this.squad = squad;
+            }
+
+            Write writeModel() {
+                return new Write(squad);
+            }
+
+            Read readModel() {
+                return new Read(squad);
+            }
+        }
+
+        static class Write {
+            final List<Rover> squad;
+
+            Write(List<Rover> squad) {
+                this.squad = squad;
+            }
+
+            void onTick() {
+                for(Rover current : squad) {
+                    Program instructions = current.instructions;
+                    if (instructions.hasCurrent()) {
+                        run(current);
+                        return;
+                    }
+                }
+            }
+
+            private void run(Rover rover) {
+                Position roverPosition = rover.position;
+                Program instructions = rover.instructions;
+
+                while (instructions.hasCurrent()) {
+
+                    final String currentInstruction = instructions.current();
+
+                    // PROCESS INSTRUCTIONS
+                    {
+                        if ("L".equals(currentInstruction)) {
+                            roverPosition.left();
+                        }
+
+                        if ("R".equals(currentInstruction)) {
+                            roverPosition.right();
+                        }
+
+                        if ("M".equals(currentInstruction)) {
+                            roverPosition.move();
+                        }
+                    }
+
+                    instructions.next();
+                }
+            }
+        }
+
+        static class Read {
+            final List<Rover> squad;
+
+            Read(List<Rover> squad) {
+                this.squad = squad;
+            }
+
+            boolean isRunning() {
+                for(Rover current : squad) {
+                    Program instructions = current.instructions;
+                    if (instructions.hasCurrent()) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            Stream<Rover> show() {
+                return squad.stream();
+            }
+        }
+    }
     static class Parser {
 
         static final Function<String, Position> parsePosition = line -> {
@@ -173,40 +258,18 @@ public class TestableCore {
 
         List<Rover> squad = Parser.toSquad(lines);
 
+        Model.BookOfRecord bookOfRecord = new Model.BookOfRecord(squad);
+
         // RUN the model.
-        {
-            for (Rover rover : squad) {
+        Model.Read readModel = bookOfRecord.readModel();
+        Model.Write writeModel = bookOfRecord.writeModel();
 
-                Position roverPosition = rover.position;
-                Program instructions = rover.instructions;
-
-                while (instructions.hasCurrent()) {
-
-                    final String currentInstruction = instructions.current();
-                    
-                    // PROCESS INSTRUCTIONS
-                    {
-                        if ("L".equals(currentInstruction)) {
-                            roverPosition.left();
-                        }
-
-                        if ("R".equals(currentInstruction)) {
-                            roverPosition.right();
-                        }
-
-                        if ("M".equals(currentInstruction)) {
-                            roverPosition.move();
-                        }
-                    }
-
-                    instructions.next();
-                }
-            }
+        while(readModel.isRunning()) {
+            writeModel.onTick();
         }
 
         // OUTPUT the result.
-        squad
-                .stream()
+        readModel.show()
                 .map(rover -> rover.position)
                 .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
                 .forEach(out::println);
