@@ -5,7 +5,6 @@
  */
 package com.vocumsineratio.kata.mars;
 
-import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,11 +12,9 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * @author Danil Suits (danil@vast.com)
@@ -73,11 +70,80 @@ public class TestableCore {
 
     static class Rover {
         Position position;
+        Program instructions;
+
+        Rover(Position position, Program instructions) {
+            this.position = position;
+            this.instructions = instructions;
+        }
+    }
+
+    static class Program {
         String remainingInstructions;
 
-        Rover(Position position, String remainingInstructions) {
-            this.position = position;
+        Program(String remainingInstructions) {
             this.remainingInstructions = remainingInstructions;
+        }
+
+        boolean hasCurrent() {
+            return ! remainingInstructions.isEmpty();
+        }
+
+        String current () {
+            return remainingInstructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
+        }
+
+        void next() {
+            remainingInstructions = remainingInstructions.substring(NEXT_INSTRUCTION_OFFSET);
+        }
+
+        static final int FIRST_INSTRUCTION_OFFSET = 0;
+        static final int NEXT_INSTRUCTION_OFFSET = 1;
+    }
+
+    static class Parser {
+
+        static final Function<String, Position> parsePosition = line -> {
+            final String currentLocation = line.substring(0, line.length()-2);
+            String[] rawCoordinates = currentLocation.split(" ");
+
+            int xPos = Integer.parseInt(rawCoordinates[0]);
+            int yPos = Integer.parseInt(rawCoordinates[1]);
+            Location roverLocation = new Location(xPos, yPos);
+
+            final String startHeading = line.substring(line.length() - 1);
+            CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
+
+            return new Position(roverLocation, currentHeading);
+        };
+
+        static Rover from(String rawPosition, String rawInstructions) {
+            return new Rover(
+                    parsePosition.apply(rawPosition),
+                    new Program(rawInstructions)
+            );
+        }
+
+        static List<Rover> toSquad(List<String> lines) {
+            List<Rover> squad = new ArrayList<>();
+
+            int POSITION_OFFSET = 0;
+            int INSTRUCTION_OFFSET = 1;
+            {
+                int FIRST_ROVER_OFFSET = 1;
+                int INPUT_LINES_PER_ROVER = 2;
+
+                for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER) {
+                    String rawPosition = lines.get(POSITION_OFFSET + index);
+                    final String rawInstructions = lines.get(INSTRUCTION_OFFSET + index);
+
+                    squad.add(
+                            Parser.from(rawPosition, rawInstructions)
+                    );
+                }
+            }
+
+            return squad;
         }
     }
 
@@ -87,54 +153,23 @@ public class TestableCore {
             if (false) return;
         }
 
-        // Stream Parsing.
+        // INPUT the data
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
         List<String> lines = reader.lines().collect(Collectors.toList());
 
-        int FIRST_ROVER_OFFSET = 1;
-        int INPUT_LINES_PER_ROVER = 2;
-
-        List<Rover> squad = new ArrayList<>();
-        
-        int POSITION_OFFSET = 0;
-        int INSTRUCTION_OFFSET = 1;
-        {
-            Function<String, Position> parsePosition = line -> {
-                final String currentLocation = line.substring(0, line.length()-2);
-                String[] rawCoordinates = currentLocation.split(" ");
-
-                int xPos = Integer.parseInt(rawCoordinates[0]);
-                int yPos = Integer.parseInt(rawCoordinates[1]);
-                Location roverLocation = new Location(xPos, yPos);
-
-                final String startHeading = line.substring(line.length() - 1);
-                CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
-
-                return new Position(roverLocation, currentHeading);
-            };
-
-            for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER) {
-                String position = lines.get(POSITION_OFFSET + index);
-                Rover rover = new Rover(parsePosition.apply(position), lines.get(INSTRUCTION_OFFSET + index));
-                squad.add(rover);
-            }
-        }
+        List<Rover> squad = Parser.toSquad(lines);
 
         // RUN the model.
         {
-            int FIRST_INSTRUCTION_OFFSET = 0;
-            int NEXT_INSTRUCTION_OFFSET = 1;
-
             for (Rover rover : squad) {
 
                 Position roverPosition = rover.position;
+                Program instructions = rover.instructions;
 
-                while (! rover.remainingInstructions.isEmpty()) {
+                while (instructions.hasCurrent()) {
 
-                    // TODO: real parsing
-                    final String currentInstruction = rover.remainingInstructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
-                    rover.remainingInstructions = rover.remainingInstructions.substring(NEXT_INSTRUCTION_OFFSET);
-
+                    final String currentInstruction = instructions.current();
+                    
                     // PROCESS INSTRUCTIONS
                     {
                         if ("L".equals(currentInstruction)) {
@@ -151,10 +186,13 @@ public class TestableCore {
                             roverPosition.location.y += moves[1];
                         }
                     }
+
+                    instructions.next();
                 }
             }
         }
 
+        // OUTPUT the result.
         squad
                 .stream()
                 .map(rover -> rover.position)
