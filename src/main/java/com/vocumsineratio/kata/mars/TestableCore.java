@@ -66,6 +66,20 @@ public class TestableCore {
             this.location = location;
             this.heading = heading;
         }
+
+        void left() {
+            heading = LEFT.get(heading);
+        }
+
+        void right() {
+            heading = RIGHT.get(heading);
+        }
+
+        void move() {
+            int[] moves = MOVE.get(heading);
+            location.x += moves[0];
+            location.y += moves[1];
+        }
     }
 
     static class Rover {
@@ -173,17 +187,15 @@ public class TestableCore {
                     // PROCESS INSTRUCTIONS
                     {
                         if ("L".equals(currentInstruction)) {
-                            roverPosition.heading = LEFT.get(roverPosition.heading);
+                            roverPosition.left();
                         }
 
                         if ("R".equals(currentInstruction)) {
-                            roverPosition.heading = RIGHT.get(roverPosition.heading);
+                            roverPosition.right();
                         }
 
                         if ("M".equals(currentInstruction)) {
-                            int[] moves = MOVE.get(roverPosition.heading);
-                            roverPosition.location.x += moves[0];
-                            roverPosition.location.y += moves[1];
+                            roverPosition.move();
                         }
                     }
 
