@@ -45,6 +45,9 @@ public class TestableCore {
     static final EnumMap<CompassPoint, int []> MOVE = new EnumMap<>(CompassPoint.class);
     static {
         MOVE.put(CompassPoint.N, new int[]{0, 1});
+        MOVE.put(CompassPoint.S, new int[]{0, -1});
+        MOVE.put(CompassPoint.E, new int[]{1, 0});
+        MOVE.put(CompassPoint.W, new int[]{-1, 0});
     }
 
     static void runTest(InputStream in, PrintStream out) throws IOException {
@@ -98,24 +101,9 @@ public class TestableCore {
                         }
 
                         if ("M".equals(currentInstruction)) {
-
-                            if (CompassPoint.W.equals(currentHeading)) {
-                                xPos -= 1;
-                            }
-
-                            if (CompassPoint.E.equals(currentHeading)) {
-                                xPos += 1;
-                            }
-
-                            if (CompassPoint.S.equals(currentHeading)) {
-                                yPos -= 1;
-                            }
-
-                            if (CompassPoint.N.equals(currentHeading)) {
-                                int [] moves = MOVE.get(CompassPoint.N);
-                                xPos += moves[0];
-                                yPos += moves[1];
-                            }
+                            int[] moves = MOVE.get(currentHeading);
+                            xPos += moves[0];
+                            yPos += moves[1];
                         }
                     }
 
