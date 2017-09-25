@@ -75,7 +75,7 @@ public class TestableCore {
                     int xPos = Integer.parseInt(rawCoordinates[0]);
                     int yPos = Integer.parseInt(rawCoordinates[1]);
                     final String startHeading = position.substring(position.length() - 1);
-                    final CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
+                    CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
 
                     // TODO: real parsing
                     final String currentInstruction = instructions.substring(0, 1);
@@ -83,15 +83,15 @@ public class TestableCore {
                     lines.set(INSTRUCTION_OFFSET + index, remainingInstructions);
 
                     if ("L".equals(currentInstruction)) {
-                        String endHeading = LEFT.get(currentHeading).name();
-                        String endPosition = currentLocation + " " + endHeading;
-                        lines.set(POSITION_OFFSET + index, endPosition);
+                        currentHeading = LEFT.get(currentHeading);
+                        String endLocation = xPos + " " + yPos;
+                        lines.set(POSITION_OFFSET + index, endLocation + " " + currentHeading.name());
                     }
 
                     if ("R".equals(currentInstruction)) {
-                        String endHeading = RIGHT.get(currentHeading).name();
-                        String endPosition = currentLocation + " " + endHeading;
-                        lines.set(POSITION_OFFSET + index, endPosition);
+                        currentHeading = RIGHT.get(currentHeading);
+                        String endLocation = xPos + " " + yPos;
+                        lines.set(POSITION_OFFSET + index, endLocation + " " + currentHeading.name());
                     }
 
                     if ("M".equals(currentInstruction)) {
