@@ -65,19 +65,6 @@ public class TestableCore {
             for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER) {
 
                 while (! lines.get(INSTRUCTION_OFFSET + index).isEmpty()) {
-                    // TODO: remove the cheat when we can.
-                    // Key Insight - cheat by converting the complicated problem into a simpler
-                    // equivalent that the model undertands how to solve.
-                    {
-                        String position = lines.get(POSITION_OFFSET + index);
-                        String instructions = lines.get(INSTRUCTION_OFFSET + index);
-
-                        if ("5 1 W".equals(position) && "MRRM".equals(instructions)) {
-                            lines.set(POSITION_OFFSET + index, "5 1 E");
-                            lines.set(INSTRUCTION_OFFSET + index, "");
-                            break;
-                        }
-                    }
 
                     String position = lines.get(POSITION_OFFSET + index);
                     String instructions = lines.get(INSTRUCTION_OFFSET + index);
