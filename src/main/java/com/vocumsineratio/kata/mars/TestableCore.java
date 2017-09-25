@@ -88,7 +88,6 @@ public class TestableCore {
                     // TODO: real parsing
                     final String currentInstruction = instructions.substring(0, 1);
                     final String remainingInstructions = instructions.substring(NEXT_INSTRUCTION_OFFSET);
-                    lines.set(INSTRUCTION_OFFSET + index, remainingInstructions);
 
                     // PROCESS INSTRUCTIONS
                     {
@@ -109,8 +108,8 @@ public class TestableCore {
 
                     // UPDATE STATE
                     {
-                        String endLocation = xPos + " " + yPos;
-                        lines.set(POSITION_OFFSET + index, endLocation + " " + currentHeading.name());
+                        lines.set(POSITION_OFFSET + index, (xPos + " " + yPos) + " " + currentHeading.name());
+                        lines.set(INSTRUCTION_OFFSET + index, remainingInstructions);
                     }
                 }
             }
