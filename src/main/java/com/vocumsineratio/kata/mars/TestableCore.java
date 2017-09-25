@@ -111,13 +111,13 @@ public class TestableCore {
                 String position = lines.get(POSITION_OFFSET + index);
                 Position roverPosition = parsePosition.apply(position);
 
-                while (! lines.get(INSTRUCTION_OFFSET + index).isEmpty()) {
-                    
-                    String instructions = lines.get(INSTRUCTION_OFFSET + index);
+                String remainingInstructions = lines.get(INSTRUCTION_OFFSET + index);
+
+                while (! remainingInstructions.isEmpty()) {
 
                     // TODO: real parsing
-                    final String currentInstruction = instructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
-                    final String remainingInstructions = instructions.substring(NEXT_INSTRUCTION_OFFSET);
+                    final String currentInstruction = remainingInstructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
+                    remainingInstructions = remainingInstructions.substring(NEXT_INSTRUCTION_OFFSET);
 
                     // PROCESS INSTRUCTIONS
                     {
