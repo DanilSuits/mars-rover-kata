@@ -155,21 +155,12 @@ public class TestableCore {
             }
         }
 
-        for (int n = 0; n < squad.size(); ++n) {
-            Rover rover = squad.get(n);
-            Position roverPosition = rover.position;
-            int index = FIRST_ROVER_OFFSET + 2 * n;
-            // UPDATE STATE
-            {
-                lines.set(POSITION_OFFSET + index, (roverPosition.location.x + " " + roverPosition.location.y) + " " + roverPosition.heading.name());
-                lines.set(INSTRUCTION_OFFSET + index, rover.remainingInstructions);
-            }
-        }
-
-        IntStream.range(0, lines.size())
-                .filter( n -> (n % 2) == 1)
-                .mapToObj(n -> lines.get(n))
+        squad
+                .stream()
+                .map(rover -> rover.position)
+                .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
                 .forEach(out::println);
+
     }
 
     public static void main(String[] args) throws IOException {
