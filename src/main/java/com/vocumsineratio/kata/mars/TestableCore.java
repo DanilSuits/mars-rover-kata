@@ -11,8 +11,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -116,35 +119,49 @@ public class TestableCore {
         static final int NEXT_INSTRUCTION_OFFSET = 1;
     }
 
-    static class Model {
-        static class BookOfRecord {
-            final List<Rover> squad;
+    static class View {
+        final boolean isRunning;
+        final List<Position> squad;
 
-            BookOfRecord(List<Rover> squad) {
-                this.squad = squad;
+        View(boolean isRunning, List<Position> squad) {
+            this.isRunning = isRunning;
+            this.squad = squad;
+        }
+    }
+
+    static class CQRS {
+        static class Repository {
+            final AtomicReference<List<Rover>> mutableReference;
+
+            Repository(final AtomicReference<List<Rover>> mutableReference) {
+                this.mutableReference = mutableReference;
             }
 
-            Write writeModel() {
-                return new Write(squad);
-            }
-
-            Read readModel() {
-                return new Read(squad);
+            Root getRoot() {
+                return new Root(mutableReference);
             }
         }
 
-        static class Write {
-            final List<Rover> squad;
+        static class Root {
+            final AtomicReference<List<Rover>> mutableReference;
 
-            Write(List<Rover> squad) {
-                this.squad = squad;
+            Root(AtomicReference<List<Rover>> mutableReference) {
+                this.mutableReference = mutableReference;
+            }
+
+            void onLoad(List<Rover> squad) {
+                mutableReference.compareAndSet(null, Collections.unmodifiableList(squad));
             }
 
             void onTick() {
-                for(Rover current : squad) {
-                    Program instructions = current.instructions;
+                List<Rover> previous = mutableReference.get();
+                List<Rover> next = new ArrayList(previous);
+
+                for(Rover rover : next) {
+                    Program instructions = rover.instructions;
                     if (instructions.hasCurrent()) {
-                        run(current);
+                        run(rover);
+                        mutableReference.compareAndSet(previous, Collections.unmodifiableList(next));
                         return;
                     }
                 }
@@ -178,28 +195,56 @@ public class TestableCore {
             }
         }
 
-        static class Read {
-            final List<Rover> squad;
+        static class Projector implements Runnable {
+            final AtomicReference<List<Rover>> writeModel;
+            final AtomicReference<View> readModel;
 
-            Read(List<Rover> squad) {
-                this.squad = squad;
+            Projector(AtomicReference<List<Rover>> writeModel, AtomicReference<View> readModel) {
+                this.writeModel = writeModel;
+                this.readModel = readModel;
+            }
+
+            @Override
+            public void run() {
+                List<Rover> source = writeModel.get();
+
+                boolean isRunning = false;
+                List<Position> positions = new ArrayList<>(source.size());
+
+                for (Rover current : source) {
+                    positions.add(current.position);
+                    isRunning = isRunning || current.instructions.hasCurrent();
+                }
+
+                readModel.set(new View(isRunning, positions));
+            }
+        }
+
+        static class Cache {
+            final AtomicReference<View> readModel;
+
+            Cache(final AtomicReference<View> readModel) {
+                this.readModel = readModel;
             }
 
             boolean isRunning() {
-                for(Rover current : squad) {
-                    Program instructions = current.instructions;
-                    if (instructions.hasCurrent()) {
-                        return true;
-                    }
-                }
-                return false;
+                View view = current();
+                return view.isRunning;
             }
 
-            Stream<Rover> show() {
-                return squad.stream();
+            Stream<Position> show() {
+                View view = current();
+                return view.squad.stream();
             }
+
+            View current() {
+                return Optional.ofNullable(readModel.get()).orElse(NULL_VIEW);
+            }
+
+            private final View NULL_VIEW = new View(true, Collections.EMPTY_LIST);
         }
     }
+    
     static class Parser {
 
         static final Function<String, Position> parsePosition = line -> {
@@ -258,19 +303,24 @@ public class TestableCore {
 
         List<Rover> squad = Parser.toSquad(lines);
 
-        Model.BookOfRecord bookOfRecord = new Model.BookOfRecord(squad);
+        AtomicReference<List<Rover>> bookOfRecord = new AtomicReference<>();
+        AtomicReference<View> viewCache = new AtomicReference<>();
 
-        // RUN the model.
-        Model.Read readModel = bookOfRecord.readModel();
-        Model.Write writeModel = bookOfRecord.writeModel();
+        CQRS.Repository repository = new CQRS.Repository(bookOfRecord);
+        CQRS.Projector projector = new CQRS.Projector(bookOfRecord, viewCache);
+        CQRS.Cache cache = new CQRS.Cache(viewCache);
 
-        while(readModel.isRunning()) {
-            writeModel.onTick();
+        CQRS.Root root = repository.getRoot();
+
+        root.onLoad(squad);
+        projector.run();
+        while(cache.isRunning()) {
+            root.onTick();
+            projector.run();
         }
 
         // OUTPUT the result.
-        readModel.show()
-                .map(rover -> rover.position)
+        cache.show()
                 .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
                 .forEach(out::println);
 
