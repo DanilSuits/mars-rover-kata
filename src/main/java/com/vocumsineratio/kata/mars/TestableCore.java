@@ -71,6 +71,16 @@ public class TestableCore {
         }
     }
 
+    static class Rover {
+        Position position;
+        String remainingInstructions;
+
+        Rover(Position position, String remainingInstructions) {
+            this.position = position;
+            this.remainingInstructions = remainingInstructions;
+        }
+    }
+
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
@@ -109,15 +119,15 @@ public class TestableCore {
             for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER) {
 
                 String position = lines.get(POSITION_OFFSET + index);
-                Position roverPosition = parsePosition.apply(position);
+                Rover rover = new Rover(parsePosition.apply(position), lines.get(INSTRUCTION_OFFSET + index));
 
-                String remainingInstructions = lines.get(INSTRUCTION_OFFSET + index);
+                Position roverPosition = rover.position;
 
-                while (! remainingInstructions.isEmpty()) {
+                while (! rover.remainingInstructions.isEmpty()) {
 
                     // TODO: real parsing
-                    final String currentInstruction = remainingInstructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
-                    remainingInstructions = remainingInstructions.substring(NEXT_INSTRUCTION_OFFSET);
+                    final String currentInstruction = rover.remainingInstructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
+                    rover.remainingInstructions = rover.remainingInstructions.substring(NEXT_INSTRUCTION_OFFSET);
 
                     // PROCESS INSTRUCTIONS
                     {
@@ -139,7 +149,7 @@ public class TestableCore {
                     // UPDATE STATE
                     {
                         lines.set(POSITION_OFFSET + index, (roverPosition.location.x + " " + roverPosition.location.y) + " " + roverPosition.heading.name());
-                        lines.set(INSTRUCTION_OFFSET + index, remainingInstructions);
+                        lines.set(INSTRUCTION_OFFSET + index, rover.remainingInstructions);
                     }
                 }
             }
