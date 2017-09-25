@@ -94,14 +94,11 @@ public class TestableCore {
         int FIRST_ROVER_OFFSET = 1;
         int INPUT_LINES_PER_ROVER = 2;
 
-        // RUN the model.
+        List<Rover> squad = new ArrayList<>();
+        
+        int POSITION_OFFSET = 0;
+        int INSTRUCTION_OFFSET = 1;
         {
-            int POSITION_OFFSET = 0;
-            int INSTRUCTION_OFFSET = 1;
-
-            int FIRST_INSTRUCTION_OFFSET = 0;
-            int NEXT_INSTRUCTION_OFFSET = 1;
-
             Function<String, Position> parsePosition = line -> {
                 final String currentLocation = line.substring(0, line.length()-2);
                 String[] rawCoordinates = currentLocation.split(" ");
@@ -117,9 +114,18 @@ public class TestableCore {
             };
 
             for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER) {
-
                 String position = lines.get(POSITION_OFFSET + index);
                 Rover rover = new Rover(parsePosition.apply(position), lines.get(INSTRUCTION_OFFSET + index));
+                squad.add(rover);
+            }
+        }
+
+        // RUN the model.
+        {
+            int FIRST_INSTRUCTION_OFFSET = 0;
+            int NEXT_INSTRUCTION_OFFSET = 1;
+
+            for (Rover rover : squad) {
 
                 Position roverPosition = rover.position;
 
@@ -145,15 +151,19 @@ public class TestableCore {
                             roverPosition.location.y += moves[1];
                         }
                     }
-
-                    // UPDATE STATE
-                    {
-                        lines.set(POSITION_OFFSET + index, (roverPosition.location.x + " " + roverPosition.location.y) + " " + roverPosition.heading.name());
-                        lines.set(INSTRUCTION_OFFSET + index, rover.remainingInstructions);
-                    }
                 }
             }
+        }
 
+        for (int n = 0; n < squad.size(); ++n) {
+            Rover rover = squad.get(n);
+            Position roverPosition = rover.position;
+            int index = FIRST_ROVER_OFFSET + 2 * n;
+            // UPDATE STATE
+            {
+                lines.set(POSITION_OFFSET + index, (roverPosition.location.x + " " + roverPosition.location.y) + " " + roverPosition.heading.name());
+                lines.set(INSTRUCTION_OFFSET + index, rover.remainingInstructions);
+            }
         }
 
         IntStream.range(0, lines.size())
