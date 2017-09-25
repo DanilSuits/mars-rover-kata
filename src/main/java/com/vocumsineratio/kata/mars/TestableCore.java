@@ -92,30 +92,28 @@ public class TestableCore {
             int FIRST_INSTRUCTION_OFFSET = 0;
             int NEXT_INSTRUCTION_OFFSET = 1;
 
+            Function<String, Position> parsePosition = line -> {
+                final String currentLocation = line.substring(0, line.length()-2);
+                String[] rawCoordinates = currentLocation.split(" ");
+
+                int xPos = Integer.parseInt(rawCoordinates[0]);
+                int yPos = Integer.parseInt(rawCoordinates[1]);
+                Location roverLocation = new Location(xPos, yPos);
+
+                final String startHeading = line.substring(line.length() - 1);
+                CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
+
+                return new Position(roverLocation, currentHeading);
+            };
+
             for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER) {
 
+                String position = lines.get(POSITION_OFFSET + index);
+                Position roverPosition = parsePosition.apply(position);
+
                 while (! lines.get(INSTRUCTION_OFFSET + index).isEmpty()) {
-
-
-                    Function<String, Position> parsePosition = line -> {
-                        final String currentLocation = line.substring(0, line.length()-2);
-                        String[] rawCoordinates = currentLocation.split(" ");
-
-                        int xPos = Integer.parseInt(rawCoordinates[0]);
-                        int yPos = Integer.parseInt(rawCoordinates[1]);
-                        Location roverLocation = new Location(xPos, yPos);
-
-                        final String startHeading = line.substring(line.length() - 1);
-                        CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
-
-                        return new Position(roverLocation, currentHeading);
-                    };
-
-
-                    String position = lines.get(POSITION_OFFSET + index);
+                    
                     String instructions = lines.get(INSTRUCTION_OFFSET + index);
-                    Position roverPosition = parsePosition.apply(position);
-
 
                     // TODO: real parsing
                     final String currentInstruction = instructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
