@@ -113,6 +113,7 @@ public class TestableCore {
 
                             if (CompassPoint.N.equals(currentHeading)) {
                                 int [] moves = MOVE.get(CompassPoint.N);
+                                xPos += moves[0];
                                 yPos += moves[1];
                             }
                         }
