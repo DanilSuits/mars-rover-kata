@@ -50,6 +50,16 @@ public class TestableCore {
         MOVE.put(CompassPoint.W, new int[]{-1, 0});
     }
 
+    static class Location {
+        int x;
+        int y;
+
+        public Location(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
@@ -68,6 +78,7 @@ public class TestableCore {
             int POSITION_OFFSET = 0;
             int INSTRUCTION_OFFSET = 1;
 
+            int FIRST_INSTRUCTION_OFFSET = 0;
             int NEXT_INSTRUCTION_OFFSET = 1;
 
             for (int index = FIRST_ROVER_OFFSET; index < lines.size(); index += INPUT_LINES_PER_ROVER) {
@@ -80,13 +91,16 @@ public class TestableCore {
                     // TODO: real parsing
                     final String currentLocation = position.substring(0, position.length()-2);
                     String[] rawCoordinates = currentLocation.split(" ");
+
                     int xPos = Integer.parseInt(rawCoordinates[0]);
                     int yPos = Integer.parseInt(rawCoordinates[1]);
+                    Location roverLocation = new Location(xPos, yPos);
+
                     final String startHeading = position.substring(position.length() - 1);
                     CompassPoint currentHeading = CompassPoint.valueOf(startHeading);
 
                     // TODO: real parsing
-                    final String currentInstruction = instructions.substring(0, 1);
+                    final String currentInstruction = instructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
                     final String remainingInstructions = instructions.substring(NEXT_INSTRUCTION_OFFSET);
 
                     // PROCESS INSTRUCTIONS
@@ -101,14 +115,14 @@ public class TestableCore {
 
                         if ("M".equals(currentInstruction)) {
                             int[] moves = MOVE.get(currentHeading);
-                            xPos += moves[0];
-                            yPos += moves[1];
+                            roverLocation.x += moves[0];
+                            roverLocation.y += moves[1];
                         }
                     }
 
                     // UPDATE STATE
                     {
-                        lines.set(POSITION_OFFSET + index, (xPos + " " + yPos) + " " + currentHeading.name());
+                        lines.set(POSITION_OFFSET + index, (roverLocation.x + " " + roverLocation.y) + " " + currentHeading.name());
                         lines.set(INSTRUCTION_OFFSET + index, remainingInstructions);
                     }
                 }
