@@ -42,6 +42,11 @@ public class TestableCore {
         RIGHT.put(CompassPoint.N, CompassPoint.E);
     }
 
+    static final EnumMap<CompassPoint, int []> MOVE = new EnumMap<>(CompassPoint.class);
+    static {
+        MOVE.put(CompassPoint.N, new int[]{0, 1});
+    }
+
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
@@ -107,7 +112,8 @@ public class TestableCore {
                             }
 
                             if (CompassPoint.N.equals(currentHeading)) {
-                                yPos += 1;
+                                int [] moves = MOVE.get(CompassPoint.N);
+                                yPos += moves[1];
                             }
                         }
                     }
