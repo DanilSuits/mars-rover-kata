@@ -154,7 +154,7 @@ public class TestableCore {
                     final String rawInstructions = lines.get(INSTRUCTION_OFFSET + index);
 
                     squad.add(
-                            Parser.from(rawPosition, rawInstructions)
+                            TestableCore.Parser.from(rawPosition, rawInstructions)
                     );
                 }
             }
@@ -164,6 +164,7 @@ public class TestableCore {
     }
 
     static class API {
+        // TODO: I'm not quite sure where this goes.
         interface Repository<T> {
             T get();
             void save(T theThing);
@@ -221,8 +222,8 @@ public class TestableCore {
             void store(T thing);
         }
 
-        interface Factory<Document, Model> {
-            Model create(Document source);
+        interface Parser<Document, Model> {
+            Model parse(Document source);
         }
 
         interface Model<Document> {
@@ -231,17 +232,17 @@ public class TestableCore {
 
         static class Repository<Document, M extends Plumbing.Model<Document>> implements API.Repository<M> {
             private final Plumbing.Database<Document> database;
-            Plumbing.Factory<Document, M> factory;
+            Parser<Document, M> parser;
 
-            Repository(Plumbing.Database<Document> database, Plumbing.Factory<Document, M> factory) {
+            Repository(Plumbing.Database<Document> database, Parser<Document, M> parser) {
                 this.database = database;
-                this.factory = factory;
+                this.parser = parser;
             }
 
             @Override
             public M get() {
                 Document lines = database.load();
-                return factory.create(lines);
+                return parser.parse(lines);
             }
 
             @Override
@@ -253,7 +254,7 @@ public class TestableCore {
     }
 
     static class Lines {
-        interface Factory<T> extends Plumbing.Factory<List<String>, T> {};
+        interface Parser<T> extends Plumbing.Parser<List<String>, T> {};
 
         interface Model extends Plumbing.Model<List<String>> {};
 
@@ -279,21 +280,15 @@ public class TestableCore {
                         .stream()
                         .forEach(toDatabase::println);
             }
-
         }
-
     }
 
     static class LinesDataModel {
-        static Plumbing.Repository connect(Lines.Database db) {
-            Plumbing.Repository repo = new Plumbing.Repository(db, LinesDataModel.TO_SQUAD);
-            return repo;
-        }
 
-        static final Lines.Factory<Squad> TO_SQUAD = new Lines.Factory<Squad>() {
+        static final Lines.Parser<Squad> TO_SQUAD = new Lines.Parser<Squad>() {
             @Override
-            public Squad create(List<String> lines) {
-                return new Squad(Parser.toSquad(lines));
+            public Squad parse(List<String> lines) {
+                return new Squad(TestableCore.Parser.toSquad(lines));
             }
         };
 
@@ -311,7 +306,6 @@ public class TestableCore {
                         .collect(Collectors.toList());
             }
         }
-
     }
 
     static class Application<Squad extends API.Squad> {
@@ -337,7 +331,8 @@ public class TestableCore {
             PrintStream toDatabase = out;
             Lines.Database db = new Lines.Database(fromDatabase, toDatabase);
 
-            Plumbing.Repository repo = LinesDataModel.connect(db);
+            final Lines.Parser<LinesDataModel.Squad> parser = LinesDataModel.TO_SQUAD;
+            Plumbing.Repository<List<String>, LinesDataModel.Squad> repo = new Plumbing.Repository(db, parser);
             return new Application(repo);
         }
     }
