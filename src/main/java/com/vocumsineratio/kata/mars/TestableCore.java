@@ -167,6 +167,11 @@ public class TestableCore {
         interface Squad {
             void run();
         }
+
+        interface Repository<T extends API.Squad> {
+            T get();
+            void save(T theThing);
+        }
     }
 
     static class Domain {
@@ -265,42 +270,44 @@ public class TestableCore {
             }
 
         }
-    }
 
-    static class Repository {
-        private final Plumbing.Database<List<String>> database;
-        Lines.Factory<Lines.Squad> factory;
+        static class Repository implements API.Repository<Lines.Squad> {
+            private final Plumbing.Database<List<String>> database;
+            Lines.Factory<Lines.Squad> factory;
 
-        Repository(Plumbing.Database<List<String>> database) {
-            this(database, new Lines.Factory<Lines.Squad>() {
-                @Override
-                public Lines.Squad create(List<String> lines) {
-                    return new Lines.Squad(Parser.toSquad(lines));
-                }
-            });
-        }
+            Repository(Plumbing.Database<List<String>> database) {
+                this(database, new Lines.Factory<Lines.Squad>() {
+                    @Override
+                    public Lines.Squad create(List<String> lines) {
+                        return new Lines.Squad(Parser.toSquad(lines));
+                    }
+                });
+            }
 
-        Repository(Plumbing.Database<List<String>> database, Lines.Factory<Lines.Squad> factory) {
-            this.database = database;
-            this.factory = factory;
-        }
+            Repository(Plumbing.Database<List<String>> database, Lines.Factory<Lines.Squad> factory) {
+                this.database = database;
+                this.factory = factory;
+            }
 
-        Lines.Squad get() {
-            List<String> lines = database.load();
-            return factory.create(lines);
-        }
+            @Override
+            public Lines.Squad get() {
+                List<String> lines = database.load();
+                return factory.create(lines);
+            }
 
-        void save(Lines.Squad squad) {
-            List<String> data = squad.toLines();
+            @Override
+            public void save(Lines.Squad squad) {
+                List<String> data = squad.toLines();
 
-            database.store(data);
+                database.store(data);
+            }
         }
     }
 
     static class Application {
-        private final Repository repo;
+        private final API.Repository<Lines.Squad> repo;
 
-        Application(Repository repo) {
+        Application(API.Repository<Lines.Squad> repo) {
             this.repo = repo;
         }
 
@@ -319,12 +326,12 @@ public class TestableCore {
             if (false) return;
         }
 
-        // Let's pretend
+        // Composition!
         InputStream fromDatabase = in;
         PrintStream toDatabase = out;
         Lines.Database store = new Lines.Database(in, out);
 
-        Repository repo = new Repository(store);
+        Lines.Repository repo = new Lines.Repository(store);
         Application app = new Application(repo);
 
         app.handleCommand();
