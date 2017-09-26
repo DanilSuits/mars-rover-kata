@@ -228,6 +228,28 @@ public class TestableCore {
         interface Model<Document> {
             Document toDocument();
         }
+
+        static class Repository<Document, M extends Plumbing.Model<Document>> implements API.Repository<M> {
+            private final Plumbing.Database<Document> database;
+            Plumbing.Factory<Document, M> factory;
+
+            Repository(Plumbing.Database<Document> database, Plumbing.Factory<Document, M> factory) {
+                this.database = database;
+                this.factory = factory;
+            }
+
+            @Override
+            public M get() {
+                Document lines = database.load();
+                return factory.create(lines);
+            }
+
+            @Override
+            public void save(M squad) {
+                Document data = squad.toDocument();
+                database.store(data);
+            }
+        }
     }
 
     static class Lines {
@@ -260,32 +282,11 @@ public class TestableCore {
 
         }
 
-        static class Repository<Document, M extends Plumbing.Model<Document>> implements API.Repository<M> {
-            private final Plumbing.Database<Document> database;
-            Plumbing.Factory<Document, M> factory;
-
-            Repository(Plumbing.Database<Document> database, Plumbing.Factory<Document, M> factory) {
-                this.database = database;
-                this.factory = factory;
-            }
-
-            @Override
-            public M get() {
-                Document lines = database.load();
-                return factory.create(lines);
-            }
-
-            @Override
-            public void save(M squad) {
-                Document data = squad.toDocument();
-                database.store(data);
-            }
-        }
     }
 
     static class LinesDataModel {
-        static Lines.Repository connect(Lines.Database db) {
-            Lines.Repository repo = new Lines.Repository(db, LinesDataModel.TO_SQUAD);
+        static Plumbing.Repository connect(Lines.Database db) {
+            Plumbing.Repository repo = new Plumbing.Repository(db, LinesDataModel.TO_SQUAD);
             return repo;
         }
 
@@ -336,7 +337,7 @@ public class TestableCore {
             PrintStream toDatabase = out;
             Lines.Database db = new Lines.Database(fromDatabase, toDatabase);
 
-            Lines.Repository repo = LinesDataModel.connect(db);
+            Plumbing.Repository repo = LinesDataModel.connect(db);
             return new Application(repo);
         }
     }
