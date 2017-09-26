@@ -28,9 +28,7 @@ class Domain {
 
                 while (instructions.hasCurrent()) {
 
-                    final String currentInstruction = instructions.current();
-
-                    final InstructionCode code = InstructionCode.valueOf(currentInstruction);
+                    final InstructionCode code = instructions.current();
 
                     // PROCESS INSTRUCTIONS
                     {
@@ -79,13 +77,26 @@ class Domain {
         RIGHT.put(CompassPoint.N, CompassPoint.E);
     }
 
-    static final EnumMap<CompassPoint, int[]> MOVE = new EnumMap<>(CompassPoint.class);
+    static class Move {
+        final int [] offsets;
+
+        Move(int... offsets) {
+            this.offsets = offsets;
+        }
+
+        void applyTo(Location location) {
+            location.x += offsets[0];
+            location.y += offsets[1];
+        }
+    }
+
+    static final EnumMap<CompassPoint, Move> MOVE = new EnumMap<>(CompassPoint.class);
 
     static {
-        MOVE.put(CompassPoint.N, new int[]{0, 1});
-        MOVE.put(CompassPoint.S, new int[]{0, -1});
-        MOVE.put(CompassPoint.E, new int[]{1, 0});
-        MOVE.put(CompassPoint.W, new int[]{-1, 0});
+        MOVE.put(CompassPoint.N, new Move(0, 1));
+        MOVE.put(CompassPoint.S, new Move(0, -1));
+        MOVE.put(CompassPoint.E, new Move(1, 0));
+        MOVE.put(CompassPoint.W, new Move(-1, 0));
     }
 
     static class Location {
@@ -116,9 +127,7 @@ class Domain {
         }
 
         void move() {
-            int[] moves = MOVE.get(heading);
-            location.x += moves[0];
-            location.y += moves[1];
+            MOVE.get(heading).applyTo(location);
         }
     }
 
@@ -143,8 +152,9 @@ class Domain {
             return !remainingInstructions.isEmpty();
         }
 
-        String current() {
-            return remainingInstructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
+        InstructionCode current() {
+            String name = remainingInstructions.substring(FIRST_INSTRUCTION_OFFSET, NEXT_INSTRUCTION_OFFSET);
+            return InstructionCode.valueOf(name);
         }
 
         void next() {
