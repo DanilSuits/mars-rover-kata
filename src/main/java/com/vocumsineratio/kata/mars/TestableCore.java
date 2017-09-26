@@ -15,7 +15,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.lang.System.in;
 
@@ -211,6 +210,13 @@ public class TestableCore {
         }
     }
 
+    static class Plumbing {
+        interface Database<T> {
+            T load();
+            void store(T thing);
+        }
+    }
+
     static class Lines {
         interface Factory<T> {
             T create(List<String> lines);
@@ -234,14 +240,39 @@ public class TestableCore {
                         .collect(Collectors.toList());
             }
         }
+
+        static class Database implements Plumbing.Database<List<String>> {
+
+            private final InputStream fromDatabase;
+            private final PrintStream toDatabase;
+
+            Database(InputStream fromDatabase, PrintStream toDatabase) {
+                this.fromDatabase = fromDatabase;
+                this.toDatabase = toDatabase;
+            }
+
+            @Override
+            public List<String> load() {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(fromDatabase));
+                return reader.lines().collect(Collectors.toList());
+            }
+
+            @Override
+            public void store(List<String> data) {
+                data
+                        .stream()
+                        .forEach(toDatabase::println);
+            }
+
+        }
     }
 
     static class Repository {
-        private final DatabaseConnection connection;
+        private final Plumbing.Database<List<String>> database;
         Lines.Factory<Lines.Squad> factory;
 
-        Repository(DatabaseConnection connection) {
-            this(connection, new Lines.Factory<Lines.Squad>() {
+        Repository(Plumbing.Database<List<String>> database) {
+            this(database, new Lines.Factory<Lines.Squad>() {
                 @Override
                 public Lines.Squad create(List<String> lines) {
                     return new Lines.Squad(Parser.toSquad(lines));
@@ -249,41 +280,20 @@ public class TestableCore {
             });
         }
 
-        Repository(DatabaseConnection connection, Lines.Factory<Lines.Squad> factory) {
-            this.connection = connection;
+        Repository(Plumbing.Database<List<String>> database, Lines.Factory<Lines.Squad> factory) {
+            this.database = database;
             this.factory = factory;
         }
 
         Lines.Squad get() {
-            List<String> lines = connection.load();
+            List<String> lines = database.load();
             return factory.create(lines);
         }
 
         void save(Lines.Squad squad) {
             List<String> data = squad.toLines();
 
-            connection.store(data);
-        }
-    }
-
-    static class DatabaseConnection {
-        private final InputStream fromDatabase;
-        private final PrintStream toDatabase;
-
-        DatabaseConnection(InputStream fromDatabase, PrintStream toDatabase) {
-            this.fromDatabase = fromDatabase;
-            this.toDatabase = toDatabase;
-        }
-
-        List<String> load() {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fromDatabase));
-            return reader.lines().collect(Collectors.toList());
-        }
-
-        void store(List<String> data) {
-            data
-                    .stream()
-                    .forEach(toDatabase::println);
+            database.store(data);
         }
     }
 
@@ -312,9 +322,9 @@ public class TestableCore {
         // Let's pretend
         InputStream fromDatabase = in;
         PrintStream toDatabase = out;
-        DatabaseConnection connection = new DatabaseConnection(in, out);
+        Lines.Database store = new Lines.Database(in, out);
 
-        Repository repo = new Repository(connection);
+        Repository repo = new Repository(store);
         Application app = new Application(repo);
 
         app.handleCommand();
