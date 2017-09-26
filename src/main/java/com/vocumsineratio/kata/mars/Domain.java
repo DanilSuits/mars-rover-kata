@@ -34,15 +34,15 @@ class Domain {
 
                     // PROCESS INSTRUCTIONS
                     {
-                        if ("L".equals(code.name())) {
+                        if (InstructionCode.L.equals(code)) {
                             roverPosition.left();
                         }
 
-                        if ("R".equals(code.name())) {
+                        if (InstructionCode.R.equals(code)) {
                             roverPosition.right();
                         }
 
-                        if ("M".equals(code.name())) {
+                        if (InstructionCode.M.equals(code)) {
                             roverPosition.move();
                         }
                     }
@@ -56,6 +56,7 @@ class Domain {
     enum InstructionCode {
         L, M, R
     }
+
     enum CompassPoint {
         N, W, S, E
     }
