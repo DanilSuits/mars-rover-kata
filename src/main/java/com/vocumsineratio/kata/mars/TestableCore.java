@@ -175,6 +175,14 @@ public class TestableCore {
     }
 
     static class Domain {
+        interface Factory<Document, Model> {
+            Model create(Document source);
+        }
+
+        interface Model<Document> {
+            Document toDocument();
+        }
+
         static class Squad implements API.Squad {
             List<Rover> squad;
 
@@ -223,13 +231,9 @@ public class TestableCore {
     }
 
     static class Lines {
-        interface Factory<T> {
-            T create(List<String> lines);
-        }
+        interface Factory<T> extends Domain.Factory<List<String>, T> {};
 
-        interface Model {
-            List<String> toLines();
-        }
+        interface Model extends Domain.Model<List<String>> {};
 
         static class Squad extends Domain.Squad implements Lines.Model {
             Squad(List<Rover> squad) {
@@ -237,7 +241,7 @@ public class TestableCore {
             }
 
             @Override
-            public List<String> toLines() {
+            public List<String> toDocument() {
                 return squad
                         .stream()
                         .map(rover -> rover.position)
@@ -297,11 +301,23 @@ public class TestableCore {
 
             @Override
             public void save(Lines.Squad squad) {
-                List<String> data = squad.toLines();
+                List<String> data = squad.toDocument();
 
                 database.store(data);
             }
         }
+
+        static Lines.Repository connect(Lines.Database db) {
+            Lines.Repository repo = new Repository(db, Lines.TO_SQUAD);
+            return repo;
+        }
+
+        static final Lines.Factory<Lines.Squad> TO_SQUAD = new Lines.Factory<Lines.Squad>() {
+            @Override
+            public Lines.Squad create(List<String> lines) {
+                return new Lines.Squad(Parser.toSquad(lines));
+            }
+        };
     }
 
     static class Application<Squad extends API.Squad> {
@@ -329,9 +345,9 @@ public class TestableCore {
         // Composition!
         InputStream fromDatabase = in;
         PrintStream toDatabase = out;
-        Lines.Database store = new Lines.Database(in, out);
+        Lines.Database db = new Lines.Database(in, out);
 
-        Lines.Repository repo = new Lines.Repository(store);
+        Lines.Repository repo = Lines.connect(db);
         Application app = new Application(repo);
 
         app.handleCommand();
