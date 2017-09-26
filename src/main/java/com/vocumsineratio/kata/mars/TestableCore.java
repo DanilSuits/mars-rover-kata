@@ -175,14 +175,6 @@ public class TestableCore {
     }
 
     static class Domain {
-        interface Factory<Document, Model> {
-            Model create(Document source);
-        }
-
-        interface Model<Document> {
-            Document toDocument();
-        }
-
         static class Squad implements API.Squad {
             List<Rover> squad;
 
@@ -228,12 +220,20 @@ public class TestableCore {
             T load();
             void store(T thing);
         }
+
+        interface Factory<Document, Model> {
+            Model create(Document source);
+        }
+
+        interface Model<Document> {
+            Document toDocument();
+        }
     }
 
     static class Lines {
-        interface Factory<T> extends Domain.Factory<List<String>, T> {};
+        interface Factory<T> extends Plumbing.Factory<List<String>, T> {};
 
-        interface Model extends Domain.Model<List<String>> {};
+        interface Model extends Plumbing.Model<List<String>> {};
 
         static class Squad extends Domain.Squad implements Lines.Model {
             Squad(List<Rover> squad) {
@@ -275,11 +275,11 @@ public class TestableCore {
 
         }
 
-        static class Repository<Document, M extends API.Squad & Domain.Model<Document>> implements API.Repository<M> {
+        static class Repository<Document, M extends API.Squad & Plumbing.Model<Document>> implements API.Repository<M> {
             private final Plumbing.Database<Document> database;
-            Domain.Factory<Document, M> factory;
+            Plumbing.Factory<Document, M> factory;
 
-            Repository(Plumbing.Database<Document> database, Domain.Factory<Document, M> factory) {
+            Repository(Plumbing.Database<Document> database, Plumbing.Factory<Document, M> factory) {
                 this.database = database;
                 this.factory = factory;
             }
