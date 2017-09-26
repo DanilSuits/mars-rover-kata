@@ -275,34 +275,24 @@ public class TestableCore {
 
         }
 
-        static class Repository implements API.Repository<Lines.Squad> {
-            private final Plumbing.Database<List<String>> database;
-            Lines.Factory<Lines.Squad> factory;
+        static class Repository<Document, M extends API.Squad & Domain.Model<Document>> implements API.Repository<M> {
+            private final Plumbing.Database<Document> database;
+            Domain.Factory<Document, M> factory;
 
-            Repository(Plumbing.Database<List<String>> database) {
-                this(database, new Lines.Factory<Lines.Squad>() {
-                    @Override
-                    public Lines.Squad create(List<String> lines) {
-                        return new Lines.Squad(Parser.toSquad(lines));
-                    }
-                });
-            }
-
-            Repository(Plumbing.Database<List<String>> database, Lines.Factory<Lines.Squad> factory) {
+            Repository(Plumbing.Database<Document> database, Domain.Factory<Document, M> factory) {
                 this.database = database;
                 this.factory = factory;
             }
 
             @Override
-            public Lines.Squad get() {
-                List<String> lines = database.load();
+            public M get() {
+                Document lines = database.load();
                 return factory.create(lines);
             }
 
             @Override
-            public void save(Lines.Squad squad) {
-                List<String> data = squad.toDocument();
-
+            public void save(M squad) {
+                Document data = squad.toDocument();
                 database.store(data);
             }
         }
