@@ -163,18 +163,6 @@ public class TestableCore {
         }
     }
 
-    static class API {
-        // TODO: I'm not quite sure where this goes.
-        interface Repository<T> {
-            T get();
-            void save(T theThing);
-        }
-
-        interface Squad {
-            void run();
-        }
-    }
-
     static class Domain {
         static class Squad implements API.Squad {
             List<Rover> squad;
@@ -212,43 +200,6 @@ public class TestableCore {
                         instructions.next();
                     }
                 }
-            }
-        }
-    }
-
-    static class Plumbing {
-        interface Database<T> {
-            T load();
-            void store(T thing);
-        }
-
-        interface Parser<Document, Model> {
-            Model parse(Document source);
-        }
-
-        interface Model<Document> {
-            Document toDocument();
-        }
-
-        static class Repository<Document, M extends Plumbing.Model<Document>> implements API.Repository<M> {
-            private final Plumbing.Database<Document> database;
-            Parser<Document, M> parser;
-
-            Repository(Plumbing.Database<Document> database, Parser<Document, M> parser) {
-                this.database = database;
-                this.parser = parser;
-            }
-
-            @Override
-            public M get() {
-                Document lines = database.load();
-                return parser.parse(lines);
-            }
-
-            @Override
-            public void save(M squad) {
-                Document data = squad.toDocument();
-                database.store(data);
             }
         }
     }
@@ -292,7 +243,7 @@ public class TestableCore {
             }
         };
 
-        static class Squad extends Domain.Squad implements Lines.Model {
+        static final class Squad extends Domain.Squad implements Lines.Model {
             Squad(List<Rover> squad) {
                 super(squad);
             }
@@ -325,15 +276,19 @@ public class TestableCore {
     }
 
     static class CompositionRoot {
+        static Application create(Plumbing.Database<List<String>> db) {
+            final Lines.Parser<LinesDataModel.Squad> parser = LinesDataModel.TO_SQUAD;
+            Plumbing.Repository<List<String>, LinesDataModel.Squad> repo = new Plumbing.Repository(db, parser);
+            return new Application(repo);
+        }
+
         static Application create(InputStream in, PrintStream out) {
             // Composition!
             InputStream fromDatabase = in;
             PrintStream toDatabase = out;
             Lines.Database db = new Lines.Database(fromDatabase, toDatabase);
 
-            final Lines.Parser<LinesDataModel.Squad> parser = LinesDataModel.TO_SQUAD;
-            Plumbing.Repository<List<String>, LinesDataModel.Squad> repo = new Plumbing.Repository(db, parser);
-            return new Application(repo);
+            return create(db);
         }
     }
 
