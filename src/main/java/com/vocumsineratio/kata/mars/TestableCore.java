@@ -15,6 +15,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Danil Suits (danil@vast.com)
@@ -161,56 +162,98 @@ public class TestableCore {
         }
     }
 
+    static class API {
+        interface Squad {
+            void run();
+        }
+    }
+
+    static class Domain {
+        static class Squad implements API.Squad {
+            List<Rover> squad;
+
+            Squad(List<Rover> squad) {
+                this.squad = squad;
+            }
+
+            @Override
+            public void run() {
+                for (Rover rover : squad) {
+
+                    Position roverPosition = rover.position;
+                    Program instructions = rover.instructions;
+
+                    while (instructions.hasCurrent()) {
+
+                        final String currentInstruction = instructions.current();
+
+                        // PROCESS INSTRUCTIONS
+                        {
+                            if ("L".equals(currentInstruction)) {
+                                roverPosition.left();
+                            }
+
+                            if ("R".equals(currentInstruction)) {
+                                roverPosition.right();
+                            }
+
+                            if ("M".equals(currentInstruction)) {
+                                roverPosition.move();
+                            }
+                        }
+
+                        instructions.next();
+                    }
+                }
+            }
+
+            public Stream<Rover> stream() {
+                return squad.stream();
+            }
+        }
+    }
+
+    static class Repository {
+        private final InputStream in;
+        private final PrintStream out;
+
+        Repository(InputStream in, PrintStream out) {
+            this.in = in;
+            this.out = out;
+        }
+
+        Domain.Squad get() {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            List<String> lines = reader.lines().collect(Collectors.toList());
+
+            return new Domain.Squad(Parser.toSquad(lines));
+        }
+
+        void save(Domain.Squad squad) {
+            squad
+                    .stream()
+                    .map(rover -> rover.position)
+                    .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
+                    .forEach(out::println);
+        }
+    }
+    
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
             if (false) return;
         }
 
-        // INPUT the data
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        List<String> lines = reader.lines().collect(Collectors.toList());
+        // Let's pretend
+        InputStream fromDatabase = in;
+        PrintStream toDatabase = out;
+        Repository repo = new Repository(fromDatabase, toDatabase);
 
-        List<Rover> squad = Parser.toSquad(lines);
+        Domain.Squad squad = repo.get();
 
-        // RUN the model.
-        {
-            for (Rover rover : squad) {
+        squad.run();
 
-                Position roverPosition = rover.position;
-                Program instructions = rover.instructions;
-
-                while (instructions.hasCurrent()) {
-
-                    final String currentInstruction = instructions.current();
-                    
-                    // PROCESS INSTRUCTIONS
-                    {
-                        if ("L".equals(currentInstruction)) {
-                            roverPosition.left();
-                        }
-
-                        if ("R".equals(currentInstruction)) {
-                            roverPosition.right();
-                        }
-
-                        if ("M".equals(currentInstruction)) {
-                            roverPosition.move();
-                        }
-                    }
-
-                    instructions.next();
-                }
-            }
-        }
-
-        // OUTPUT the result.
-        squad
-                .stream()
-                .map(rover -> rover.position)
-                .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
-                .forEach(out::println);
-
+        repo.save(squad);
     }
 
     public static void main(String[] args) throws IOException {
