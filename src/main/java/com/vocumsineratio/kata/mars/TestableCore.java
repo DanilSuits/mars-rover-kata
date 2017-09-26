@@ -260,6 +260,22 @@ public class TestableCore {
         }
     }
 
+    static class Application {
+        private final Repository repo;
+
+        Application(Repository repo) {
+            this.repo = repo;
+        }
+
+        void handleCommand () {
+            Domain.Squad squad = repo.get();
+
+            squad.run();
+
+            repo.save(squad);
+        }
+    }
+
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
@@ -272,12 +288,10 @@ public class TestableCore {
         DatabaseConnection connection = new DatabaseConnection(in, out);
 
         Repository repo = new Repository(connection);
+        Application app = new Application(repo);
 
-        Domain.Squad squad = repo.get();
+        app.handleCommand();
 
-        squad.run();
-
-        repo.save(squad);
     }
 
     public static void main(String[] args) throws IOException {
