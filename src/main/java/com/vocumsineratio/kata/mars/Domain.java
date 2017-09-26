@@ -30,17 +30,19 @@ class Domain {
 
                     final String currentInstruction = instructions.current();
 
+                    final InstructionCode code = InstructionCode.valueOf(currentInstruction);
+
                     // PROCESS INSTRUCTIONS
                     {
-                        if ("L".equals(currentInstruction)) {
+                        if ("L".equals(code.name())) {
                             roverPosition.left();
                         }
 
-                        if ("R".equals(currentInstruction)) {
+                        if ("R".equals(code.name())) {
                             roverPosition.right();
                         }
 
-                        if ("M".equals(currentInstruction)) {
+                        if ("M".equals(code.name())) {
                             roverPosition.move();
                         }
                     }
@@ -51,6 +53,9 @@ class Domain {
         }
     }
 
+    enum InstructionCode {
+        L, M, R
+    }
     enum CompassPoint {
         N, W, S, E
     }
