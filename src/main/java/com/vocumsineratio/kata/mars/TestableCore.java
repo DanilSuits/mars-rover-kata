@@ -171,7 +171,7 @@ public class TestableCore {
     }
 
     static class Domain {
-        static class Squad implements API.Squad, Lines.Model {
+        static class Squad implements API.Squad {
             List<Rover> squad;
 
             Squad(List<Rover> squad) {
@@ -208,6 +208,22 @@ public class TestableCore {
                     }
                 }
             }
+        }
+    }
+
+    static class Lines {
+        interface Factory<T> {
+            T create(List<String> lines);
+        }
+
+        interface Model {
+            List<String> toLines();
+        }
+
+        static class Squad extends Domain.Squad implements Lines.Model {
+            Squad(List<Rover> squad) {
+                super(squad);
+            }
 
             @Override
             public List<String> toLines() {
@@ -220,40 +236,30 @@ public class TestableCore {
         }
     }
 
-    static class Lines {
-        interface Factory<T> {
-            T create(List<String> lines);
-        }
-
-        interface Model {
-            List<String> toLines();
-        }
-    }
-
     static class Repository {
         private final DatabaseConnection connection;
-        Lines.Factory<Domain.Squad> factory;
+        Lines.Factory<Lines.Squad> factory;
 
         Repository(DatabaseConnection connection) {
-            this(connection, new Lines.Factory<Domain.Squad>() {
+            this(connection, new Lines.Factory<Lines.Squad>() {
                 @Override
-                public Domain.Squad create(List<String> lines) {
-                    return new Domain.Squad(Parser.toSquad(lines));
+                public Lines.Squad create(List<String> lines) {
+                    return new Lines.Squad(Parser.toSquad(lines));
                 }
             });
         }
 
-        Repository(DatabaseConnection connection, Lines.Factory<Domain.Squad> factory) {
+        Repository(DatabaseConnection connection, Lines.Factory<Lines.Squad> factory) {
             this.connection = connection;
             this.factory = factory;
         }
 
-        Domain.Squad get() {
+        Lines.Squad get() {
             List<String> lines = connection.load();
             return factory.create(lines);
         }
 
-        void save(Domain.Squad squad) {
+        void save(Lines.Squad squad) {
             List<String> data = squad.toLines();
 
             connection.store(data);
@@ -289,7 +295,7 @@ public class TestableCore {
         }
 
         void handleCommand () {
-            Domain.Squad squad = repo.get();
+            Lines.Squad squad = repo.get();
 
             squad.run();
 
