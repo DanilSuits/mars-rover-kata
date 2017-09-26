@@ -17,6 +17,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static java.lang.System.in;
+
 /**
  * @author Danil Suits (danil@vast.com)
  */
@@ -214,30 +216,50 @@ public class TestableCore {
     }
 
     static class Repository {
-        private final InputStream in;
-        private final PrintStream out;
+        private final DatabaseConnection connection;
 
-        Repository(InputStream in, PrintStream out) {
-            this.in = in;
-            this.out = out;
+        Repository(DatabaseConnection connection) {
+            this.connection = connection;
         }
 
         Domain.Squad get() {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            List<String> lines = reader.lines().collect(Collectors.toList());
+            List<String> lines = connection.load();
 
             return new Domain.Squad(Parser.toSquad(lines));
         }
 
         void save(Domain.Squad squad) {
-            squad
+            List<String> data = squad
                     .stream()
                     .map(rover -> rover.position)
                     .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
-                    .forEach(out::println);
+                    .collect(Collectors.toList());
+
+            connection.store(data);
         }
     }
-    
+
+    static class DatabaseConnection {
+        private final InputStream fromDatabase;
+        private final PrintStream toDatabase;
+
+        DatabaseConnection(InputStream fromDatabase, PrintStream toDatabase) {
+            this.fromDatabase = fromDatabase;
+            this.toDatabase = toDatabase;
+        }
+
+        List<String> load() {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fromDatabase));
+            return reader.lines().collect(Collectors.toList());
+        }
+
+        void store(List<String> data) {
+            data
+                    .stream()
+                    .forEach(toDatabase::println);
+        }
+    }
+
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
@@ -247,7 +269,9 @@ public class TestableCore {
         // Let's pretend
         InputStream fromDatabase = in;
         PrintStream toDatabase = out;
-        Repository repo = new Repository(fromDatabase, toDatabase);
+        DatabaseConnection connection = new DatabaseConnection(in, out);
+
+        Repository repo = new Repository(connection);
 
         Domain.Squad squad = repo.get();
 
@@ -259,6 +283,6 @@ public class TestableCore {
     public static void main(String[] args) throws IOException {
         // This is my proof that the thin shell can invoke
         // the function provided by the testable core.
-        runTest(System.in, System.out);
+        runTest(in, System.out);
     }
 }
