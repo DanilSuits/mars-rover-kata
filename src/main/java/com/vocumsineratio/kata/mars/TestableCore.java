@@ -259,22 +259,6 @@ public class TestableCore {
         }
     }
 
-    static class Application<Squad extends API.Squad> {
-        private final API.Repository<Squad> repo;
-
-        Application(API.Repository<Squad> repo) {
-            this.repo = repo;
-        }
-
-        void handleCommand () {
-            Squad squad = repo.get();
-
-            squad.run();
-
-            repo.save(squad);
-        }
-    }
-
     static class CompositionRoot {
         static Application create(Plumbing.Database<List<String>> db) {
             final Lines.Parser<LinesDataModel.Squad> parser = LinesDataModel.TO_SQUAD;
