@@ -304,15 +304,15 @@ public class TestableCore {
         }
     }
 
-    static class Application {
-        private final API.Repository<Lines.Squad> repo;
+    static class Application<Squad extends API.Squad> {
+        private final API.Repository<Squad> repo;
 
-        Application(API.Repository<Lines.Squad> repo) {
+        Application(API.Repository<Squad> repo) {
             this.repo = repo;
         }
 
         void handleCommand () {
-            Lines.Squad squad = repo.get();
+            Squad squad = repo.get();
 
             squad.run();
 
