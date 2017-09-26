@@ -171,7 +171,7 @@ public class TestableCore {
     }
 
     static class Domain {
-        static class Squad implements API.Squad {
+        static class Squad implements API.Squad, Lines.Model {
             List<Rover> squad;
 
             Squad(List<Rover> squad) {
@@ -209,31 +209,52 @@ public class TestableCore {
                 }
             }
 
-            public Stream<Rover> stream() {
-                return squad.stream();
+            @Override
+            public List<String> toLines() {
+                return squad
+                        .stream()
+                        .map(rover -> rover.position)
+                        .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
+                        .collect(Collectors.toList());
             }
+        }
+    }
+
+    static class Lines {
+        interface Factory<T> {
+            T create(List<String> lines);
+        }
+
+        interface Model {
+            List<String> toLines();
         }
     }
 
     static class Repository {
         private final DatabaseConnection connection;
+        Lines.Factory<Domain.Squad> factory;
 
         Repository(DatabaseConnection connection) {
+            this(connection, new Lines.Factory<Domain.Squad>() {
+                @Override
+                public Domain.Squad create(List<String> lines) {
+                    return new Domain.Squad(Parser.toSquad(lines));
+                }
+            });
+        }
+
+        Repository(DatabaseConnection connection, Lines.Factory<Domain.Squad> factory) {
             this.connection = connection;
+            this.factory = factory;
         }
 
         Domain.Squad get() {
             List<String> lines = connection.load();
-
-            return new Domain.Squad(Parser.toSquad(lines));
+            return factory.create(lines);
         }
 
         void save(Domain.Squad squad) {
-            List<String> data = squad
-                    .stream()
-                    .map(rover -> rover.position)
-                    .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
-                    .collect(Collectors.toList());
+            List<String> data = squad.toLines();
 
             connection.store(data);
         }
