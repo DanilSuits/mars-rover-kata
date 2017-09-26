@@ -164,13 +164,13 @@ public class TestableCore {
     }
 
     static class API {
-        interface Squad {
-            void run();
-        }
-
-        interface Repository<T extends API.Squad> {
+        interface Repository<T> {
             T get();
             void save(T theThing);
+        }
+
+        interface Squad {
+            void run();
         }
     }
 
@@ -235,21 +235,6 @@ public class TestableCore {
 
         interface Model extends Plumbing.Model<List<String>> {};
 
-        static class Squad extends Domain.Squad implements Lines.Model {
-            Squad(List<Rover> squad) {
-                super(squad);
-            }
-
-            @Override
-            public List<String> toDocument() {
-                return squad
-                        .stream()
-                        .map(rover -> rover.position)
-                        .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
-                        .collect(Collectors.toList());
-            }
-        }
-
         static class Database implements Plumbing.Database<List<String>> {
 
             private final InputStream fromDatabase;
@@ -275,7 +260,7 @@ public class TestableCore {
 
         }
 
-        static class Repository<Document, M extends API.Squad & Plumbing.Model<Document>> implements API.Repository<M> {
+        static class Repository<Document, M extends Plumbing.Model<Document>> implements API.Repository<M> {
             private final Plumbing.Database<Document> database;
             Plumbing.Factory<Document, M> factory;
 
@@ -296,18 +281,36 @@ public class TestableCore {
                 database.store(data);
             }
         }
+    }
 
+    static class LinesDataModel {
         static Lines.Repository connect(Lines.Database db) {
-            Lines.Repository repo = new Repository(db, Lines.TO_SQUAD);
+            Lines.Repository repo = new Lines.Repository(db, LinesDataModel.TO_SQUAD);
             return repo;
         }
 
-        static final Lines.Factory<Lines.Squad> TO_SQUAD = new Lines.Factory<Lines.Squad>() {
+        static final Lines.Factory<Squad> TO_SQUAD = new Lines.Factory<Squad>() {
             @Override
-            public Lines.Squad create(List<String> lines) {
-                return new Lines.Squad(Parser.toSquad(lines));
+            public Squad create(List<String> lines) {
+                return new Squad(Parser.toSquad(lines));
             }
         };
+
+        static class Squad extends Domain.Squad implements Lines.Model {
+            Squad(List<Rover> squad) {
+                super(squad);
+            }
+
+            @Override
+            public List<String> toDocument() {
+                return squad
+                        .stream()
+                        .map(rover -> rover.position)
+                        .map(roverPosition -> roverPosition.location.x + " " + roverPosition.location.y + " " + roverPosition.heading.name())
+                        .collect(Collectors.toList());
+            }
+        }
+
     }
 
     static class Application<Squad extends API.Squad> {
@@ -326,20 +329,25 @@ public class TestableCore {
         }
     }
 
+    static class CompositionRoot {
+        static Application create(InputStream in, PrintStream out) {
+            // Composition!
+            InputStream fromDatabase = in;
+            PrintStream toDatabase = out;
+            Lines.Database db = new Lines.Database(fromDatabase, toDatabase);
+
+            Lines.Repository repo = LinesDataModel.connect(db);
+            return new Application(repo);
+        }
+    }
+
     static void runTest(InputStream in, PrintStream out) throws IOException {
         {
             // FOR TEST CALIBRATION ONLY
             if (false) return;
         }
 
-        // Composition!
-        InputStream fromDatabase = in;
-        PrintStream toDatabase = out;
-        Lines.Database db = new Lines.Database(in, out);
-
-        Lines.Repository repo = Lines.connect(db);
-        Application app = new Application(repo);
-
+        Application app = CompositionRoot.create(in, out);
         app.handleCommand();
 
     }
