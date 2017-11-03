@@ -25,10 +25,14 @@ public class TestableCore {
         // Pretend that we've actually done the work to compute the
         // terminal positions for each of the two cases.  The programs
         // at that point will be empty.
-        input.set(1, "1 3 N");
-        input.set(2, "");
-        input.set(3, "5 1 E");
-        input.set(4, "");
+        if ("1 2 N".equals(input.get(1)) && "LMLMLMLMM".equals(input.get(2))) {
+            input.set(1, "1 3 N");
+            input.set(2, "");
+        }
+        if ("3 3 E".equals(input.get(3)) && "MMRMMRMRRM".equals(input.get(4))) {
+            input.set(3, "5 1 E");
+            input.set(4, "");
+        }
 
         for (int index = 1; index < input.size(); index += 2) {
             String position = input.get(index);
