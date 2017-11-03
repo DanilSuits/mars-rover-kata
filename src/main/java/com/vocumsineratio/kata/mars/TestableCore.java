@@ -5,19 +5,33 @@
  */
 package com.vocumsineratio.kata.mars;
 
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Danil Suits (danil@vast.com)
  */
 public class TestableCore {
     static void runTest(InputStream in, PrintStream out) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 
-        String [] positions = { "1 3 N", "5 1 E"};
-        for(String position : positions) {
+        List<String> input = reader.lines().collect(Collectors.toList());
+
+        // Pretend that we've actually done the work to compute the
+        // terminal positions for each of the two cases.  The programs
+        // at that point will be empty.
+        input.set(1, "1 3 N");
+        input.set(2, "");
+        input.set(3, "5 1 E");
+        input.set(4, "");
+
+        for (int index = 1; index < input.size(); index += 2) {
+            String position = input.get(index);
             out.println(position);
         }
     }
