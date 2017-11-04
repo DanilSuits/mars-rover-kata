@@ -30,56 +30,57 @@ public class TestableCore {
             input.set(2, "");
         }
 
-        int currentPosition = 3;
-        int currentInstructions = currentPosition + 1;
+        for ( int currentPosition = 3; currentPosition < input.size(); currentPosition += 2) {
+            int currentInstructions = currentPosition + 1;
 
-        while (! input.get(currentInstructions).isEmpty()) {
-            String [] position = input.get(currentPosition).split(" ");
+            while (!input.get(currentInstructions).isEmpty()) {
+                String[] position = input.get(currentPosition).split(" ");
 
-            switch (input.get(currentInstructions).substring(0,1)) {
-                case "R": {
-                    switch (position[2]) {
-                        case "N" : {
-                            position[2] = "E";
-                            break ;
+                switch (input.get(currentInstructions).substring(0, 1)) {
+                    case "R": {
+                        switch (position[2]) {
+                            case "N": {
+                                position[2] = "E";
+                                break;
+                            }
+                            case "W": {
+                                position[2] = "N";
+                                break;
+                            }
+                            case "S": {
+                                position[2] = "W";
+                                break;
+                            }
+                            case "E": {
+                                position[2] = "S";
+                                break;
+                            }
                         }
-                        case "W" : {
-                            position[2] = "N";
-                            break ;
-                        }
-                        case "S" : {
-                            position[2] = "W";
-                            break ;
-                        }
-                        case "E" : {
-                            position[2] = "S";
-                            break ;
+                        break;
+                    }
+
+                    case "M": {
+                        switch (position[2]) {
+                            case "S": {
+                                position[1] = String.valueOf(-1 + Integer.valueOf(position[1]));
+                                break;
+                            }
+                            case "E": {
+                                position[0] = String.valueOf(1 + Integer.valueOf(position[0]));
+                                break;
+                            }
+                            case "W": {
+                                position[0] = String.valueOf(-1 + Integer.valueOf(position[0]));
+                                break;
+                            }
                         }
                     }
-                    break ;
                 }
 
-                case "M": {
-                    switch (position[2]) {
-                        case "S" : {
-                            position[1] = String.valueOf(-1 + Integer.valueOf(position[1]));
-                            break ;
-                        }
-                        case "E" : {
-                            position[0] = String.valueOf(1 + Integer.valueOf(position[0]));
-                            break ;
-                        }
-                        case "W" : {
-                            position[0] = String.valueOf(-1 + Integer.valueOf(position[0]));
-                            break ;
-                        }
-                    }
-                }
+                input.set(currentPosition, String.join(" ", position));
+                input.set(currentInstructions, input.get(currentInstructions).substring(1));
+
             }
-            
-            input.set(currentPosition, String.join(" ", position));
-            input.set(currentInstructions, input.get(currentInstructions).substring(1));
-
         }
 
         for (int index = 1; index < input.size(); index += 2) {
