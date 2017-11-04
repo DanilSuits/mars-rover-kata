@@ -53,7 +53,12 @@ public class TestableCore {
                 }
 
                 case "M": {
-                    position[0] = String.valueOf(1 + Integer.valueOf(position[0]));
+                    switch (position[2]) {
+                        case "E" : {
+                            position[0] = String.valueOf(1 + Integer.valueOf(position[0]));
+                            break ;
+                        }
+                    }
                 }
             }
             
