@@ -30,8 +30,16 @@ public class TestableCore {
             input.set(2, "");
         }
         if ("3 3 E".equals(input.get(3)) && "MMRMMRMRRM".equals(input.get(4))) {
-            input.set(3, "4 1 E");
-            input.set(4, "M");
+            input.set(3, "4 1 N");
+            input.set(4, "RM");
+        }
+        if ("4 1 N".equals(input.get(3)) && "R".equals(input.get(4).substring(0,1))) {
+
+            String [] position = input.get(3).split(" ");
+            position[2] = "E";
+
+            input.set(3, String.join(" ", position));
+            input.set(4, input.get(4).substring(1));
         }
         if ("4 1 E".equals(input.get(3)) && "M".equals(input.get(4).substring(0,1))) {
 
