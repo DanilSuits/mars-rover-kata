@@ -37,11 +37,15 @@ public class TestableCore {
         while (! input.get(4).isEmpty()) {
             String [] position = input.get(3).split(" ");
 
-            if ("R".equals(input.get(4).substring(0,1))) {
-                position[2] = "E";
-            }
-            if ("M".equals(input.get(4).substring(0,1))) {
-                position[0] = String.valueOf(1 + Integer.valueOf(position[0]));
+            switch (input.get(4).substring(0,1)) {
+                case "R": {
+                    position[2] = "E";
+                    break ;
+                }
+
+                case "M": {
+                    position[0] = String.valueOf(1 + Integer.valueOf(position[0]));
+                }
             }
             
             input.set(3, String.join(" ", position));
