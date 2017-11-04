@@ -29,10 +29,6 @@ public class TestableCore {
             input.set(1, "1 3 N");
             input.set(2, "");
         }
-        if ("3 3 E".equals(input.get(3)) && "MMRMMRMRRM".equals(input.get(4))) {
-            input.set(3, "3 3 E");
-            input.set(4, "MMRMMRMRRM");
-        }
         
         while (! input.get(4).isEmpty()) {
             String [] position = input.get(3).split(" ");
