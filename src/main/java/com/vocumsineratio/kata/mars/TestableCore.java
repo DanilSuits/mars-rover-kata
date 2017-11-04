@@ -30,7 +30,7 @@ public class TestableCore {
             input.set(2, "");
         }
 
-        for ( int currentPosition = 3; currentPosition < input.size(); currentPosition += 2) {
+        for ( int currentPosition = 1; currentPosition < input.size(); currentPosition += 2) {
             int currentInstructions = currentPosition + 1;
 
             while (!input.get(currentInstructions).isEmpty()) {
