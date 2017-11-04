@@ -26,8 +26,8 @@ public class TestableCore {
         // terminal positions for each of the two cases.  The programs
         // at that point will be empty.
         if ("1 2 N".equals(input.get(1)) && "LMLMLMLMM".equals(input.get(2))) {
-            input.set(1, "0 2 S");
-            input.set(2, "MLMLMM");
+            input.set(1, "0 2 W");
+            input.set(2, "LMLMLMM");
         }
 
         for ( int currentPosition = 1; currentPosition < input.size(); currentPosition += 2) {
@@ -45,6 +45,10 @@ public class TestableCore {
                             }
                             case "S": {
                                 position[2] = "E";
+                                break;
+                            }
+                            case "W": {
+                                position[2] = "S";
                                 break;
                             }
                         }
