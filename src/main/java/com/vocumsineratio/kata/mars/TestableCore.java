@@ -30,8 +30,8 @@ public class TestableCore {
             input.set(2, "");
         }
         if ("3 3 E".equals(input.get(3)) && "MMRMMRMRRM".equals(input.get(4))) {
-            input.set(3, "4 1 N");
-            input.set(4, "RM");
+            input.set(3, "4 1 W");
+            input.set(4, "RRM");
         }
         
         while (! input.get(4).isEmpty()) {
@@ -42,6 +42,10 @@ public class TestableCore {
                     switch (position[2]) {
                         case "N" : {
                             position[2] = "E";
+                            break ;
+                        }
+                        case "W" : {
+                            position[2] = "N";
                             break ;
                         }
                     }
