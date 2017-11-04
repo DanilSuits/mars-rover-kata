@@ -26,8 +26,8 @@ public class TestableCore {
         // terminal positions for each of the two cases.  The programs
         // at that point will be empty.
         if ("1 2 N".equals(input.get(1)) && "LMLMLMLMM".equals(input.get(2))) {
-            input.set(1, "0 1 S");
-            input.set(2, "LMLMM");
+            input.set(1, "0 2 S");
+            input.set(2, "MLMLMM");
         }
 
         for ( int currentPosition = 1; currentPosition < input.size(); currentPosition += 2) {
