@@ -31,7 +31,7 @@ public class TestableCore {
         }
 
         int currentPosition = 3;
-        int currentInstructions = 4;
+        int currentInstructions = currentPosition + 1;
 
         while (! input.get(currentInstructions).isEmpty()) {
             String [] position = input.get(currentPosition).split(" ");
