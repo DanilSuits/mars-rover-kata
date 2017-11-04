@@ -22,14 +22,6 @@ public class TestableCore {
 
         List<String> input = reader.lines().collect(Collectors.toList());
 
-        // Pretend that we've actually done the work to compute the
-        // terminal positions for each of the two cases.  The programs
-        // at that point will be empty.
-        if ("1 2 N".equals(input.get(1)) && "LMLMLMLMM".equals(input.get(2))) {
-            input.set(1, "1 2 N");
-            input.set(2, "LMLMLMLMM");
-        }
-
         for ( int currentPosition = 1; currentPosition < input.size(); currentPosition += 2) {
             int currentInstructions = currentPosition + 1;
 
