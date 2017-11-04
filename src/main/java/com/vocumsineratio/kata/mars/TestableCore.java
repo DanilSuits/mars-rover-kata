@@ -37,10 +37,10 @@ public class TestableCore {
         while (! input.get(4).isEmpty()) {
             String [] position = input.get(3).split(" ");
 
-            if ("4 1 N".equals(input.get(3)) && "R".equals(input.get(4).substring(0,1))) {
+            if ("R".equals(input.get(4).substring(0,1))) {
                 position[2] = "E";
             }
-            if ("4 1 E".equals(input.get(3)) && "M".equals(input.get(4).substring(0,1))) {
+            if ("M".equals(input.get(4).substring(0,1))) {
                 position[0] = String.valueOf(1 + Integer.valueOf(position[0]));
             }
             
