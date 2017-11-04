@@ -30,8 +30,8 @@ public class TestableCore {
             input.set(2, "");
         }
         if ("3 3 E".equals(input.get(3)) && "MMRMMRMRRM".equals(input.get(4))) {
-            input.set(3, "5 3 E");
-            input.set(4, "RMMRMRRM");
+            input.set(3, "4 3 E");
+            input.set(4, "MRMMRMRRM");
         }
         
         while (! input.get(4).isEmpty()) {
