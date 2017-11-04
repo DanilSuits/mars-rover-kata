@@ -34,7 +34,9 @@ public class TestableCore {
             input.set(4, "M");
         }
         if ("4 1 E".equals(input.get(3)) && "M".equals(input.get(4))) {
-            input.set(3, "5 1 E");
+            String [] position = input.get(3).split(" ");
+            position[0] = "5";
+            input.set(3, String.join(" ", position));
             input.set(4, "");
         }
 
