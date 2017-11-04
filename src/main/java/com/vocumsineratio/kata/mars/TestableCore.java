@@ -29,11 +29,14 @@ public class TestableCore {
             input.set(1, "1 3 N");
             input.set(2, "");
         }
-        
-        while (! input.get(4).isEmpty()) {
-            String [] position = input.get(3).split(" ");
 
-            switch (input.get(4).substring(0,1)) {
+        int currentPosition = 3;
+        int currentInstructions = 4;
+
+        while (! input.get(currentInstructions).isEmpty()) {
+            String [] position = input.get(currentPosition).split(" ");
+
+            switch (input.get(currentInstructions).substring(0,1)) {
                 case "R": {
                     switch (position[2]) {
                         case "N" : {
@@ -74,8 +77,8 @@ public class TestableCore {
                 }
             }
             
-            input.set(3, String.join(" ", position));
-            input.set(4, input.get(4).substring(1));
+            input.set(currentPosition, String.join(" ", position));
+            input.set(currentInstructions, input.get(currentInstructions).substring(1));
 
         }
 
