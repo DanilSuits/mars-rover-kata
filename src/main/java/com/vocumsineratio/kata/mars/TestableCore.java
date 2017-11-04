@@ -39,7 +39,12 @@ public class TestableCore {
 
             switch (input.get(4).substring(0,1)) {
                 case "R": {
-                    position[2] = "E";
+                    switch (position[2]) {
+                        case "N" : {
+                            position[2] = "E";
+                            break ;
+                        }
+                    }
                     break ;
                 }
 
