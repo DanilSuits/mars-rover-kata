@@ -53,7 +53,7 @@ class Rover {
         instructionSet.put("M", Rover::move);
 
         int instructionPointer = 9;
-        String currentInstruction = lines[4].substring(instructionPointer, 10);
+        String currentInstruction = lines[4].substring(instructionPointer, 1 + instructionPointer);
         Function<State, State> instruction = instructionSet.get(currentInstruction);
         State s = instruction.apply(new State(4, 1, "E"));
 
