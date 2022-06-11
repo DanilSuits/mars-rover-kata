@@ -30,8 +30,9 @@ class Rover {
         
         State s = new State();
         s.x = 5;
+        s.y = 1;
 
-        report[1] = Schema.rover(s.x, 1, "E");
+        report[1] = Schema.rover(s.x, s.y, "E");
         return report;
     }
 }
