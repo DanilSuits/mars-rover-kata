@@ -89,7 +89,7 @@ class Rover {
 
         State crntState = new State(3, 3, "E");
         {
-            String roverInstructions = lines[4].substring(0);
+            String roverInstructions = lines[1 + 2 * 1 + 1];
             {
                 for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
                     String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
