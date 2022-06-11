@@ -1,5 +1,7 @@
 package com.vocumsineratio.mars;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -46,7 +48,12 @@ class Rover {
 
         report[0] = Schema.rover(1, 3, "N");
 
-        Function<State, State> instruction = Rover::move;
+        Map<String, Function<State, State>> interpreter = Collections.singletonMap(
+                "M",
+                Rover::move
+        );
+
+        Function<State, State> instruction = interpreter.get("M");
         State s = instruction.apply(new State(4, 1, "E"));
 
         report[1] = Schema.rover(s);
