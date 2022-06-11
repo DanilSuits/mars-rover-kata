@@ -54,7 +54,7 @@ class Rover {
                 crnt.x,
                 crnt.y,
                 rightTurns.get(
-                        "N"
+                        crnt.orientation
                 ));
     }
 
