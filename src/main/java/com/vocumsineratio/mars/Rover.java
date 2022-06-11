@@ -36,6 +36,10 @@ class Rover {
         return new State(1 + crnt.x, crnt.y, crnt.orientation);
     }
 
+    static State right(State crnt) {
+        return    new State(4, 1, "E");
+    }
+
     static String [] output(String... lines) {
         assert lines[0].equals("5 5");
         assert lines[1].equals("1 2 N");
@@ -53,7 +57,7 @@ class Rover {
         instructionSet.put("M", Rover::move);
 
         State crntState = new State(4, 1, "N");
-        crntState = new State(4, 1, "E");
+        crntState = right(crntState);
 
         String roverInstructions =  lines[4].substring(9);
         for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
