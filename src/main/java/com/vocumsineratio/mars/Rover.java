@@ -38,7 +38,7 @@ class Rover {
 
     static State right(State crnt) {
         if ("W".equals(crnt.orientation)) {
-            return new State(4, 1, "N");
+            return new State(crnt.x, crnt.y, "N");
         }
         assert "N" == crnt.orientation;
         return new State(crnt.x, crnt.y, "E");
