@@ -14,7 +14,14 @@ class Rover {
         int x;
         int y;
         String orientation;
+
+        State(int x, int y, String orientation) {
+            this.x = x;
+            this.y = y;
+            this.orientation = orientation;
+        }
     }
+
     static String [] output(String... lines) {
         assert lines[0].equals("5 5");
         assert lines[1].equals("1 2 N");
@@ -28,10 +35,7 @@ class Rover {
 
         report[0] = Schema.rover(1, 3, "N");
         
-        State s = new State();
-        s.x = 5;
-        s.y = 1;
-        s.orientation = "E";
+        State s = new State(5, 1, "E");
 
         report[1] = Schema.rover(s.x, s.y, s.orientation);
         return report;
