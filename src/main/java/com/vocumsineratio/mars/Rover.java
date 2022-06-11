@@ -60,20 +60,22 @@ class Rover {
 
         State crntState = new State(4, 1, "N");
         {
-            String roverInstructions =  lines[4].substring(8);
+            String roverInstructions = lines[4].substring(8);
             {
-                String currentInstruction = roverInstructions.substring(0,1);
+                String currentInstruction = roverInstructions.substring(0, 1);
                 Function<State, State> instruction = instructionSet.get(currentInstruction);
                 crntState = instruction.apply(crntState);
             }
-
         }
-        
-        String roverInstructions =  lines[4].substring(9);
-        for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
-            String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
-            Function<State, State> instruction = instructionSet.get(currentInstruction);
-            crntState = instruction.apply(crntState);
+        {
+            String roverInstructions = lines[4].substring(9);
+            {
+                for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
+                    String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
+                    Function<State, State> instruction = instructionSet.get(currentInstruction);
+                    crntState = instruction.apply(crntState);
+                }
+            }
         }
 
         report[1] = Schema.rover(crntState);
