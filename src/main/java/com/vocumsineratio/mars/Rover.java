@@ -1,5 +1,7 @@
 package com.vocumsineratio.mars;
 
+import java.util.function.Function;
+
 /**
  * @author Danil Suits (danil@vast.com)
  */
@@ -43,8 +45,9 @@ class Rover {
         String[] report = new String[roverCount];
 
         report[0] = Schema.rover(1, 3, "N");
-        
-        State s = move(new State(4, 1, "E"));
+
+        Function<State, State> instruction = Rover::move;
+        State s = instruction.apply(new State(4, 1, "E"));
 
         report[1] = Schema.rover(s);
         return report;
