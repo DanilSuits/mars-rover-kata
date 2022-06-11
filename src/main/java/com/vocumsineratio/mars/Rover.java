@@ -52,8 +52,9 @@ class Rover {
         Map<String, Function<State, State>> instructionSet = new HashMap<>();
         instructionSet.put("M", Rover::move);
 
-        int instructionPointer = 9;
-        String currentInstruction = lines[4].substring(instructionPointer, 1 + instructionPointer);
+        String roverInstructions =  lines[4].substring(9);
+        int instructionPointer = 0;
+        String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
         Function<State, State> instruction = instructionSet.get(currentInstruction);
         State s = instruction.apply(new State(4, 1, "E"));
 
