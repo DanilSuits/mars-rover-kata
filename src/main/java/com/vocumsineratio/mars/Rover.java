@@ -10,7 +10,9 @@ class Rover {
         assert lines[2].equals("LMLMLMLMM");
         assert lines[3].equals("3 3 E");
         assert lines[4].equals("MMRMMRMRRM");
-        
-        return "1 3 N\n5 1 E\n".split("\n");
+
+
+        String[] report = "1 3 N\n5 1 E\n".split("\n");
+        return report;
     }
 }
