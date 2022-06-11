@@ -9,6 +9,12 @@ class Rover {
             return String.format("%d %d %s", x, y, orientation);
         }
     }
+
+    static class State {
+        int x;
+        int y;
+        String orientation;
+    }
     static String [] output(String... lines) {
         assert lines[0].equals("5 5");
         assert lines[1].equals("1 2 N");
@@ -19,8 +25,13 @@ class Rover {
 
         int roverCount = (lines.length - 1) / 2;
         String[] report = new String[roverCount];
+
         report[0] = Schema.rover(1, 3, "N");
-        report[1] = Schema.rover(5, 1, "E");
+        
+        State s = new State();
+        s.x = 5;
+
+        report[1] = Schema.rover(s.x, 1, "E");
         return report;
     }
 }
