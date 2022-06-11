@@ -49,7 +49,7 @@ class Rover {
     }
 
     static State south(State crnt) {
-        return new State(5, 1, "S");
+        return new State(crnt.x, crnt.y -1, crnt.orientation);
     }
 
     static State right(State crnt) {
