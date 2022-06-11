@@ -52,11 +52,12 @@ class Rover {
         Map<String, Function<State, State>> instructionSet = new HashMap<>();
         instructionSet.put("M", Rover::move);
 
+        State crntState = new State(4, 1, "E");
+
         String roverInstructions =  lines[4].substring(9);
         int instructionPointer = 0;
         String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
         Function<State, State> instruction = instructionSet.get(currentInstruction);
-        State crntState = new State(4, 1, "E");
         crntState = instruction.apply(crntState);
 
         report[1] = Schema.rover(crntState);
