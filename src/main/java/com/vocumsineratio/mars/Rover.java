@@ -19,7 +19,7 @@ class Rover {
 
         String[] report = new String[2];
         report[0] = Schema.rover(1, 3, "N");
-        report[1] = "5 1 E";
+        report[1] = "5 1 E"; report[1] = Schema.rover(5, 1, "E");
         return report;
     }
 }
