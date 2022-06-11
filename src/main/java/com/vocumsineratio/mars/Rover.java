@@ -52,7 +52,8 @@ class Rover {
         Map<String, Function<State, State>> instructionSet = new HashMap<>();
         instructionSet.put("M", Rover::move);
 
-        Function<State, State> instruction = instructionSet.get("M");
+        String currentInstruction = "M";
+        Function<State, State> instruction = instructionSet.get(currentInstruction);
         State s = instruction.apply(new State(4, 1, "E"));
 
         report[1] = Schema.rover(s);
