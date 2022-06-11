@@ -32,11 +32,12 @@ class Rover {
     }
 
     static State move(State crnt) {
-        if ("W" == crnt.orientation) {
-            return west(crnt);
-        }
-        assert "E" == crnt.orientation;
-        return east(crnt);
+        HashMap<String, Function<State, State>> moves = new HashMap<>();
+        moves.put("W", Rover::west);
+        moves.put("E", Rover::east);
+
+        Function<State, State> move = moves.get(crnt.orientation);
+        return move.apply(crnt);
     }
 
     static State west(State crnt) {
