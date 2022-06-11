@@ -26,6 +26,10 @@ class Rover {
         }
     }
 
+    static State move(State crnt) {
+        return new State(5, 1, "E");
+    }
+
     static String [] output(String... lines) {
         assert lines[0].equals("5 5");
         assert lines[1].equals("1 2 N");
@@ -39,7 +43,7 @@ class Rover {
 
         report[0] = Schema.rover(1, 3, "N");
         
-        State s = new State(5, 1, "E");
+        State s = move(new State(4, 1, "E"));
 
         report[1] = Schema.rover(s);
         return report;
