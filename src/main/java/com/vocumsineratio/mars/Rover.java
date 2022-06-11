@@ -58,7 +58,10 @@ class Rover {
         instructionSet.put("M", Rover::move);
         instructionSet.put("R", Rover::right);
 
-        State crntState = new State(4, 1, "N");
+        State crntState = new State(4, 1, "W");
+        {
+            crntState = new State(4, 1, "N");
+        }
         {
             String roverInstructions = lines[4].substring(8);
             {
