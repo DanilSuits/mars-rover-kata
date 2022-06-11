@@ -90,7 +90,7 @@ class Rover {
         State crntState = new State(4, 3, "E");
         {
             {
-                crntState = east(crntState);
+                crntState = move(crntState);
             }
         }
         {
