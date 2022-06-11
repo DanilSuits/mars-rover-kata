@@ -40,16 +40,18 @@ class Rover {
         HashMap<String, String> rightTurns = new HashMap<>();
         rightTurns.put("W", "N");
         rightTurns.put("N", "E");
+        
+        assert rightTurns.containsKey(crnt.orientation);
 
-        if ("W".equals(crnt.orientation)) {
-            return new State(
-                    crnt.x,
-                    crnt.y,
-                    rightTurns.get(
-                            crnt.orientation
-                    ));
-        }
-        assert "N" == crnt.orientation;
+//        if ("W".equals(crnt.orientation)) {
+//            return new State(
+//                    crnt.x,
+//                    crnt.y,
+//                    rightTurns.get(
+//                            crnt.orientation
+//                    ));
+//        }
+//        assert "N" == crnt.orientation;
         return new State(
                 crnt.x,
                 crnt.y,
