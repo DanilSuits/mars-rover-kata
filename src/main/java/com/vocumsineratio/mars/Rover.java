@@ -58,6 +58,7 @@ class Rover {
         rightTurns.put("W", "N");
         rightTurns.put("N", "E");
         rightTurns.put("S", "W");
+        rightTurns.put("E", "S");
         
         assert rightTurns.containsKey(crnt.orientation);
 
@@ -89,7 +90,7 @@ class Rover {
         State crntState = new State(5, 3, "E");
         {
             {
-                crntState = new State(5, 3, "S");
+                crntState = right(crntState);
             }
         }
         {
