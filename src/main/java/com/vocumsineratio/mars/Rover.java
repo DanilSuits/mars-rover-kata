@@ -31,8 +31,9 @@ class Rover {
         State s = new State();
         s.x = 5;
         s.y = 1;
+        s.orientation = "E";
 
-        report[1] = Schema.rover(s.x, s.y, "E");
+        report[1] = Schema.rover(s.x, s.y, s.orientation);
         return report;
     }
 }
