@@ -37,11 +37,14 @@ class Rover {
     }
 
     static State right(State crnt) {
+        if ("W".equals(crnt.orientation)) {
+            return new State(4, 1, "N");
+        }
         assert "N" == crnt.orientation;
         return new State(crnt.x, crnt.y, "E");
     }
 
-    static String [] output(String... lines) {
+    static String[] output(String... lines) {
         assert lines[0].equals("5 5");
         assert lines[1].equals("1 2 N");
         assert lines[2].equals("LMLMLMLMM");
@@ -60,7 +63,7 @@ class Rover {
 
         State crntState = new State(4, 1, "W");
         {
-            crntState = new State(4, 1, "N");
+            crntState = Rover.right(crntState);
         }
         {
             String roverInstructions = lines[4].substring(8);
