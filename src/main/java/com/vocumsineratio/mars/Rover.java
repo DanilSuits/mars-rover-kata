@@ -48,6 +48,10 @@ class Rover {
         return new State(crnt.x + 1, crnt.y, crnt.orientation);
     }
 
+    static State south(State crnt) {
+        return new State(5, 1, "S");
+    }
+
     static State right(State crnt) {
         HashMap<String, String> rightTurns = new HashMap<>();
         rightTurns.put("W", "N");
@@ -84,7 +88,7 @@ class Rover {
         State crntState = new State(5, 2, "S");
         {
             {
-                crntState = new State(5, 1, "S");
+                crntState = south(crntState);
             }
         }
         {
