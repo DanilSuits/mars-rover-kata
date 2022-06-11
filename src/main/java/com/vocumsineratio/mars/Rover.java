@@ -52,6 +52,7 @@ class Rover {
         HashMap<String, String> rightTurns = new HashMap<>();
         rightTurns.put("W", "N");
         rightTurns.put("N", "E");
+        rightTurns.put("S", "W");
         
         assert rightTurns.containsKey(crnt.orientation);
 
@@ -82,7 +83,7 @@ class Rover {
 
         State crntState = new State(5, 1, "S");
         {
-            crntState = new State(5, 1, "W");
+            crntState = right(crntState);
         }
         {
             String roverInstructions = lines[4].substring(6);
