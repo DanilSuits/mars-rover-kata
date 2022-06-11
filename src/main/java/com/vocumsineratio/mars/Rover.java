@@ -8,6 +8,10 @@ class Rover {
         static String rover(int x, int y, String orientation) {
             return String.format("%d %d %s", x, y, orientation);
         }
+
+        static String rover(State s) {
+            return rover(s.x, s.y, s.orientation);
+        }
     }
 
     static class State {
@@ -37,7 +41,7 @@ class Rover {
         
         State s = new State(5, 1, "E");
 
-        report[1] = Schema.rover(s.x, s.y, s.orientation);
+        report[1] = Schema.rover(s);
         return report;
     }
 }
