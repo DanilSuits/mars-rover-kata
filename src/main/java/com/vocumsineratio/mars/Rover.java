@@ -56,10 +56,11 @@ class Rover {
 
         Map<String, Function<State, State>> instructionSet = new HashMap<>();
         instructionSet.put("M", Rover::move);
+        instructionSet.put("R", Rover::right);
 
         State crntState = new State(4, 1, "N");
         {
-            Function<State, State> instruction = Rover::right;
+            Function<State, State> instruction = instructionSet.get("R");
             crntState = instruction.apply(crntState);
         }
         
