@@ -17,7 +17,8 @@ class Rover {
         assert lines[4].equals("MMRMMRMRRM");
 
 
-        String[] report = new String[2];
+        int roverCount = 2;
+        String[] report = new String[roverCount];
         report[0] = Schema.rover(1, 3, "N");
         report[1] = Schema.rover(5, 1, "E");
         return report;
