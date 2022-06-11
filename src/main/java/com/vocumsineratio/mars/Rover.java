@@ -35,6 +35,7 @@ class Rover {
         HashMap<String, Function<State, State>> moves = new HashMap<>();
         moves.put("W", Rover::west);
         moves.put("E", Rover::east);
+        moves.put("S", Rover::south);
 
         Function<State, State> move = moves.get(crnt.orientation);
         return move.apply(crnt);
@@ -88,7 +89,7 @@ class Rover {
         State crntState = new State(5, 2, "S");
         {
             {
-                crntState = south(crntState);
+                crntState = move(crntState);
             }
         }
         {
