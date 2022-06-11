@@ -39,6 +39,7 @@ class Rover {
     static State right(State crnt) {
         HashMap<String, String> rightTurns = new HashMap<>();
         rightTurns.put("W", "N");
+        rightTurns.put("N", "E");
 
         if ("W".equals(crnt.orientation)) {
             return new State(
@@ -49,7 +50,12 @@ class Rover {
                     ));
         }
         assert "N" == crnt.orientation;
-        return new State(crnt.x, crnt.y, "E");
+        return new State(
+                crnt.x,
+                crnt.y,
+                rightTurns.get(
+                        "N"
+                ));
     }
 
     static String[] output(String... lines) {
