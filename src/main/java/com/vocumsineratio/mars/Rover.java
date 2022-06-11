@@ -33,10 +33,14 @@ class Rover {
 
     static State move(State crnt) {
         if ("W" == crnt.orientation) {
-            return new State(crnt.x - 1, crnt.y, crnt.orientation);
+            return west(crnt);
         }
         assert "E" == crnt.orientation;
         return new State(1 + crnt.x, crnt.y, crnt.orientation);
+    }
+
+    static State west(State crnt) {
+        return new State(crnt.x - 1, crnt.y, crnt.orientation);
     }
 
     static State right(State crnt) {
