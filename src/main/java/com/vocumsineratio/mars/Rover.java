@@ -43,15 +43,6 @@ class Rover {
         
         assert rightTurns.containsKey(crnt.orientation);
 
-//        if ("W".equals(crnt.orientation)) {
-//            return new State(
-//                    crnt.x,
-//                    crnt.y,
-//                    rightTurns.get(
-//                            crnt.orientation
-//                    ));
-//        }
-//        assert "N" == crnt.orientation;
         return new State(
                 crnt.x,
                 crnt.y,
