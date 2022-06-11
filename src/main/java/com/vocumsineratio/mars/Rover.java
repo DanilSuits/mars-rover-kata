@@ -89,8 +89,13 @@ class Rover {
 
         State crntState = new State(5, 3, "E");
         {
+            String roverInstructions = lines[4].substring(2);
             {
-                crntState = right(crntState);
+                int instructionPointer = 0; {
+                    String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
+                    Function<State, State> instruction = instructionSet.get(currentInstruction);
+                    crntState = instruction.apply(crntState);
+                }
             }
         }
         {
