@@ -75,10 +75,10 @@ class Rover {
                 ));
     }
     
-    private static State left(State crntState) {
+    private static State left(State crnt) {
         return new State(
-                crntState.x,
-                crntState.y,
+                crnt.x,
+                crnt.y,
                 "N");
     }
 
