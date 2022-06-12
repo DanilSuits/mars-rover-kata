@@ -98,7 +98,9 @@ class Rover {
         assert lines[4].equals("MMRMMRMRRM");
 
 
-        int roverCount = (lines.length - 1) / 2;
+        int plateauLength = 1;
+        int roverLength = 2;
+        int roverCount = (lines.length - plateauLength) / roverLength;
         String[] report = new String[roverCount];
 
         Map<String, Function<State, State>> instructionSet = new HashMap<>();
@@ -110,7 +112,7 @@ class Rover {
         final int instructionsOffset = 1;
 
         for (int roverId = 0; roverId < roverCount; ++roverId) {
-            int roverOffset = 1 + 2 * roverId;
+            int roverOffset = plateauLength + roverLength * roverId;
             String positionDescription = lines[roverOffset + positionOffset];
             String [] roverArgs = positionDescription.split(" ");
             
