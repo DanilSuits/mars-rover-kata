@@ -124,7 +124,10 @@ class Rover {
                     roverArgs[2]
             );
             for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
-                String currentInstruction = roverInstructions.substring(instructionPointer, instructionLength + instructionPointer);
+                String currentInstruction = roverInstructions.substring(
+                        instructionPointer,
+                        instructionLength + instructionPointer
+                );
                 Function<State, State> instruction = instructionSet.get(currentInstruction);
                 crntState = instruction.apply(crntState);
             }
