@@ -53,6 +53,10 @@ class Rover {
         return new State(crnt.x, crnt.y - 1, crnt.orientation);
     }
 
+    static State north(State crnt) {
+        return new State(1, 3, "N");
+    }
+
     static State right(State crnt) {
         HashMap<String, String> rightTurns = new HashMap<>();
         rightTurns.put("W", "N");
@@ -86,7 +90,8 @@ class Rover {
         instructionSet.put("R", Rover::right);
 
         {
-            State crntState = new State(1, 3, "N");
+            State crntState = new State(1, 2, "N");
+            crntState = north(crntState);
             report[0] = Schema.rover(crntState);
         }
         
