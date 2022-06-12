@@ -95,7 +95,11 @@ class Rover {
             String positionDescription = lines[roverOffset + positionOffset];
             String [] roverArgs = positionDescription.split(" ");
             
-            State crntState = new State(3, 3, roverArgs[2]);
+            State crntState = new State(
+                    3,
+                    3,
+                    roverArgs[2]
+            );
             {
                 String roverInstructions = lines[roverOffset + instructionsOffset];
                 {
