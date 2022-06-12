@@ -106,7 +106,8 @@ class Rover {
         {
             State crntState = new State(1, 1, "E");
             {
-                Function<State, State> instruction = instructionSet.get("L");
+                String currentInstruction = "L";
+                Function<State, State> instruction = instructionSet.get(currentInstruction);
                 crntState = instruction.apply(crntState);
             }
             {
