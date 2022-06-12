@@ -105,7 +105,8 @@ class Rover {
         {
             State crntState = new State(1, 1, "E");
             {
-                crntState = left(crntState);
+                Function<State, State> instruction = Rover::left;
+                crntState = instruction.apply(crntState);
             }
             {
                 String roverInstructions = lines[2].substring(7);
