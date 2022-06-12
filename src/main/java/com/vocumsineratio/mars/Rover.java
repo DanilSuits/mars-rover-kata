@@ -97,7 +97,7 @@ class Rover {
             
             State crntState = new State(
                     3,
-                    3,
+                    Integer.parseInt(roverArgs[1]),
                     roverArgs[2]
             );
             {
