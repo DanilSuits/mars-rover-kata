@@ -92,7 +92,7 @@ class Rover {
 
         {
             State crntState = new State(1, 1, "E");
-            crntState = new State(1, 1, "N");
+            crntState = left(crntState);
             {
                 String roverInstructions = lines[2].substring(7);
                 for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
@@ -103,7 +103,7 @@ class Rover {
             }
             report[0] = Schema.rover(crntState);
         }
-        
+
         {
             int roverId = 1;
             int roverOffset = 1 + 2 * roverId;
@@ -131,5 +131,9 @@ class Rover {
             report[roverId] = Schema.rover(crntState);
         }
         return report;
+    }
+
+    private static State left(State crntState) {
+        return new State(1, 1, "N");
     }
 }
