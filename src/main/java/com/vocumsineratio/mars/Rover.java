@@ -92,9 +92,8 @@ class Rover {
 
         {
             State crntState = new State(1, 1, "N");
-            crntState = move(crntState);
             {
-                String roverInstructions = lines[2].substring(8);
+                String roverInstructions = lines[2].substring(7);
                 for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
                     String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
                     Function<State, State> instruction = instructionSet.get(currentInstruction);
