@@ -74,6 +74,10 @@ class Rover {
                         crnt.orientation
                 ));
     }
+    
+    private static State left(State crntState) {
+        return new State(1, 1, "N");
+    }
 
     static String[] output(String... lines) {
         assert lines[0].equals("5 5");
@@ -131,9 +135,5 @@ class Rover {
             report[roverId] = Schema.rover(crntState);
         }
         return report;
-    }
-
-    private static State left(State crntState) {
-        return new State(1, 1, "N");
     }
 }
