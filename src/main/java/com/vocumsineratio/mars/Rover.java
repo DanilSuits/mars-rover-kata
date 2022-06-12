@@ -106,7 +106,8 @@ class Rover {
         {
             State crntState = new State(1, 1, "E");
             {
-                String currentInstruction = "L";
+                String roverInstructions = lines[2].substring(6);
+                String currentInstruction = roverInstructions.substring(0, 1);
                 Function<State, State> instruction = instructionSet.get(currentInstruction);
                 crntState = instruction.apply(crntState);
             }
