@@ -93,9 +93,11 @@ class Rover {
         {
             State crntState = new State(1, 2, "N");
             String roverInstructions = lines[2].substring(8);
-            String currentInstruction = roverInstructions.substring(0, 1);
-            Function<State, State> instruction = instructionSet.get(currentInstruction);
-            crntState = instruction.apply(crntState);
+            for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
+                String currentInstruction = roverInstructions.substring(0, 1);
+                Function<State, State> instruction = instructionSet.get(currentInstruction);
+                crntState = instruction.apply(crntState);
+            }
             report[0] = Schema.rover(crntState);
         }
         
