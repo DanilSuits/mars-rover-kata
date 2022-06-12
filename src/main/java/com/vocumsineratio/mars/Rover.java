@@ -104,7 +104,8 @@ class Rover {
         instructionSet.put("L", Rover::left);
 
         {
-            State crntState = new State(1, 1, "E");
+            State crntState = new State(0, 1, "E");
+            crntState = move(crntState);
             {
                 String roverInstructions = lines[2].substring(6);
                 for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
