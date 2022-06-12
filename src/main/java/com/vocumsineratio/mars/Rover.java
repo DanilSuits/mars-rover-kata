@@ -130,7 +130,7 @@ class Rover {
                     }
                 }
             }
-            report[0] = Schema.rover(crntState);
+            report[roverId] = Schema.rover(crntState);
         }
 
         {
