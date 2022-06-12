@@ -92,7 +92,8 @@ class Rover {
 
         {
             State crntState = new State(1, 2, "N");
-            crntState = move(crntState);
+            Function<State, State> instruction = Rover::move;
+            crntState = instruction.apply(crntState);
             report[0] = Schema.rover(crntState);
         }
         
