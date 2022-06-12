@@ -133,7 +133,7 @@ class Rover {
             report[roverId] = Schema.rover(crntState);
         }
 
-        for (int roverId = 1; roverId < roverCount; ++roverId) {
+        for (int roverId = 0; roverId < roverCount; ++roverId) {
             int roverOffset = 1 + 2 * roverId;
             int positionOffset = 0;
             int instructionsOffset = 1;
