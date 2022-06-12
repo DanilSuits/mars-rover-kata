@@ -86,7 +86,8 @@ class Rover {
         instructionSet.put("R", Rover::right);
 
         {
-            report[0] = Schema.rover(1, 3, "N");
+            State crntState = new State(1, 3, "N");
+            report[0] = Schema.rover(crntState);
         }
         
         {
