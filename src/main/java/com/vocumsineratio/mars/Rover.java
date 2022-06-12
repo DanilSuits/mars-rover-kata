@@ -76,7 +76,10 @@ class Rover {
     }
     
     private static State left(State crntState) {
-        return new State(1, 1, "N");
+        return new State(
+                crntState.x,
+                crntState.y,
+                "N");
     }
 
     static String[] output(String... lines) {
