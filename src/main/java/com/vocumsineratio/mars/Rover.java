@@ -122,14 +122,10 @@ class Rover {
                     Integer.parseInt(roverArgs[1]),
                     roverArgs[2]
             );
-            {
-                {
-                    for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
-                        String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
-                        Function<State, State> instruction = instructionSet.get(currentInstruction);
-                        crntState = instruction.apply(crntState);
-                    }
-                }
+            for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
+                String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
+                Function<State, State> instruction = instructionSet.get(currentInstruction);
+                crntState = instruction.apply(crntState);
             }
 
             report[roverId] = Schema.rover(crntState);
