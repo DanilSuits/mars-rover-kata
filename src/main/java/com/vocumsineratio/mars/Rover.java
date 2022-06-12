@@ -76,10 +76,15 @@ class Rover {
     }
     
     private static State left(State crnt) {
+        HashMap<String, String> leftTurns = new HashMap<>();
+        leftTurns.put("E", "N");
+
         return new State(
                 crnt.x,
                 crnt.y,
-                "N");
+                leftTurns.get(
+                        crnt.orientation
+                ));
     }
 
     static String[] output(String... lines) {
