@@ -110,6 +110,7 @@ class Rover {
 
         final int positionOffset = 0;
         final int instructionsOffset = 1;
+        final int instructionLength = 1;
 
         for (int roverId = 0; roverId < roverCount; ++roverId) {
             int roverOffset = plateauLength + roverLength * roverId;
@@ -123,7 +124,7 @@ class Rover {
                     roverArgs[2]
             );
             for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
-                String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
+                String currentInstruction = roverInstructions.substring(instructionPointer, instructionLength + instructionPointer);
                 Function<State, State> instruction = instructionSet.get(currentInstruction);
                 crntState = instruction.apply(crntState);
             }
