@@ -88,9 +88,12 @@ class Rover {
         instructionSet.put("R", Rover::right);
 
         int roverId = 1;
+        int roverOffset = 1 + 2 * roverId;
+        int instructionsOffset = 1;
+
         State crntState = new State(3, 3, "E");
         {
-            String roverInstructions = lines[1 + 2 * roverId + 1];
+            String roverInstructions = lines[roverOffset + instructionsOffset];
             {
                 for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
                     String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
