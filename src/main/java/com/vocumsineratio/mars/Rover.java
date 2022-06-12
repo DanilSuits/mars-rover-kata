@@ -81,12 +81,12 @@ class Rover {
         int roverCount = (lines.length - 1) / 2;
         String[] report = new String[roverCount];
 
-        report[0] = Schema.rover(1, 3, "N");
-
         Map<String, Function<State, State>> instructionSet = new HashMap<>();
         instructionSet.put("M", Rover::move);
         instructionSet.put("R", Rover::right);
 
+        report[0] = Schema.rover(1, 3, "N");
+        
         {
             int roverId = 1;
             int roverOffset = 1 + 2 * roverId;
