@@ -121,7 +121,7 @@ class Rover {
             );
 
             {
-                String roverInstructions = lines[2];
+                String roverInstructions = lines[roverOffset + instructionsOffset];
                 {
                     for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
                         String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
