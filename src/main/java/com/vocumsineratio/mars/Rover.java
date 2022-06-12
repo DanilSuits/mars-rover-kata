@@ -79,6 +79,8 @@ class Rover {
         HashMap<String, String> leftTurns = new HashMap<>();
         leftTurns.put("E", "N");
         leftTurns.put("S", "E");
+        leftTurns.put("W", "S");
+        leftTurns.put("N", "W");
 
         return new State(
                 crnt.x,
@@ -105,9 +107,9 @@ class Rover {
         instructionSet.put("L", Rover::left);
 
         {
-            State crntState = new State(0, 2, "S");
+            State crntState = new State(1, 2, "N");
             {
-                String roverInstructions = lines[2].substring(3);
+                String roverInstructions = lines[2];
                 for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
                     String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
                     Function<State, State> instruction = instructionSet.get(currentInstruction);
