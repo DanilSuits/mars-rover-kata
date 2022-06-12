@@ -106,33 +106,6 @@ class Rover {
         instructionSet.put("R", Rover::right);
         instructionSet.put("L", Rover::left);
 
-        {
-            int roverId = 0;
-            int roverOffset = 1 + 2 * roverId;
-            int positionOffset = 0;
-            int instructionsOffset = 1;
-            String positionDescription = lines[roverOffset + positionOffset];
-            String [] roverArgs = positionDescription.split(" ");
-
-            State crntState = new State(
-                    Integer.parseInt(roverArgs[0]),
-                    Integer.parseInt(roverArgs[1]),
-                    roverArgs[2]
-            );
-
-            {
-                String roverInstructions = lines[roverOffset + instructionsOffset];
-                {
-                    for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
-                        String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
-                        Function<State, State> instruction = instructionSet.get(currentInstruction);
-                        crntState = instruction.apply(crntState);
-                    }
-                }
-            }
-            report[roverId] = Schema.rover(crntState);
-        }
-
         for (int roverId = 0; roverId < roverCount; ++roverId) {
             int roverOffset = 1 + 2 * roverId;
             int positionOffset = 0;
