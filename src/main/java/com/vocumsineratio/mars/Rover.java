@@ -106,10 +106,11 @@ class Rover {
         instructionSet.put("R", Rover::right);
         instructionSet.put("L", Rover::left);
 
+        final int positionOffset = 0;
+        final int instructionsOffset = 1;
+
         for (int roverId = 0; roverId < roverCount; ++roverId) {
             int roverOffset = 1 + 2 * roverId;
-            int positionOffset = 0;
-            int instructionsOffset = 1;
             String positionDescription = lines[roverOffset + positionOffset];
             String [] roverArgs = positionDescription.split(" ");
             
