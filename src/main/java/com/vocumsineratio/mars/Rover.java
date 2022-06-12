@@ -107,7 +107,19 @@ class Rover {
         instructionSet.put("L", Rover::left);
 
         {
-            State crntState = new State(1, 2, "N");
+            int roverId = 0;
+            int roverOffset = 1 + 2 * roverId;
+            int positionOffset = 0;
+            int instructionsOffset = 1;
+            String positionDescription = lines[roverOffset + positionOffset];
+            String [] roverArgs = positionDescription.split(" ");
+
+            State crntState = new State(
+                    Integer.parseInt(roverArgs[0]),
+                    Integer.parseInt(roverArgs[1]),
+                    roverArgs[2]
+            );
+
             {
                 String roverInstructions = lines[2];
                 for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
