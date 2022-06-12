@@ -50,7 +50,7 @@ class Rover {
     }
 
     static State south(State crnt) {
-        return new State(crnt.x, crnt.y -1, crnt.orientation);
+        return new State(crnt.x, crnt.y - 1, crnt.orientation);
     }
 
     static State right(State crnt) {
@@ -59,7 +59,7 @@ class Rover {
         rightTurns.put("N", "E");
         rightTurns.put("S", "W");
         rightTurns.put("E", "S");
-        
+
         assert rightTurns.containsKey(crnt.orientation);
 
         return new State(
@@ -87,23 +87,24 @@ class Rover {
         instructionSet.put("M", Rover::move);
         instructionSet.put("R", Rover::right);
 
-        int roverId = 1;
-        int roverOffset = 1 + 2 * roverId;
-        int instructionsOffset = 1;
-
-        State crntState = new State(3, 3, "E");
         {
-            String roverInstructions = lines[roverOffset + instructionsOffset];
+            int roverId = 1;
+            int roverOffset = 1 + 2 * roverId;
+            int instructionsOffset = 1;
+            State crntState = new State(3, 3, "E");
             {
-                for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
-                    String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
-                    Function<State, State> instruction = instructionSet.get(currentInstruction);
-                    crntState = instruction.apply(crntState);
+                String roverInstructions = lines[roverOffset + instructionsOffset];
+                {
+                    for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
+                        String currentInstruction = roverInstructions.substring(instructionPointer, 1 + instructionPointer);
+                        Function<State, State> instruction = instructionSet.get(currentInstruction);
+                        crntState = instruction.apply(crntState);
+                    }
                 }
             }
-        }
 
-        report[roverId] = Schema.rover(crntState);
+            report[roverId] = Schema.rover(crntState);
+        }
         return report;
     }
 }
