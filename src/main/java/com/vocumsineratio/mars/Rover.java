@@ -36,6 +36,7 @@ class Rover {
         moves.put("W", Rover::west);
         moves.put("E", Rover::east);
         moves.put("S", Rover::south);
+        moves.put("N", Rover::north);
 
         Function<State, State> move = moves.get(crnt.orientation);
         return move.apply(crnt);
@@ -91,7 +92,7 @@ class Rover {
 
         {
             State crntState = new State(1, 2, "N");
-            crntState = north(crntState);
+            crntState = move(crntState);
             report[0] = Schema.rover(crntState);
         }
         
