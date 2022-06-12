@@ -85,7 +85,9 @@ class Rover {
         instructionSet.put("M", Rover::move);
         instructionSet.put("R", Rover::right);
 
-        report[0] = Schema.rover(1, 3, "N");
+        {
+            report[0] = Schema.rover(1, 3, "N");
+        }
         
         {
             int roverId = 1;
