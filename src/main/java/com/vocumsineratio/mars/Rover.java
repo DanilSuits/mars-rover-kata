@@ -89,8 +89,6 @@ class Rover {
                 ));
     }
 
-    static Map<String, Function<State, State>> instructionSet = new HashMap<>();
-
     static String[] output(String... lines) {
         assert lines[0].equals("5 5");
         assert lines[1].equals("1 2 N");
@@ -103,6 +101,8 @@ class Rover {
         int roverLength = 2;
         int roverCount = (lines.length - plateauLength) / roverLength;
         String[] report = new String[roverCount];
+
+        Map<String, Function<State, State>> instructionSet = new HashMap<>();
 
         instructionSet.put("M", Rover::move);
         instructionSet.put("R", Rover::right);
