@@ -112,7 +112,7 @@ class Rover {
         final int instructionsOffset = 1;
 
         State [] rovers = new State[roverCount];
-        String [] roverInstructions = new String[roverCount];
+        String [][] roverInstructions = new String[roverCount][];
 
         for (int roverId = 0; roverId < roverCount; ++roverId) {
             int roverOffset = plateauLength + roverLength * roverId;
@@ -125,11 +125,11 @@ class Rover {
                     roverArgs[2]
             );
 
-            roverInstructions[roverId] = lines[roverOffset + instructionsOffset];
+            roverInstructions[roverId] = lines[roverOffset + instructionsOffset].split("");
         }
 
         for (int roverId = 0; roverId < roverCount; ++roverId) {
-            String [] crntInstructions = roverInstructions[roverId].split("");
+            String [] crntInstructions = roverInstructions[roverId];
             State crntState = rovers[roverId];
 
             String currentReport = report(instructionSet, crntInstructions, crntState);
