@@ -113,6 +113,8 @@ class Rover {
         final int instructionLength = 1;
 
         State [] rovers = new State[roverCount];
+        String [] roverInstructions = new String[roverCount];
+
         for (int roverId = 0; roverId < roverCount; ++roverId) {
             int roverOffset = plateauLength + roverLength * roverId;
             String positionDescription = lines[roverOffset + positionOffset];
@@ -123,16 +125,18 @@ class Rover {
                     Integer.parseInt(roverArgs[1]),
                     roverArgs[2]
             );
+
+            roverInstructions[roverId] = lines[roverOffset + instructionsOffset];
         }
 
         for (int roverId = 0; roverId < roverCount; ++roverId) {
             int roverOffset = plateauLength + roverLength * roverId;
-            String roverInstructions = lines[roverOffset + instructionsOffset];
+            String crntInstructions = roverInstructions[roverId];
 
             State crntState = rovers[roverId];
 
-            for (int instructionPointer = 0; instructionPointer < roverInstructions.length(); ++instructionPointer) {
-                String currentInstruction = roverInstructions.substring(
+            for (int instructionPointer = 0; instructionPointer < crntInstructions.length(); ++instructionPointer) {
+                String currentInstruction = crntInstructions.substring(
                         instructionPointer,
                         instructionLength + instructionPointer
                 );
