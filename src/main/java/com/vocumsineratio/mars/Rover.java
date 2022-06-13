@@ -132,8 +132,7 @@ class Rover {
             String [] crntInstructions = roverInstructions[roverId].split("");
             State crntState = rovers[roverId];
 
-            Map<String, Function<State, State>> instructionSet1 = instructionSet;
-            String currentReport = report(crntInstructions, crntState, instructionSet1);
+            String currentReport = report(crntInstructions, crntState, instructionSet);
             report[roverId] = currentReport;
         }
         return report;
