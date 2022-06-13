@@ -130,9 +130,7 @@ class Rover {
         }
 
         for (int roverId = 0; roverId < roverCount; ++roverId) {
-            int roverOffset = plateauLength + roverLength * roverId;
             String [] crntInstructions = roverInstructions[roverId].split("");
-
             State crntState = rovers[roverId];
 
             for (String currentInstruction : crntInstructions) {
