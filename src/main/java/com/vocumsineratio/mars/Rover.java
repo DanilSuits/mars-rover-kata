@@ -141,6 +141,10 @@ class Rover {
 
     static String report(String[] crntInstructions, State crntState) {
         Map<String, Function<State, State>> instructionSet = Rover.instructionSet;
+        return report(crntInstructions, crntState, instructionSet);
+    }
+
+    private static String report(String[] crntInstructions, State crntState, Map<String, Function<State, State>> instructionSet) {
         for (String currentInstruction : crntInstructions) {
             Function<State, State> instruction = instructionSet.get(currentInstruction);
             crntState = instruction.apply(crntState);
