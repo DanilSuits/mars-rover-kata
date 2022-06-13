@@ -129,11 +129,11 @@ class Rover {
         }
 
         for (int roverId = 0; roverId < roverCount; ++roverId) {
-            String [] crntInstructions = roverInstructions[roverId];
-            State crntState = rovers[roverId];
-
-            String currentReport = report(instructionSet, crntInstructions, crntState);
-            report[roverId] = currentReport;
+            report[roverId] = report(
+                    instructionSet,
+                    roverInstructions[roverId],
+                    rovers[roverId]
+            );
         }
         return report;
     }
