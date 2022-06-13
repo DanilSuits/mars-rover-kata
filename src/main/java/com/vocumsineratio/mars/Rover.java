@@ -103,11 +103,12 @@ class Rover {
         String[] report = new String[roverCount];
 
         Map<String, Function<State, State>> instructionSet = new HashMap<>();
-
-        instructionSet.put("M", Rover::move);
-        instructionSet.put("R", Rover::right);
-        instructionSet.put("L", Rover::left);
-
+        {
+            instructionSet.put("M", Rover::move);
+            instructionSet.put("R", Rover::right);
+            instructionSet.put("L", Rover::left);
+        }
+        
         final int positionOffset = 0;
         final int instructionsOffset = 1;
 
