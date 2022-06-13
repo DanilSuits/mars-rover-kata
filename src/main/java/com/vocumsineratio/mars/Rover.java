@@ -1,6 +1,5 @@
 package com.vocumsineratio.mars;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -133,15 +132,11 @@ class Rover {
             String [] crntInstructions = roverInstructions[roverId].split("");
             State crntState = rovers[roverId];
 
-            String currentReport = report(crntInstructions, crntState);
+            Map<String, Function<State, State>> instructionSet1 = instructionSet;
+            String currentReport = report(crntInstructions, crntState, instructionSet1);
             report[roverId] = currentReport;
         }
         return report;
-    }
-
-    static String report(String[] crntInstructions, State crntState) {
-        Map<String, Function<State, State>> instructionSet = Rover.instructionSet;
-        return report(crntInstructions, crntState, instructionSet);
     }
 
     private static String report(String[] crntInstructions, State crntState, Map<String, Function<State, State>> instructionSet) {
