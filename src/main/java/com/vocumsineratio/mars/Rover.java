@@ -110,7 +110,6 @@ class Rover {
 
         final int positionOffset = 0;
         final int instructionsOffset = 1;
-        final int instructionLength = 1;
 
         State [] rovers = new State[roverCount];
         String [] roverInstructions = new String[roverCount];
