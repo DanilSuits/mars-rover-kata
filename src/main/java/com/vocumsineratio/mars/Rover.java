@@ -138,7 +138,8 @@ class Rover {
                 crntState = instruction.apply(crntState);
             }
 
-            report[roverId] = Schema.rover(crntState);
+            String currentReport = Schema.rover(crntState);
+            report[roverId] = currentReport;
         }
         return report;
     }
