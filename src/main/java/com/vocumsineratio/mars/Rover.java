@@ -133,14 +133,18 @@ class Rover {
             String [] crntInstructions = roverInstructions[roverId].split("");
             State crntState = rovers[roverId];
 
-            for (String currentInstruction : crntInstructions) {
-                Function<State, State> instruction = instructionSet.get(currentInstruction);
-                crntState = instruction.apply(crntState);
-            }
-
-            String currentReport = Schema.rover(crntState);
+            String currentReport = report(crntInstructions, crntState);
             report[roverId] = currentReport;
         }
         return report;
+    }
+
+    static String report(String[] crntInstructions, State crntState) {
+        for (String currentInstruction : crntInstructions) {
+            Function<State, State> instruction = instructionSet.get(currentInstruction);
+            crntState = instruction.apply(crntState);
+        }
+
+        return Schema.rover(crntState);
     }
 }
