@@ -132,13 +132,13 @@ class Rover {
             String [] crntInstructions = roverInstructions[roverId].split("");
             State crntState = rovers[roverId];
 
-            String currentReport = report(crntInstructions, crntState, instructionSet);
+            String currentReport = report(instructionSet, crntInstructions, crntState);
             report[roverId] = currentReport;
         }
         return report;
     }
 
-    private static String report(String[] crntInstructions, State crntState, Map<String, Function<State, State>> instructionSet) {
+    private static String report(Map<String, Function<State, State>> instructionSet, String[] crntInstructions, State crntState) {
         for (String currentInstruction : crntInstructions) {
             Function<State, State> instruction = instructionSet.get(currentInstruction);
             crntState = instruction.apply(crntState);
